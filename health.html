@@ -640,7 +640,7 @@ main {
         <h4>Profile</h4>
         <div class="wc-field-row">
           <div class="wc-field"><label>Weight</label><input type="number" id="setWeight" step="0.5" min="20" max="300"></div>
-          <div class="wc-field"><label>Weight unit</label><div class="seg" id="setWeightUnit"><button data-u="kg">kg</button><button data-u="lb">lb</button></div></div>
+          <div class="wc-field"><label>Weight unit</label><div class="seg" id="setWeightUnit"><button data-u="lb" class="active">lb</button></div></div>
         </div>
         <div class="wc-field-row">
           <div class="wc-field"><label>Age</label><input type="number" id="setAge" min="13" max="100"></div>
@@ -971,7 +971,7 @@ main {
     s.unit = s.unit || CONFIG.unit || 'bottle';
     s.bottleMl = s.bottleMl || CONFIG.bottleMl || 500;
     s.glassMl  = s.glassMl  || CONFIG.glassMl  || 250;
-    s.weightUnit = s.weightUnit || 'kg';
+    s.weightUnit = s.weightUnit || 'lb';
     s.profile = Object.assign({}, CONFIG.profile, s.profile || {});
     s.caffeineMgPerDay = (s.caffeineMgPerDay != null) ? s.caffeineMgPerDay : (CONFIG.caffeineMgPerDay || 200);
     s.substances = Array.isArray(s.substances) ? s.substances : (CONFIG.defaultSubstances || []);

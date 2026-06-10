@@ -10,7 +10,7 @@
 <script>
 const CONFIG = {
   appTitle: "Progressive Overload Coach",
-  units: "kg",
+  units: "lb",
   gyms: [
     { id: "home",  name: "Home Gym" },
     { id: "comm",  name: "Commercial Gym" }
@@ -671,7 +671,7 @@ img, video, canvas, svg { max-width: 100%; }
 <div class="po-modal-bg" id="setModalBg">
   <div class="po-modal" style="max-width:480px;">
     <h3>Settings</h3>
-    <div class="po-set-section"><h4>Units</h4><div class="po-modal-seg" id="setUnitsSeg"><button data-u="kg">kg</button><button data-u="lb">lb</button></div></div>
+    <div class="po-set-section"><h4>Units</h4><div class="po-modal-seg" id="setUnitsSeg"><button data-u="lb" class="active">lb</button></div></div>
     <div class="po-set-section"><h4>Gyms</h4><div class="po-set-list" id="setGyms"></div><button class="po-add-row-btn" id="setAddGym">+ Add gym</button></div>
     <div class="po-set-section"><h4>Days</h4><div class="po-set-list" id="setDays"></div><button class="po-add-row-btn" id="setAddDay">+ Add day</button></div>
     <div class="po-set-section"><h4>Data</h4>
@@ -698,7 +698,7 @@ img, video, canvas, svg { max-width: 100%; }
   }
   function normalize(s) {
     s = s || {};
-    s.units = s.units || CONFIG.units || 'kg';
+    s.units = s.units || CONFIG.units || 'lb';
     s.gyms  = (Array.isArray(s.gyms)  && s.gyms.length)  ? s.gyms  : CONFIG.gyms.slice();
     s.days  = (Array.isArray(s.days)  && s.days.length)  ? s.days  : CONFIG.days.slice();
     s.exercises = Array.isArray(s.exercises) ? s.exercises : buildDefaultExercises();
