@@ -151,34 +151,17 @@
     }
 
     .goal-ticker-row {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      height: 22px;
-      gap: 8px;
+      position: absolute; inset: 0;
+      display: flex; align-items: center; gap: 8px;
       font-family: var(--font-mono);
-      font-size: 12.5px;
-      font-weight: 600;
+      font-size: 12.5px; font-weight: 600;
       font-variant-numeric: tabular-nums;
       color: var(--text-primary);
       white-space: nowrap;
-      position: absolute;
-      width: 100%;
-      top: 0;
-      left: 0;
+      opacity: 1;
+      transition: opacity 0.22s ease;
     }
-
-    .goal-ticker-row.is-leaving  { animation: ticker-leave 0.45s cubic-bezier(0.55, 0, 0.55, 1) forwards; }
-    .goal-ticker-row.is-entering { animation: ticker-enter 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
-
-    @keyframes ticker-leave {
-      from { opacity: 1; transform: translateY(0); }
-      to   { opacity: 0; transform: translateY(-100%); }
-    }
-    @keyframes ticker-enter {
-      from { opacity: 0; transform: translateY(100%); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
+    .goal-ticker-row.is-fading { opacity: 0; }
 
     .goal-ticker-status {
       width: 18px;
@@ -1036,34 +1019,49 @@
       return row;
     }
 
-    function tick(isFirst) {
+    var firstTick = true;
+    function tick() {
       const stage = document.getElementById('goalTickerStage');
       const meta  = document.getElementById('goalTickerMeta');
-      const result = buildTickerItems();
-      meta.textContent = `${result.done}/${result.total}`;
-      if (cycleIdx >= result.items.length) cycleIdx = 0;
-      const item = result.items[cycleIdx];
-      cycleIdx = (cycleIdx + 1) % result.items.length;
-      const existing = stage.querySelector('.goal-ticker-row');
-      if (!isFirst && existing) {
-        existing.classList.add('is-leaving');
-        setTimeout(function() { if (existing.parentNode) existing.remove(); }, 460);
-      } else if (existing) {
-        existing.remove();
+      const { items, done, total } = buildTickerItems();
+      if (cycleIdx >= items.length) cycleIdx = 0;
+      const item = items[cycleIdx];
+      cycleIdx = (cycleIdx + 1) % items.length;
+      meta.textContent = done + '/' + total;
+
+      let row = stage.querySelector('.goal-ticker-row');
+      if (!row) {
+        row = document.createElement('div');
+        row.className = 'goal-ticker-row';
+        row.innerHTML =
+          '<span class="goal-ticker-status"></span>' +
+          '<span class="goal-ticker-text"></span>';
+        stage.appendChild(row);
       }
-      const newRow = makeTickerRow(item);
-      if (!isFirst) newRow.classList.add('is-entering');
-      stage.appendChild(newRow);
+
+      const statusEl = row.querySelector('.goal-ticker-status');
+      const textEl   = row.querySelector('.goal-ticker-text');
+
+      const apply = function() {
+        statusEl.setAttribute('data-status', item.status);
+        statusEl.textContent = item.status === 'done' ? '✓' : item.status === 'pending' ? '○' : '·';
+        textEl.textContent = item.text;
+        row.classList.remove('is-fading');
+      };
+
+      if (firstTick) { apply(); firstTick = false; return; }
+      row.classList.add('is-fading');
+      setTimeout(apply, 220);
     }
 
     function startTicker() {
-      tick(true);
-      setInterval(function() { tick(false); }, 5000);
+      tick();
+      setInterval(function() { tick(); }, 5000);
     }
 
     window.addEventListener('goals-changed', function() {
       cycleIdx = 0;
-      tick(false);
+      tick();
     });
 
     // ── Render helpers ────────────────────────────────────────
