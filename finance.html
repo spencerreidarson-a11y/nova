@@ -8,6 +8,7 @@
 <meta name="theme-color" content="#0a0a0b">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Finances</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script src="topbar.js" defer></script>
 <style>
 :root {
@@ -1232,6 +1233,45 @@ input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0.85); op
   }
   function safeRenderTicker(){try{renderTicker();}catch(e){console.error('ticker failed',e);}}
   safeRenderTicker(); setInterval(safeRenderTicker,1500);
+
+  // ── Supabase cloud sync ─────────────────────────────────────
+  (function() {
+    if (!window.supabase) return;
+    var _FURL='https://gmmmrfldwjwbektgbifq.supabase.co';
+    var _FKEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdtbW1yZmxkd2p3YmVrdGdiaWZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1MDA5NTQsImV4cCI6MjA5NjA3Njk1NH0.sTUJrqcAwkl3lzbcGMU_0Gc5S_Vth0WxvfF6YU8rlJc';
+    var _FAPP='finance';
+    var fSupa=window.supabase.createClient(_FURL,_FKEY);
+    var fTimer=null,fLastJson=null,fSuppress=false;
+    var _FEXTRA=['subs','wishlist','incoming_orders','nw:history','nw:activity'];
+    function fKey(k){return k.startsWith('nw:')||_FEXTRA.indexOf(k)!==-1;}
+    function fCollect(){var out={};for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(k&&fKey(k)){try{out[k]=JSON.parse(localStorage.getItem(k));}catch(e){}}}return out;}
+    function fApply(data){
+      if(!data||typeof data!=='object') return;
+      fSuppress=true;
+      try{Object.keys(data).forEach(function(k){if(!fKey(k)) return;var inc=JSON.stringify(data[k]);if(localStorage.getItem(k)!==inc) localStorage.setItem(k,inc);});}
+      finally{fSuppress=false;}
+      try{renderAllNetWorth();}catch(e){}
+      try{renderSubs();}catch(e){}
+      try{safeRenderTicker();}catch(e){}
+    }
+    async function fPush(){var st=fCollect(),json=JSON.stringify(st);if(json===fLastJson) return;try{var r=await fSupa.from('app_state').upsert({key:_FAPP,data:st,updated_at:new Date().toISOString()},{onConflict:'key'});if(!r.error) fLastJson=json;}catch(e){}}
+    function fSchedule(){if(fSuppress) return;clearTimeout(fTimer);fTimer=setTimeout(fPush,400);}
+    var _fOrig=localStorage.setItem.bind(localStorage);
+    localStorage.setItem=function(k,v){_fOrig(k,v);try{if(!fSuppress&&fKey(k)) fSchedule();}catch(e){}};
+    (async function(){
+      try{var r=await fSupa.from('app_state').select('data').eq('key',_FAPP).maybeSingle();
+        if(!r.error&&r.data&&r.data.data){fLastJson=JSON.stringify(r.data.data);fApply(r.data.data);}
+        else if(Object.keys(fCollect()).length>0) fSchedule();
+      }catch(e){}
+      fSupa.channel('fin_sync').on('postgres_changes',{event:'*',schema:'public',table:'app_state',filter:'key=eq.'+_FAPP},function(p){
+        if(!p.new||!p.new.data) return;var inc=JSON.stringify(p.new.data);if(inc===fLastJson) return;fLastJson=inc;fApply(p.new.data);
+      }).subscribe();
+    })();
+    window.addEventListener('beforeunload',function(){
+      var st=fCollect(),json=JSON.stringify(st);if(json===fLastJson) return;
+      try{fetch(_FURL+'/rest/v1/app_state?on_conflict=key',{method:'POST',headers:{'apikey':_FKEY,'Authorization':'Bearer '+_FKEY,'Content-Type':'application/json','Prefer':'resolution=merge-duplicates'},body:JSON.stringify({key:_FAPP,data:st,updated_at:new Date().toISOString()}),keepalive:true}).catch(function(){});}catch(e){}
+    });
+  })();
 
 })();
 </script>

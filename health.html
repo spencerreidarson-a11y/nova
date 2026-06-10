@@ -532,6 +532,7 @@ main {
 ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 999px; }
 ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.15); }
 </style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
   <script src="topbar.js" defer></script>
 </head>
 <body>
@@ -929,6 +930,7 @@ main {
   [nameInput, doseInput].forEach(i => { i.addEventListener('keydown', (e) => { if (e.key === 'Enter') { if (!resultsEl.hidden && i === nameInput) { const first = resultsEl.querySelector('.stack-result'); if (first) { e.preventDefault(); first.click(); return; } } addBtn.click(); } if (e.key === 'Escape') resultsEl.hidden = true; }); });
   setInterval(() => { const newKey = `stack:taken:${getActiveDate()}`; if (newKey !== todayKey) todayKey = newKey; render(); }, 60 * 1000);
   render(); startTicker();
+  window.addEventListener('health-synced', () => { render(); });
 })();
 </script>
 
@@ -1196,6 +1198,45 @@ main {
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 
   renderAll();
+  window.addEventListener('health-synced', () => { state = loadState(); renderAll(); });
+})();
+</script>
+
+<!-- ===== HEALTH CLOUD SYNC ===== -->
+<script>
+(function() {
+  if (!window.supabase) return;
+  var _HURL='https://gmmmrfldwjwbektgbifq.supabase.co';
+  var _HKEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdtbW1yZmxkd2p3YmVrdGdiaWZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1MDA5NTQsImV4cCI6MjA5NjA3Njk1NH0.sTUJrqcAwkl3lzbcGMU_0Gc5S_Vth0WxvfF6YU8rlJc';
+  var _HAPP='health';
+  var hSupa=window.supabase.createClient(_HURL,_HKEY);
+  var hTimer=null,hLastJson=null,hSuppress=false;
+  function hKey(k){return k.startsWith('stack:')||k==='po_water_v1';}
+  function hCollect(){var out={};for(var i=0;i<localStorage.length;i++){var k=localStorage.key(i);if(k&&hKey(k)){try{out[k]=JSON.parse(localStorage.getItem(k));}catch(e){}}}return out;}
+  function hApply(data){
+    if(!data||typeof data!=='object') return;
+    hSuppress=true;
+    try{Object.keys(data).forEach(function(k){if(!hKey(k)) return;var inc=JSON.stringify(data[k]);if(localStorage.getItem(k)!==inc) localStorage.setItem(k,inc);});}
+    finally{hSuppress=false;}
+    window.dispatchEvent(new CustomEvent('health-synced'));
+  }
+  async function hPush(){var st=hCollect(),json=JSON.stringify(st);if(json===hLastJson) return;try{var r=await hSupa.from('app_state').upsert({key:_HAPP,data:st,updated_at:new Date().toISOString()},{onConflict:'key'});if(!r.error) hLastJson=json;}catch(e){}}
+  function hSchedule(){if(hSuppress) return;clearTimeout(hTimer);hTimer=setTimeout(hPush,400);}
+  var _hOrig=localStorage.setItem.bind(localStorage);
+  localStorage.setItem=function(k,v){_hOrig(k,v);try{if(!hSuppress&&hKey(k)) hSchedule();}catch(e){}};
+  (async function(){
+    try{var r=await hSupa.from('app_state').select('data').eq('key',_HAPP).maybeSingle();
+      if(!r.error&&r.data&&r.data.data){hLastJson=JSON.stringify(r.data.data);hApply(r.data.data);}
+      else if(Object.keys(hCollect()).length>0) hSchedule();
+    }catch(e){}
+    hSupa.channel('health_sync').on('postgres_changes',{event:'*',schema:'public',table:'app_state',filter:'key=eq.'+_HAPP},function(p){
+      if(!p.new||!p.new.data) return;var inc=JSON.stringify(p.new.data);if(inc===hLastJson) return;hLastJson=inc;hApply(p.new.data);
+    }).subscribe();
+  })();
+  window.addEventListener('beforeunload',function(){
+    var st=hCollect(),json=JSON.stringify(st);if(json===hLastJson) return;
+    try{fetch(_HURL+'/rest/v1/app_state?on_conflict=key',{method:'POST',headers:{'apikey':_HKEY,'Authorization':'Bearer '+_HKEY,'Content-Type':'application/json','Prefer':'resolution=merge-duplicates'},body:JSON.stringify({key:_HAPP,data:st,updated_at:new Date().toISOString()}),keepalive:true}).catch(function(){});}catch(e){}
+  });
 })();
 </script>
 
