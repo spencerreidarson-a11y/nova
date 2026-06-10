@@ -531,6 +531,228 @@ main {
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 999px; }
 ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.15); }
+
+/* ===== GARMIN RECOVERY CARD ===== */
+.gc-wrap { margin-bottom: 28px; }
+.gc-card {
+  background: rgba(255,255,255,0.025);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 22px;
+  padding: 22px 22px 18px;
+  box-shadow: 0 1px 0 0 rgba(255,255,255,0.06) inset, 0 12px 40px rgba(0,0,0,0.45);
+}
+.gc-header {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 20px;
+}
+.gc-brand-mark {
+  width: 26px; height: 26px; border-radius: 50%;
+  background: #fff; color: #0a0a0b;
+  font-weight: 900; font-size: 13px; letter-spacing: -0.04em;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 0 10px rgba(107,227,164,0.35);
+  flex-shrink: 0;
+}
+.gc-wordmark { font-weight: 800; font-size: 13px; letter-spacing: 0.18em; color: var(--text-primary); }
+.gc-subline  { font-size: 10px; color: var(--text-tertiary); letter-spacing: 0.08em; margin-top: 1px; }
+.gc-edit-btn {
+  margin-left: auto; width: 32px; height: 32px; border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04);
+  color: var(--text-secondary); cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: background 0.18s, color 0.18s; flex-shrink: 0;
+}
+.gc-edit-btn:hover { background: rgba(255,255,255,0.10); color: var(--text-primary); }
+.gc-edit-btn svg { display: block; }
+
+/* Empty state */
+.gc-empty {
+  display: flex; flex-direction: column; align-items: center;
+  text-align: center; padding: 20px 8px 12px; gap: 8px;
+}
+.gc-empty-icon { font-size: 32px; opacity: 0.35; }
+.gc-empty-title { font-size: 16px; font-weight: 700; color: var(--text-primary); }
+.gc-empty-sub { font-size: 12px; color: var(--text-tertiary); max-width: 240px; line-height: 1.5; }
+.gc-log-cta {
+  margin-top: 8px; padding: 11px 22px; border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.85);
+  background: linear-gradient(180deg,#fff 0%,#e8e5dd 100%);
+  color: #0a0a0b; font-family: inherit; font-size: 13px; font-weight: 700;
+  cursor: pointer; box-shadow: inset 0 1px 0 rgba(255,255,255,0.55), 0 4px 14px rgba(0,0,0,0.3);
+  transition: transform 0.12s;
+}
+.gc-log-cta:hover { transform: translateY(-1px); }
+.gc-log-cta:active { transform: scale(0.98); }
+
+/* Hero ring */
+.gc-hero { display: flex; justify-content: center; margin-bottom: 22px; }
+.gc-ring-wrap { position: relative; width: 220px; max-width: 70%; aspect-ratio: 1; }
+.gc-ring-svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.gc-ring-track { fill: none; stroke: rgba(255,255,255,0.06); stroke-width: 12; }
+.gc-ring-fill {
+  fill: none; stroke: #6BE3A4; stroke-width: 12; stroke-linecap: round;
+  stroke-dasharray: 603.19; stroke-dashoffset: 603.19;
+  transition: stroke-dashoffset 0.9s cubic-bezier(0.22,1,0.36,1), stroke 0.4s, filter 0.4s;
+}
+.gc-ring-center {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+}
+.gc-ring-num {
+  font-size: 58px; font-weight: 700; letter-spacing: -0.04em;
+  color: var(--text-primary); line-height: 1; font-variant-numeric: tabular-nums;
+}
+.gc-ring-lbl {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--text-tertiary); margin-top: 8px;
+}
+.gc-ring-badge {
+  margin-top: 6px; font-size: 11px; font-weight: 800;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 3px 10px; border-radius: 999px; border: 1px solid;
+}
+.gc-ring-badge.green  { color: #6BE3A4; border-color: rgba(107,227,164,0.35); background: rgba(107,227,164,0.10); }
+.gc-ring-badge.yellow { color: #F2C063; border-color: rgba(242,192,99,0.35);  background: rgba(242,192,99,0.10); }
+.gc-ring-badge.red    { color: #FF8A8A; border-color: rgba(255,138,138,0.35); background: rgba(255,138,138,0.10); }
+
+/* Stats grid */
+.gc-stats {
+  display: grid; grid-template-columns: repeat(4,1fr); gap: 8px;
+  padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.05);
+  margin-bottom: 20px;
+}
+.gc-stat {
+  position: relative;
+  background: rgba(255,255,255,0.025); border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 12px; padding: 12px 10px; text-align: center;
+}
+.gc-stat-label { font-size: 10px; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.14em; font-weight: 700; margin-bottom: 6px; }
+.gc-stat-value { font-size: 22px; font-weight: 700; color: var(--text-primary); line-height: 1; font-variant-numeric: tabular-nums; letter-spacing: -0.03em; }
+.gc-stat-sub   { font-size: 10px; color: var(--text-tertiary); margin-top: 4px; font-family: var(--font-mono); }
+.gc-dot {
+  position: absolute; top: 8px; right: 8px;
+  width: 7px; height: 7px; border-radius: 50%;
+  background: rgba(255,255,255,0.12);
+}
+.gc-dot.green  { background: #6BE3A4; box-shadow: 0 0 6px rgba(107,227,164,0.55); }
+.gc-dot.white  { background: rgba(255,255,255,0.30); }
+.gc-dot.yellow { background: #F2C063; box-shadow: 0 0 6px rgba(242,192,99,0.55); }
+.gc-dot.red    { background: #FF8A8A; box-shadow: 0 0 6px rgba(255,138,138,0.55); }
+
+/* Sleep stages */
+.gc-stages { margin-bottom: 20px; }
+.gc-stages-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
+.gc-stages-eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-tertiary); }
+.gc-stages-meta { font-size: 11px; color: var(--text-primary); font-family: var(--font-mono); font-weight: 700; font-variant-numeric: tabular-nums; }
+.gc-stages-bar { display: flex; height: 10px; background: rgba(255,255,255,0.04); border-radius: 999px; overflow: hidden; margin-bottom: 10px; }
+.gc-stage { height: 100%; transition: width 0.7s cubic-bezier(0.22,1,0.36,1); }
+.gc-stage-rem   { background: #a78bfa; }
+.gc-stage-deep  { background: #6BE3A4; }
+.gc-stage-light { background: #60a5fa; }
+.gc-stage-awake { background: rgba(255,255,255,0.15); }
+.gc-stages-legend { display: grid; grid-template-columns: repeat(4,1fr); gap: 6px; }
+.gc-leg { display: flex; align-items: center; gap: 5px; font-size: 10.5px; color: var(--text-secondary); }
+.gc-leg-dot { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
+.gc-leg-val { margin-left: auto; font-weight: 700; font-family: var(--font-mono); font-size: 10px; color: var(--text-primary); }
+
+/* Bio strip */
+.gc-bio { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-bottom: 18px; }
+.gc-bio-item {
+  background: rgba(255,255,255,0.025); border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 12px; padding: 11px 12px; text-align: center;
+}
+.gc-bio-label { font-size: 9.5px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-tertiary); margin-bottom: 4px; }
+.gc-bio-val   { font-size: 18px; font-weight: 700; color: var(--text-primary); font-variant-numeric: tabular-nums; letter-spacing: -0.02em; line-height: 1; }
+.gc-bio-unit  { font-size: 10px; color: var(--text-tertiary); margin-top: 2px; }
+
+/* Verdict */
+.gc-verdict {
+  padding: 14px 16px; border-radius: 0 12px 12px 0;
+  border-left: 2px solid rgba(255,255,255,0.3);
+  background: rgba(255,255,255,0.025);
+  border-top: 1px solid rgba(255,255,255,0.04);
+  border-right: 1px solid rgba(255,255,255,0.04);
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.gc-verdict.green  { border-left-color: #6BE3A4; background: rgba(107,227,164,0.06); }
+.gc-verdict.yellow { border-left-color: #F2C063; background: rgba(242,192,99,0.06); }
+.gc-verdict.red    { border-left-color: #FF8A8A; background: rgba(255,138,138,0.06); }
+.gc-verdict-head { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.gc-verdict-eyebrow { font-size: 10px; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.18em; font-weight: 700; }
+.gc-verdict-badge {
+  font-size: 9.5px; font-weight: 800; padding: 3px 9px; border-radius: 999px;
+  letter-spacing: 0.14em; text-transform: uppercase; border: 1px solid;
+}
+.gc-verdict-badge.green  { color: #6BE3A4; border-color: rgba(107,227,164,0.35); background: rgba(107,227,164,0.10); }
+.gc-verdict-badge.yellow { color: #F2C063; border-color: rgba(242,192,99,0.35);  background: rgba(242,192,99,0.10); }
+.gc-verdict-badge.red    { color: #FF8A8A; border-color: rgba(255,138,138,0.35); background: rgba(255,138,138,0.10); }
+.gc-verdict-headline { font-size: 15px; font-weight: 600; color: var(--text-primary); line-height: 1.4; margin-bottom: 6px; letter-spacing: -0.01em; }
+.gc-verdict-desc     { font-size: 12.5px; color: var(--text-secondary); line-height: 1.6; }
+
+/* Log modal */
+.gc-log-bg {
+  display: none; position: fixed; inset: 0; z-index: 200;
+  background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  align-items: center; justify-content: center;
+  padding: max(20px, env(safe-area-inset-top)) 16px max(20px, env(safe-area-inset-bottom));
+}
+.gc-log-bg.show { display: flex; }
+.gc-log-modal {
+  width: 100%; max-width: 440px; max-height: 90vh; overflow-y: auto;
+  background: rgba(14,14,16,0.97); border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 20px; padding: 24px 20px 20px;
+}
+.gc-log-title { font-size: 18px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px; letter-spacing: -0.02em; }
+.gc-log-sub   { font-size: 12px; color: var(--text-tertiary); margin-bottom: 20px; }
+.gc-log-field { margin-bottom: 16px; }
+.gc-log-label { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-tertiary); margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+.gc-log-label span { font-size: 14px; font-weight: 800; color: var(--text-primary); letter-spacing: 0; text-transform: none; font-family: var(--font-mono); }
+.gc-range-row { display: flex; align-items: center; gap: 10px; }
+.gc-range-row input[type=range] {
+  flex: 1; -webkit-appearance: none; height: 4px; border-radius: 2px;
+  background: rgba(255,255,255,0.12); outline: none; cursor: pointer;
+}
+.gc-range-row input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%;
+  background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,0.5); cursor: pointer;
+}
+.gc-range-row input[type=number] {
+  width: 60px; text-align: center; padding: 6px 8px;
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px; color: var(--text-primary); font-family: var(--font-mono);
+  font-size: 14px; font-weight: 700; outline: none;
+}
+.gc-range-row input[type=number]:focus { border-color: rgba(255,255,255,0.3); }
+.gc-dur-row { display: flex; gap: 8px; align-items: center; }
+.gc-dur-row input[type=number] {
+  flex: 1; text-align: center; padding: 10px 8px;
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 10px; color: var(--text-primary); font-family: var(--font-mono);
+  font-size: 18px; font-weight: 700; outline: none;
+}
+.gc-dur-row input[type=number]:focus { border-color: rgba(255,255,255,0.3); }
+.gc-dur-sep { font-size: 20px; color: var(--text-tertiary); font-weight: 300; }
+.gc-dur-lbl { font-size: 10px; color: var(--text-tertiary); text-align: center; margin-top: 4px; }
+.gc-log-actions { display: flex; gap: 8px; margin-top: 22px; }
+.gc-save-btn {
+  flex: 1; padding: 14px; border: none; border-radius: 12px;
+  background: linear-gradient(180deg,#fff 0%,#e8e5dd 100%);
+  color: #0a0a0b; font-family: inherit; font-size: 15px; font-weight: 700;
+  cursor: pointer; box-shadow: inset 0 1px 0 rgba(255,255,255,0.55), 0 4px 14px rgba(0,0,0,0.4);
+}
+.gc-cancel-btn {
+  padding: 14px 18px; border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.04); color: var(--text-primary);
+  border-radius: 12px; font-family: inherit; font-size: 15px; font-weight: 600; cursor: pointer;
+}
+.gc-cancel-btn:hover { background: rgba(255,255,255,0.08); }
+.gc-log-divider { height: 1px; background: rgba(255,255,255,0.06); margin: 18px 0; }
+
+@media (max-width: 480px) {
+  .gc-stats { grid-template-columns: repeat(2,1fr); }
+  .gc-ring-wrap { width: 180px; }
+  .gc-ring-num { font-size: 48px; }
+  .gc-stages-legend { grid-template-columns: repeat(2,1fr); }
+  .gc-bio { grid-template-columns: repeat(2,1fr); }
+}
 </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
   <script src="topbar.js" defer></script>
@@ -539,6 +761,214 @@ main {
 
 <!-- ===== SUPPLEMENT TRACKER ===== -->
 <main>
+
+<!-- ===== GARMIN RECOVERY CARD ===== -->
+<div class="gc-wrap" id="gcWrap">
+  <div class="gc-card">
+    <div class="gc-header">
+      <div class="gc-brand-mark">G</div>
+      <div>
+        <div class="gc-wordmark">GARMIN</div>
+        <div class="gc-subline">Fenix 8</div>
+      </div>
+      <button class="gc-edit-btn" id="gcEditBtn" title="Log today's recovery" aria-label="Log recovery">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Empty state -->
+    <div id="gcEmpty" class="gc-empty">
+      <div class="gc-empty-icon">⌚</div>
+      <div class="gc-empty-title">No recovery logged yet</div>
+      <div class="gc-empty-sub">Log your Garmin metrics each morning to track recovery, sleep, and training readiness.</div>
+      <button class="gc-log-cta" id="gcLogBtnEmpty">Log Today</button>
+    </div>
+
+    <!-- Filled state -->
+    <div id="gcFilled" style="display:none">
+
+      <!-- Hero ring -->
+      <div class="gc-hero">
+        <div class="gc-ring-wrap">
+          <svg class="gc-ring-svg" viewBox="0 0 220 220" aria-hidden="true">
+            <circle class="gc-ring-track" cx="110" cy="110" r="96"/>
+            <circle class="gc-ring-fill"  cx="110" cy="110" r="96" id="gcRingFill"/>
+          </svg>
+          <div class="gc-ring-center">
+            <div class="gc-ring-num" id="gcRecoveryNum">--</div>
+            <div class="gc-ring-lbl">recovery</div>
+            <div class="gc-ring-badge" id="gcZoneBadge">--</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats grid -->
+      <div class="gc-stats">
+        <div class="gc-stat">
+          <span class="gc-dot" id="gcDotSleep"></span>
+          <div class="gc-stat-label">Sleep</div>
+          <div class="gc-stat-value" id="gcSleepPerf">--</div>
+          <div class="gc-stat-sub">%</div>
+        </div>
+        <div class="gc-stat">
+          <span class="gc-dot" id="gcDotHrv"></span>
+          <div class="gc-stat-label">HRV</div>
+          <div class="gc-stat-value" id="gcHrv">--</div>
+          <div class="gc-stat-sub">ms</div>
+        </div>
+        <div class="gc-stat">
+          <span class="gc-dot" id="gcDotRhr"></span>
+          <div class="gc-stat-label">RHR</div>
+          <div class="gc-stat-value" id="gcRhr">--</div>
+          <div class="gc-stat-sub">bpm</div>
+        </div>
+        <div class="gc-stat">
+          <span class="gc-dot" id="gcDotBattery"></span>
+          <div class="gc-stat-label">Battery</div>
+          <div class="gc-stat-value" id="gcBattery">--</div>
+          <div class="gc-stat-sub">/100</div>
+        </div>
+      </div>
+
+      <!-- Sleep stages bar -->
+      <div class="gc-stages">
+        <div class="gc-stages-head">
+          <span class="gc-stages-eyebrow">Sleep stages <span style="font-weight:400;opacity:0.5">(est.)</span></span>
+          <span class="gc-stages-meta" id="gcSleepDur">--h --m</span>
+        </div>
+        <div class="gc-stages-bar">
+          <div class="gc-stage gc-stage-rem"   id="gcSegRem"   style="width:0%"></div>
+          <div class="gc-stage gc-stage-deep"  id="gcSegDeep"  style="width:0%"></div>
+          <div class="gc-stage gc-stage-light" id="gcSegLight" style="width:0%"></div>
+          <div class="gc-stage gc-stage-awake" id="gcSegAwake" style="width:0%"></div>
+        </div>
+        <div class="gc-stages-legend">
+          <div class="gc-leg"><span class="gc-leg-dot" style="background:#a78bfa"></span>REM<span class="gc-leg-val" id="gcLegRem">--</span></div>
+          <div class="gc-leg"><span class="gc-leg-dot" style="background:#6BE3A4"></span>Deep<span class="gc-leg-val" id="gcLegDeep">--</span></div>
+          <div class="gc-leg"><span class="gc-leg-dot" style="background:#60a5fa"></span>Light<span class="gc-leg-val" id="gcLegLight">--</span></div>
+          <div class="gc-leg"><span class="gc-leg-dot" style="background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.15)"></span>Awake<span class="gc-leg-val" id="gcLegAwake">--</span></div>
+        </div>
+      </div>
+
+      <!-- Bio strip -->
+      <div class="gc-bio">
+        <div class="gc-bio-item">
+          <div class="gc-bio-label">Stress</div>
+          <div class="gc-bio-val" id="gcStress">--</div>
+          <div class="gc-bio-unit">/100</div>
+        </div>
+        <div class="gc-bio-item">
+          <div class="gc-bio-label">Sleep Dur.</div>
+          <div class="gc-bio-val" id="gcSleepDurBio" style="font-size:14px;letter-spacing:-0.02em">--</div>
+        </div>
+        <div class="gc-bio-item">
+          <div class="gc-bio-label">Logged</div>
+          <div class="gc-bio-val" id="gcLoggedAt" style="font-size:12px;letter-spacing:0">--</div>
+        </div>
+      </div>
+
+      <!-- Today's call verdict -->
+      <div class="gc-verdict" id="gcVerdict">
+        <div class="gc-verdict-head">
+          <span class="gc-verdict-eyebrow">Today's call</span>
+          <span class="gc-verdict-badge" id="gcVerdictBadge"></span>
+        </div>
+        <div class="gc-verdict-headline" id="gcVerdictLine"></div>
+        <div class="gc-verdict-desc"     id="gcVerdictDesc"></div>
+      </div>
+
+    </div><!-- /#gcFilled -->
+  </div><!-- /.gc-card -->
+</div><!-- /.gc-wrap -->
+
+<!-- Log modal -->
+<div class="gc-log-bg" id="gcLogBg">
+  <div class="gc-log-modal">
+    <div class="gc-log-title">Log Today's Recovery</div>
+    <div class="gc-log-sub">Read the values from your Garmin Connect app each morning.</div>
+
+    <!-- Recovery Score -->
+    <div class="gc-log-field">
+      <div class="gc-log-label">Recovery Score <span id="gcValRecovery">50</span></div>
+      <div class="gc-range-row">
+        <input type="range" id="gcRangeRecovery" min="0" max="100" value="50">
+        <input type="number" id="gcNumRecovery" min="0" max="100" value="50">
+      </div>
+    </div>
+
+    <!-- HRV -->
+    <div class="gc-log-field">
+      <div class="gc-log-label">HRV <span id="gcValHrv">50</span> ms</div>
+      <div class="gc-range-row">
+        <input type="range" id="gcRangeHrv" min="10" max="150" value="50">
+        <input type="number" id="gcNumHrv" min="1" max="300" value="50">
+      </div>
+    </div>
+
+    <!-- RHR -->
+    <div class="gc-log-field">
+      <div class="gc-log-label">Resting Heart Rate <span id="gcValRhr">60</span> bpm</div>
+      <div class="gc-range-row">
+        <input type="range" id="gcRangeRhr" min="35" max="100" value="60">
+        <input type="number" id="gcNumRhr" min="30" max="120" value="60">
+      </div>
+    </div>
+
+    <!-- Sleep Performance -->
+    <div class="gc-log-field">
+      <div class="gc-log-label">Sleep Performance <span id="gcValSleepPerf">70</span>%</div>
+      <div class="gc-range-row">
+        <input type="range" id="gcRangeSleepPerf" min="0" max="100" value="70">
+        <input type="number" id="gcNumSleepPerf" min="0" max="100" value="70">
+      </div>
+    </div>
+
+    <!-- Sleep Duration -->
+    <div class="gc-log-field">
+      <div class="gc-log-label">Sleep Duration</div>
+      <div class="gc-dur-row">
+        <div>
+          <input type="number" id="gcNumSleepH" min="0" max="12" value="7" placeholder="7">
+          <div class="gc-dur-lbl">hrs</div>
+        </div>
+        <div class="gc-dur-sep">:</div>
+        <div>
+          <input type="number" id="gcNumSleepM" min="0" max="59" value="30" placeholder="30">
+          <div class="gc-dur-lbl">min</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="gc-log-divider"></div>
+
+    <!-- Body Battery -->
+    <div class="gc-log-field">
+      <div class="gc-log-label">Body Battery <span id="gcValBattery">60</span></div>
+      <div class="gc-range-row">
+        <input type="range" id="gcRangeBattery" min="0" max="100" value="60">
+        <input type="number" id="gcNumBattery" min="0" max="100" value="60">
+      </div>
+    </div>
+
+    <!-- Stress Level -->
+    <div class="gc-log-field">
+      <div class="gc-log-label">Stress Level <span id="gcValStress">30</span></div>
+      <div class="gc-range-row">
+        <input type="range" id="gcRangeStress" min="0" max="100" value="30">
+        <input type="number" id="gcNumStress" min="0" max="100" value="30">
+      </div>
+    </div>
+
+    <div class="gc-log-actions">
+      <button class="gc-save-btn" id="gcSaveBtn">Save</button>
+      <button class="gc-cancel-btn" id="gcCancelBtn">Cancel</button>
+    </div>
+  </div>
+</div>
+<!-- ===== END GARMIN CARD ===== -->
+
   <div class="section-title">Daily Stack</div>
   <div class="stack-card">
     <div class="stack-ticker" id="stackTicker">
@@ -697,6 +1127,253 @@ main {
     </div>
   </div>
 </div><!-- /.wc-scope -->
+
+<!-- ===== GARMIN RECOVERY SCRIPT ===== -->
+<script>
+(() => {
+  'use strict';
+  const SUPA_URL = 'https://gmmmrfldwjwbektgbifq.supabase.co';
+  const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdtbW1yZmxkd2p3YmVrdGdiaWZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1MDA5NTQsImV4cCI6MjA5NjA3Njk1NH0.sTUJrqcAwkl3lzbcGMU_0Gc5S_Vth0WxvfF6YU8rlJc';
+  const sb = window.supabase ? window.supabase.createClient(SUPA_URL, SUPA_KEY) : null;
+  const LS_KEY = 'gc_manual_v1';
+
+  const $ = id => document.getElementById(id);
+
+  function todayKey() {
+    const d = new Date();
+    if (d.getHours() < 6) d.setDate(d.getDate() - 1);
+    return 'garmin:' + d.toISOString().slice(0, 10);
+  }
+
+  // ── Zone helpers ────────────────────────────────────────────
+  function recoveryZone(score) {
+    if (score >= 80) return { zone: 'green',  label: 'Peak',     color: '#6BE3A4' };
+    if (score >= 67) return { zone: 'green',  label: 'High',     color: '#6BE3A4' };
+    if (score >= 34) return { zone: 'yellow', label: 'Moderate', color: '#F2C063' };
+    return             { zone: 'red',    label: 'Low',      color: '#FF8A8A' };
+  }
+  const sleepDot   = p => p >= 80 ? 'green' : p >= 60 ? 'white' : p >= 40 ? 'yellow' : 'red';
+  const hrvDot     = v => v >= 60 ? 'green' : v >= 40 ? 'white' : v >= 25 ? 'yellow' : 'red';
+  const rhrDot     = v => v <= 55 ? 'green' : v <= 65 ? 'white' : v <= 75 ? 'yellow' : 'red';
+  const battDot    = v => v >= 70 ? 'green' : v >= 40 ? 'white' : v >= 20 ? 'yellow' : 'red';
+
+  function buildVerdict(d) {
+    let label = recoveryZone(d.recoveryScore).label;
+    if (d.hrv < 40 && d.stress > 60) {
+      if (label === 'Peak') label = 'High';
+      else if (label === 'High') label = 'Moderate';
+    }
+    const z = recoveryZone(d.recoveryScore);
+    const map = {
+      Peak:     { hl: 'Green light — push hard today.',      desc: `Recovery at ${d.recoveryScore}%. Your body is fully charged. Hit that heavy session.` },
+      High:     { hl: 'Looking good — solid training day.',  desc: `Recovery at ${d.recoveryScore}%. Strong baseline. Train with intention.` },
+      Moderate: { hl: 'Moderate intensity recommended.',     desc: `Recovery at ${d.recoveryScore}%. Steady-state work is fine. Skip the PRs today.` },
+      Low:      { hl: 'Rest day — let your body recover.',   desc: `Recovery at ${d.recoveryScore}%. Pushing hard here digs a deeper hole. Walk, stretch, sleep.` },
+    };
+    return { zone: z.zone, color: z.color, label, ...(map[label] || map.Moderate) };
+  }
+
+  function estimateStages(perf, totalMins) {
+    const p = perf / 100;
+    const rem   = Math.round(totalMins * (0.20 + p * 0.05));
+    const deep  = Math.round(totalMins * (0.13 + p * 0.07));
+    const awake = Math.round(totalMins * 0.05);
+    const light = Math.max(0, totalMins - rem - deep - awake);
+    return { rem, deep, light, awake };
+  }
+
+  function fmtMins(m) {
+    if (!m && m !== 0) return '--';
+    const h = Math.floor(m / 60), mm = m % 60;
+    return `${h}h ${String(mm).padStart(2,'0')}m`;
+  }
+
+  function fmtRelTime(iso) {
+    const diff = Date.now() - new Date(iso).getTime();
+    const m = Math.round(diff / 60000);
+    if (m < 1) return 'just now';
+    if (m < 60) return `${m}m ago`;
+    const h = Math.round(m / 60);
+    return `${h}h ago`;
+  }
+
+  // ── Ring animation ──────────────────────────────────────────
+  const CIRC = 2 * Math.PI * 96;
+  function animateRing(score, color) {
+    const fill = $('gcRingFill');
+    fill.style.stroke = color;
+    fill.style.filter = `drop-shadow(0 0 18px ${color}80)`;
+    const offset = CIRC - (score / 100) * CIRC;
+    fill.style.strokeDashoffset = CIRC;
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      fill.style.strokeDashoffset = offset;
+    }));
+  }
+
+  // ── DOM helpers ─────────────────────────────────────────────
+  function setText(id, v) { const e = $(id); if (e) e.textContent = v ?? '--'; }
+  function setDot(id, cls) { const e = $(id); if (e) e.className = 'gc-dot ' + (cls || 'dim'); }
+  function setWidth(id, ratio) { const e = $(id); if (e) e.style.width = (Math.max(0, Math.min(1, ratio || 0)) * 100) + '%'; }
+  function setBadge(id, label, zone) {
+    const e = $(id); if (!e) return;
+    e.textContent = label;
+    e.className = (e.className.split(' ')[0]) + ' ' + zone;
+  }
+
+  // ── Render ──────────────────────────────────────────────────
+  function render(data) {
+    if (!data || data.recoveryScore == null) {
+      $('gcEmpty').style.display  = '';
+      $('gcFilled').style.display = 'none';
+      return;
+    }
+    $('gcEmpty').style.display  = 'none';
+    $('gcFilled').style.display = '';
+
+    const z = recoveryZone(data.recoveryScore);
+    const v = buildVerdict(data);
+
+    animateRing(data.recoveryScore, z.color);
+    setText('gcRecoveryNum', data.recoveryScore);
+    setBadge('gcZoneBadge', z.label, z.zone);
+
+    setText('gcSleepPerf', data.sleepPerf); setDot('gcDotSleep',   sleepDot(data.sleepPerf));
+    setText('gcHrv',       data.hrv);       setDot('gcDotHrv',     hrvDot(data.hrv));
+    setText('gcRhr',       data.rhr);       setDot('gcDotRhr',     rhrDot(data.rhr));
+    setText('gcBattery',   data.bodyBattery); setDot('gcDotBattery', battDot(data.bodyBattery));
+
+    const totalMins = (data.sleepHours || 0) * 60 + (data.sleepMins || 0);
+    const s = estimateStages(data.sleepPerf || 50, totalMins);
+    if (totalMins > 0) {
+      setWidth('gcSegRem',   s.rem   / totalMins);
+      setWidth('gcSegDeep',  s.deep  / totalMins);
+      setWidth('gcSegLight', s.light / totalMins);
+      setWidth('gcSegAwake', s.awake / totalMins);
+    }
+    const dur = `${data.sleepHours || 0}h ${String(data.sleepMins || 0).padStart(2,'0')}m`;
+    setText('gcSleepDur', dur);
+    setText('gcSleepDurBio', dur);
+    setText('gcLegRem',   fmtMins(s.rem));
+    setText('gcLegDeep',  fmtMins(s.deep));
+    setText('gcLegLight', fmtMins(s.light));
+    setText('gcLegAwake', fmtMins(s.awake));
+
+    setText('gcStress', data.stress);
+    setText('gcLoggedAt', data.loggedAt ? fmtRelTime(data.loggedAt) : 'today');
+
+    const vEl = $('gcVerdict');
+    vEl.className = `gc-verdict ${v.zone}`;
+    setBadge('gcVerdictBadge', v.label, v.zone);
+    setText('gcVerdictLine', v.hl);
+    setText('gcVerdictDesc', v.desc);
+  }
+
+  // ── Supabase ────────────────────────────────────────────────
+  async function loadFromCloud() {
+    if (!sb) { loadLocal(); return; }
+    try {
+      const { data, error } = await sb.from('user_data').select('value').eq('key', todayKey()).maybeSingle();
+      if (!error && data && data.value) {
+        try { localStorage.setItem(LS_KEY, JSON.stringify(data.value)); } catch {}
+        render(data.value);
+      } else {
+        loadLocal();
+      }
+    } catch { loadLocal(); }
+  }
+
+  function loadLocal() {
+    try { render(JSON.parse(localStorage.getItem(LS_KEY))); } catch { render(null); }
+  }
+
+  function saveData(payload) {
+    payload.loggedAt = new Date().toISOString();
+    try { localStorage.setItem(LS_KEY, JSON.stringify(payload)); } catch {}
+    render(payload);
+    if (!sb) return;
+    sb.from('user_data').upsert({ key: todayKey(), value: payload, updated_at: payload.loggedAt })
+      .then(r => { if (r.error) console.warn('Garmin sync error:', r.error.message); });
+  }
+
+  function setupRealtime() {
+    if (!sb) return;
+    const key = todayKey();
+    sb.channel('garmin-recovery')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'user_data' }, p => {
+        if (p.new && p.new.key === key) render(p.new.value);
+      })
+      .subscribe();
+  }
+
+  // ── Modal ───────────────────────────────────────────────────
+  function syncRangeNum(rangeId, numId, displayId) {
+    const r = $(rangeId), n = $(numId), d = $(displayId);
+    if (!r || !n) return;
+    const upd = () => {
+      const v = r.value;
+      n.value = v;
+      if (d) d.textContent = v;
+    };
+    r.addEventListener('input', () => { n.value = r.value; if (d) d.textContent = r.value; });
+    n.addEventListener('input', () => { r.value = n.value; if (d) d.textContent = n.value; });
+  }
+
+  function wireModal() {
+    syncRangeNum('gcRangeRecovery',  'gcNumRecovery',  'gcValRecovery');
+    syncRangeNum('gcRangeHrv',       'gcNumHrv',       'gcValHrv');
+    syncRangeNum('gcRangeRhr',       'gcNumRhr',       'gcValRhr');
+    syncRangeNum('gcRangeSleepPerf', 'gcNumSleepPerf', 'gcValSleepPerf');
+    syncRangeNum('gcRangeBattery',   'gcNumBattery',   'gcValBattery');
+    syncRangeNum('gcRangeStress',    'gcNumStress',    'gcValStress');
+
+    function openModal() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(LS_KEY)) || {};
+        if (saved.recoveryScore != null) {
+          setField('gcRangeRecovery',  'gcNumRecovery',  'gcValRecovery',  saved.recoveryScore);
+          setField('gcRangeHrv',       'gcNumHrv',       'gcValHrv',       saved.hrv ?? 50);
+          setField('gcRangeRhr',       'gcNumRhr',       'gcValRhr',       saved.rhr ?? 60);
+          setField('gcRangeSleepPerf', 'gcNumSleepPerf', 'gcValSleepPerf', saved.sleepPerf ?? 70);
+          setField('gcRangeBattery',   'gcNumBattery',   'gcValBattery',   saved.bodyBattery ?? 60);
+          setField('gcRangeStress',    'gcNumStress',    'gcValStress',    saved.stress ?? 30);
+          if ($('gcNumSleepH')) $('gcNumSleepH').value = saved.sleepHours ?? 7;
+          if ($('gcNumSleepM')) $('gcNumSleepM').value = saved.sleepMins  ?? 30;
+        }
+      } catch {}
+      $('gcLogBg').classList.add('show');
+    }
+    function setField(rId, nId, dId, v) {
+      const r = $(rId), n = $(nId), d = $(dId);
+      if (r) r.value = v; if (n) n.value = v; if (d) d.textContent = v;
+    }
+
+    $('gcEditBtn').addEventListener('click', openModal);
+    $('gcLogBtnEmpty').addEventListener('click', openModal);
+    $('gcCancelBtn').addEventListener('click', () => $('gcLogBg').classList.remove('show'));
+    $('gcLogBg').addEventListener('click', e => { if (e.target === $('gcLogBg')) $('gcLogBg').classList.remove('show'); });
+
+    $('gcSaveBtn').addEventListener('click', () => {
+      const get = id => parseInt($(id)?.value || '0', 10);
+      const payload = {
+        recoveryScore: get('gcNumRecovery'),
+        hrv:           get('gcNumHrv'),
+        rhr:           get('gcNumRhr'),
+        sleepPerf:     get('gcNumSleepPerf'),
+        sleepHours:    get('gcNumSleepH'),
+        sleepMins:     get('gcNumSleepM'),
+        bodyBattery:   get('gcNumBattery'),
+        stress:        get('gcNumStress'),
+      };
+      saveData(payload);
+      $('gcLogBg').classList.remove('show');
+    });
+  }
+
+  loadFromCloud();
+  setupRealtime();
+  wireModal();
+})();
+</script>
 
 <!-- ===== SUPPLEMENT TRACKER SCRIPT ===== -->
 <script>
