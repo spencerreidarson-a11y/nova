@@ -525,7 +525,13 @@ input[type="date"].lib-input { color-scheme: dark; }
   async function loadIntegration() {
     if (!sb) return;
     var r = await sb.from('library_integrations').select('*').eq('service', 'notion').maybeSingle();
-    integration = r.data || null;
+    var row = r.data || null;
+    // Discard rows with missing or invalid tokens (stale from failed attempts)
+    if (row && (!row.api_key || !row.api_key.startsWith('secret_'))) {
+      try { await sb.from('library_integrations').delete().eq('id', row.id); } catch (_) {}
+      row = null;
+    }
+    integration = row;
   }
 
   // ── RENDER GOALS ─────────────────────────────────────
@@ -880,8 +886,8 @@ input[type="date"].lib-input { color-scheme: dark; }
     await Promise.all([loadGoals(), loadNotes(), loadIntegration()]);
     renderAll();
 
-    // Auto-sync Notion if >1 hour since last sync
-    if (integration && integration.last_synced_at) {
+    // Auto-sync only if: valid token present, user has connected before (last_synced_at set), and >1 hour elapsed
+    if (integration && integration.api_key && integration.api_key.startsWith('secret_') && integration.last_synced_at) {
       var sinceMs = Date.now() - new Date(integration.last_synced_at);
       if (sinceMs > 3600000) syncNotion(integration.api_key);
     }
