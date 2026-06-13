@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" href="/nova_icon.png">
+  <link rel="apple-touch-icon" href="/nova_icon.png">
+  <link rel="manifest" href="/manifest.json">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;1,9..144,400&family=Bodoni+Moda:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0a0a0b">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="color-scheme" content="dark">
+  <title>Library</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="/topbar.js" defer></script>
+</head>
+<style>
+:root {
+  --bg: #050506;
+  --bg-card: rgba(255,255,255,0.04);
+  --bg-secondary: rgba(255,255,255,0.035);
+  --bg-input: rgba(0,0,0,0.28);
+  --bg-input-focus: rgba(0,0,0,0.36);
+  --border: rgba(255,255,255,0.06);
+  --border-strong: rgba(255,255,255,0.12);
+  --text-primary: #FAFAFA;
+  --text-secondary: #B8B6B0;
+  --text-tertiary: #76746E;
+  --text-quaternary: #4D4B47;
+  --font: -apple-system,BlinkMacSystemFont,"Inter","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --font-mono: ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --lime: #c2ef4e;
+  --amber: #F5A623;
+  --soft-red: #FF6B6B;
+}
+
+* { box-sizing: border-box; }
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text-secondary);
+  font-family: var(--font);
+  font-size: 15px; line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+body { min-height: 100vh; position: relative; overflow-x: hidden; }
+body::before {
+  content: ''; position: fixed; inset: 0;
+  background:
+    radial-gradient(60% 50% at 80% 12%, rgba(194,239,78,0.06) 0%, transparent 60%),
+    radial-gradient(50% 40% at 15% 88%, rgba(180,180,220,0.07) 0%, transparent 60%);
+  filter: blur(40px);
+  pointer-events: none; z-index: 0;
+  animation: drift 36s ease-in-out infinite alternate;
+}
+body::after {
+  content: ''; position: fixed; inset: 0;
+  background-image: radial-gradient(rgba(255,255,255,0.014) 1px, transparent 1px);
+  background-size: 3px 3px;
+  pointer-events: none; z-index: 1;
+}
+@keyframes drift { 0% { transform: translate(0,0); } 100% { transform: translate(-2%,2%); } }
+
+main {
+  position: relative; z-index: 2;
+  max-width: 720px; margin: 0 auto;
+  padding: 16px 20px 32px;
+}
+
+/* ── HEADER ─────────────────────────────────────────── */
+.lib-header { margin-bottom: 24px; }
+.lib-title {
+  font-family: 'Bodoni Moda', serif;
+  font-size: clamp(32px, 10vw, 48px);
+  font-weight: 400; color: var(--text-primary);
+  margin: 0 0 14px; letter-spacing: -0.01em; line-height: 1.1;
+}
+.lib-search-wrap { position: relative; }
+.lib-search {
+  width: 100%;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 11px 18px;
+  color: var(--text-primary); font-family: var(--font); font-size: 15px;
+  outline: none;
+  transition: border-color 0.15s, background 0.15s;
+  -webkit-appearance: none;
+}
+.lib-search:focus {
+  border-color: var(--border-strong);
+  background: var(--bg-input-focus);
+}
+.lib-search::placeholder { color: var(--text-quaternary); }
+
+/* ── SECTION ─────────────────────────────────────────── */
+.lib-section { margin-bottom: 32px; }
+.lib-section-head {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 12px;
+}
+.lib-eyebrow {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--text-tertiary);
+  font-family: var(--font-mono); flex: 1;
+}
+.lib-add-btn {
+  background: none; border: none;
+  color: var(--lime); font-size: 12px; font-weight: 600;
+  cursor: pointer; padding: 4px 0;
+  font-family: var(--font); letter-spacing: 0.01em;
+  -webkit-tap-highlight-color: transparent;
+  white-space: nowrap;
+}
+.lib-add-btn:hover { opacity: 0.8; }
+.lib-icon-btn {
+  background: none; border: none;
+  color: var(--text-tertiary); font-size: 18px;
+  cursor: pointer; padding: 2px 6px; line-height: 1;
+  -webkit-tap-highlight-color: transparent;
+  transition: color 0.15s;
+}
+.lib-icon-btn:hover { color: var(--text-primary); }
+
+/* ── LIST ROWS ───────────────────────────────────────── */
+.lib-list {
+  display: flex; flex-direction: column;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--bg-card);
+}
+.lib-row {
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.12s;
+  -webkit-tap-highlight-color: transparent;
+}
+.lib-row:last-child { border-bottom: none; }
+.lib-row:hover { background: rgba(255,255,255,0.03); }
+.lib-row-main {
+  display: flex; align-items: center; gap: 10px;
+  padding: 13px 16px;
+}
+.lib-row-text-col { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.lib-row-title {
+  font-size: 14px; font-weight: 500; color: var(--text-primary);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  flex: 1; min-width: 0;
+}
+.lib-row-snippet {
+  font-size: 12px; color: var(--text-tertiary);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.lib-row-meta {
+  font-size: 11px; color: var(--text-quaternary);
+  font-family: var(--font-mono); white-space: nowrap; flex-shrink: 0;
+}
+.lib-empty {
+  padding: 20px 16px;
+  font-size: 13px; color: var(--text-quaternary);
+  text-align: center; line-height: 1.5;
+}
+
+/* ── DEADLINE PILLS ──────────────────────────────────── */
+.deadline-pill {
+  display: inline-flex; align-items: center;
+  font-size: 11px; font-weight: 600; font-family: var(--font-mono);
+  padding: 3px 8px; border-radius: 20px; white-space: nowrap; flex-shrink: 0;
+}
+.pill-lime   { color: var(--lime);     background: rgba(194,239,78,0.12);  }
+.pill-amber  { color: var(--amber);    background: rgba(245,166,35,0.12);  }
+.pill-red    { color: var(--soft-red); background: rgba(255,107,107,0.12); }
+.pill-muted  { color: var(--text-quaternary); background: rgba(255,255,255,0.06); }
+
+/* ── GOAL EXPAND ─────────────────────────────────────── */
+.goal-expand {
+  padding: 0 16px 14px;
+  border-top: 1px solid var(--border);
+  background: rgba(255,255,255,0.02);
+}
+.goal-desc {
+  font-size: 13px; color: var(--text-secondary);
+  padding: 10px 0 10px; white-space: pre-wrap; word-break: break-word;
+}
+.goal-actions {
+  display: flex; gap: 8px; flex-wrap: wrap;
+}
+.goal-action-btn {
+  background: none; border: 1px solid var(--border);
+  color: var(--text-secondary); font-size: 12px; font-weight: 500;
+  padding: 5px 12px; border-radius: 20px;
+  cursor: pointer; font-family: var(--font);
+  transition: border-color 0.12s, color 0.12s;
+  -webkit-tap-highlight-color: transparent;
+}
+.goal-action-btn:hover { border-color: var(--border-strong); color: var(--text-primary); }
+.goal-action-delete { color: var(--soft-red); border-color: rgba(255,107,107,0.2); }
+.goal-action-delete:hover { border-color: rgba(255,107,107,0.5); color: var(--soft-red); }
+
+/* ── NOTION ──────────────────────────────────────────── */
+.notion-connect-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+  display: flex; flex-direction: column; align-items: center; gap: 14px;
+  text-align: center;
+}
+.notion-connect-text {
+  font-size: 13px; color: var(--text-tertiary); line-height: 1.5;
+}
+.lib-connect-btn {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid var(--border-strong);
+  color: var(--text-primary); font-size: 14px; font-weight: 600;
+  padding: 10px 22px; border-radius: 22px;
+  cursor: pointer; font-family: var(--font);
+  transition: background 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+.lib-connect-btn:hover { background: rgba(255,255,255,0.10); }
+.notion-glyph {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 18px; height: 18px; border-radius: 4px;
+  background: #fff; color: #000;
+  font-size: 11px; font-weight: 800; font-family: serif;
+  flex-shrink: 0;
+}
+.lib-sync-label {
+  font-size: 11px; color: var(--text-quaternary);
+  font-family: var(--font-mono);
+  margin-bottom: 8px; padding-left: 2px;
+}
+
+/* ── MODALS (bottom-sheet) ───────────────────────────── */
+.lib-modal-bg {
+  display: none; position: fixed; inset: 0; z-index: 100;
+  background: rgba(0,0,0,0.72);
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+  align-items: flex-end; justify-content: center;
+}
+.lib-modal-bg.show { display: flex; }
+.lib-modal {
+  background: #15151a;
+  border: 1px solid var(--border-strong);
+  border-radius: 22px 22px 0 0;
+  padding: 24px 20px;
+  padding-bottom: max(24px, env(safe-area-inset-bottom));
+  width: 100%; max-width: 560px;
+  max-height: 92vh; overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.lib-modal-title {
+  font-size: 17px; font-weight: 700; color: var(--text-primary);
+  margin-bottom: 20px;
+}
+.lib-field { margin-bottom: 16px; }
+.lib-label {
+  display: block;
+  font-size: 11px; font-weight: 600; letter-spacing: 0.10em;
+  text-transform: uppercase; color: var(--text-tertiary);
+  font-family: var(--font-mono); margin-bottom: 6px;
+}
+.lib-input {
+  width: 100%;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  color: var(--text-primary); font-family: var(--font); font-size: 15px;
+  outline: none;
+  transition: border-color 0.15s;
+  -webkit-appearance: none;
+}
+.lib-input:focus { border-color: var(--border-strong); }
+.lib-textarea { resize: vertical; min-height: 72px; line-height: 1.5; }
+input[type="date"].lib-input { color-scheme: dark; }
+.lib-modal-btns {
+  display: flex; gap: 10px; margin-top: 20px;
+}
+.lib-btn-cancel {
+  flex: 1; height: 46px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid var(--border);
+  color: var(--text-secondary); font-size: 15px; font-weight: 600;
+  border-radius: 12px; cursor: pointer; font-family: var(--font);
+  transition: background 0.12s;
+  -webkit-tap-highlight-color: transparent;
+}
+.lib-btn-cancel:hover { background: rgba(255,255,255,0.10); }
+.lib-btn-save {
+  flex: 2; height: 46px;
+  background: linear-gradient(180deg, #ffffff 0%, #e8e5dd 100%);
+  border: none; color: #0a0a0b;
+  font-size: 15px; font-weight: 700;
+  border-radius: 12px; cursor: pointer; font-family: var(--font);
+  transition: opacity 0.12s;
+  -webkit-tap-highlight-color: transparent;
+}
+.lib-btn-save:hover { opacity: 0.92; }
+
+/* Notion steps list */
+.lib-notion-steps {
+  margin: 0 0 20px 0; padding-left: 22px;
+  font-size: 13px; color: var(--text-secondary); line-height: 1.8;
+}
+.lib-notion-steps strong { color: var(--text-primary); }
+.lib-notion-steps li { margin-bottom: 2px; }
+
+/* ── FULL-VIEW MODAL ─────────────────────────────────── */
+.lib-fullview-bg {
+  display: none; position: fixed; inset: 0; z-index: 200;
+  background: #050506;
+  flex-direction: column;
+}
+.lib-fullview-bg.show { display: flex; }
+.lib-fullview {
+  display: flex; flex-direction: column;
+  width: 100%; height: 100%;
+  padding-top: max(16px, env(safe-area-inset-top));
+  padding-bottom: max(16px, env(safe-area-inset-bottom));
+}
+.lib-fullview-header {
+  display: flex; align-items: center; gap: 12px;
+  padding: 0 16px 14px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.lib-fullview-close {
+  background: none; border: none;
+  color: var(--text-tertiary); font-size: 22px; line-height: 1;
+  cursor: pointer; padding: 2px 6px;
+  -webkit-tap-highlight-color: transparent;
+  flex-shrink: 0;
+}
+.lib-fullview-close:hover { color: var(--text-primary); }
+.lib-fullview-title {
+  flex: 1; font-size: 15px; font-weight: 600; color: var(--text-primary);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.lib-fullview-link {
+  color: var(--lime); font-size: 13px; font-weight: 600;
+  text-decoration: none; flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+.lib-fullview-link:hover { opacity: 0.8; }
+.lib-fullview-body {
+  flex: 1; overflow-y: auto; overscroll-behavior: contain;
+  padding: 20px 20px;
+  color: var(--text-secondary); font-size: 14px; line-height: 1.75;
+  white-space: pre-wrap; word-break: break-word;
+  max-width: 680px; margin: 0 auto; width: 100%;
+}
+
+@media (max-width: 480px) {
+  main { padding: 12px 14px 28px; }
+  .lib-title { margin-bottom: 12px; }
+}
+</style>
+<body>
+<main>
+
+  <div class="lib-header">
+    <h1 class="lib-title">Library</h1>
+    <div class="lib-search-wrap">
+      <input type="search" id="libSearch" class="lib-search" placeholder="search anything..." autocomplete="off" autocorrect="off">
+    </div>
+  </div>
+
+  <!-- GOALS -->
+  <div class="lib-section" id="goalsSection">
+    <div class="lib-section-head">
+      <span class="lib-eyebrow">Goals</span>
+      <button class="lib-add-btn" id="addGoalBtn">+ Add goal</button>
+    </div>
+    <div id="goalsList" class="lib-list">
+      <div class="lib-empty">Loading…</div>
+    </div>
+  </div>
+
+  <!-- NOTION -->
+  <div class="lib-section" id="notionSection">
+    <div class="lib-section-head">
+      <span class="lib-eyebrow">Notion</span>
+      <button class="lib-icon-btn" id="notionRefreshBtn" title="Sync now" style="display:none">↻</button>
+    </div>
+    <div id="notionContent"></div>
+  </div>
+
+  <!-- APPLE NOTES -->
+  <div class="lib-section" id="appleSection">
+    <div class="lib-section-head">
+      <span class="lib-eyebrow">Apple Notes</span>
+      <label class="lib-add-btn" for="appleUpload" role="button">+ Upload notes</label>
+      <input type="file" id="appleUpload" accept=".pdf,.txt" multiple style="display:none">
+    </div>
+    <div id="appleList" class="lib-list">
+      <div class="lib-empty">Loading…</div>
+    </div>
+  </div>
+
+</main>
+
+<!-- GOAL ADD/EDIT MODAL -->
+<div class="lib-modal-bg" id="goalModalBg" role="dialog" aria-modal="true" aria-labelledby="goalModalTitle">
+  <div class="lib-modal">
+    <div class="lib-modal-title" id="goalModalTitle">Add Goal</div>
+    <div class="lib-field">
+      <label class="lib-label" for="goalTitleInput">Title</label>
+      <input type="text" id="goalTitleInput" class="lib-input" placeholder="What do you want to achieve?" autocomplete="off">
+    </div>
+    <div class="lib-field">
+      <label class="lib-label" for="goalDescInput">Description</label>
+      <textarea id="goalDescInput" class="lib-input lib-textarea" placeholder="Optional notes…" rows="3"></textarea>
+    </div>
+    <div class="lib-field">
+      <label class="lib-label" for="goalDeadlineInput">Deadline</label>
+      <input type="date" id="goalDeadlineInput" class="lib-input">
+    </div>
+    <div class="lib-modal-btns">
+      <button class="lib-btn-cancel" id="goalModalCancel">Cancel</button>
+      <button class="lib-btn-save" id="goalModalSave">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- NOTION CONNECT MODAL -->
+<div class="lib-modal-bg" id="notionModalBg" role="dialog" aria-modal="true" aria-label="Connect Notion">
+  <div class="lib-modal">
+    <div class="lib-modal-title">Connect Notion</div>
+    <ol class="lib-notion-steps">
+      <li>Go to <strong>notion.so/my-integrations</strong></li>
+      <li>Click <strong>New integration</strong>, name it "Nova"</li>
+      <li>Copy the <strong>Internal Integration Token</strong> (starts with <code>secret_</code>)</li>
+      <li>In each Notion page to sync: click <strong>···</strong> → <strong>Add connections</strong> → "Nova"</li>
+    </ol>
+    <div class="lib-field">
+      <label class="lib-label" for="notionTokenInput">Integration Token</label>
+      <input type="password" id="notionTokenInput" class="lib-input" placeholder="secret_…" autocomplete="off" autocorrect="off">
+    </div>
+    <div class="lib-modal-btns">
+      <button class="lib-btn-cancel" id="notionModalCancel">Cancel</button>
+      <button class="lib-btn-save" id="notionModalSave">Connect &amp; Sync</button>
+    </div>
+  </div>
+</div>
+
+<!-- FULL TEXT VIEW -->
+<div class="lib-fullview-bg" id="fullviewBg" role="dialog" aria-modal="true" aria-label="Note viewer">
+  <div class="lib-fullview">
+    <div class="lib-fullview-header">
+      <button class="lib-fullview-close" id="fullviewClose" aria-label="Close">✕</button>
+      <div class="lib-fullview-title" id="fullviewTitle"></div>
+      <a href="#" class="lib-fullview-link" id="fullviewLink" target="_blank" rel="noopener" style="display:none">Open ↗</a>
+    </div>
+    <div class="lib-fullview-body" id="fullviewBody"></div>
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  const SUPA_URL = 'https://gmmmrfldwjwbektgbifq.supabase.co';
+  const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdtbW1yZmxkd2p3YmVrdGdiaWZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1MDA5NTQsImV4cCI6MjA5NjA3Njk1NH0.sTUJrqcAwkl3lzbcGMU_0Gc5S_Vth0WxvfF6YU8rlJc';
+  const sb = window.supabase ? window.supabase.createClient(SUPA_URL, SUPA_KEY) : null;
+
+  let goals = [];
+  let notionPages = [];
+  let appleNotes = [];
+  let integration = null;
+  let editingGoalId = null;
+  let searchQuery = '';
+
+  // ── HELPERS ──────────────────────────────────────────
+  function esc(s) {
+    return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+  function relDate(iso) {
+    if (!iso) return '';
+    const d = new Date(iso), now = new Date();
+    const days = Math.floor((now - d) / 86400000);
+    if (days === 0) return 'today';
+    if (days === 1) return 'yesterday';
+    if (days < 7) return days + 'd ago';
+    const m = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    return m[d.getMonth()] + ' ' + d.getDate();
+  }
+  function deadlinePill(deadline) {
+    if (!deadline) return '';
+    const today = new Date(); today.setHours(0, 0, 0, 0);
+    const due = new Date(deadline + 'T00:00:00');
+    const days = Math.round((due - today) / 86400000);
+    const m = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    const dateStr = m[due.getMonth()] + ' ' + due.getDate();
+    let cls, label;
+    if (days < 0)       { cls = 'pill-red';   label = Math.abs(days) + 'd overdue'; }
+    else if (days < 7)  { cls = 'pill-red';   label = days + 'd left'; }
+    else if (days < 30) { cls = 'pill-amber'; label = days + 'd left'; }
+    else                { cls = 'pill-lime';  label = days + 'd left'; }
+    return '<span class="deadline-pill ' + cls + '">' + dateStr + ' · ' + label + '</span>';
+  }
+  function matchesQ(texts) {
+    if (!searchQuery) return true;
+    return texts.some(function (t) { return t && t.toLowerCase().indexOf(searchQuery) !== -1; });
+  }
+
+  // ── DATA LOAD ────────────────────────────────────────
+  async function loadGoals() {
+    if (!sb) return;
+    var r = await sb.from('goals').select('*').eq('status', 'active').order('created_at', { ascending: false });
+    goals = r.data || [];
+  }
+  async function loadNotes() {
+    if (!sb) return;
+    var r = await sb.from('library_notes').select('*').order('updated_at', { ascending: false });
+    var all = r.data || [];
+    notionPages = all.filter(function (n) { return n.source === 'notion'; });
+    appleNotes  = all.filter(function (n) { return n.source === 'apple'; });
+  }
+  async function loadIntegration() {
+    if (!sb) return;
+    var r = await sb.from('library_integrations').select('*').eq('service', 'notion').maybeSingle();
+    integration = r.data || null;
+  }
+
+  // ── RENDER GOALS ─────────────────────────────────────
+  function renderGoals(filter) {
+    var list = document.getElementById('goalsList');
+    var section = document.getElementById('goalsSection');
+    if (!list) return;
+    var filtered = goals.filter(function (g) { return matchesQ([g.title, g.description]); });
+    if (filter && filtered.length === 0) { section.style.display = 'none'; return; }
+    section.style.display = '';
+    if (filtered.length === 0) {
+      list.innerHTML = '<div class="lib-empty">No goals yet. Tap "+ Add goal" to create one.</div>';
+      return;
+    }
+    list.innerHTML = filtered.map(function (g) {
+      return '<div class="lib-row goal-row" data-id="' + esc(g.id) + '">' +
+        '<div class="lib-row-main">' +
+          '<span class="lib-row-title">' + esc(g.title) + '</span>' +
+          deadlinePill(g.deadline) +
+        '</div>' +
+        '<div class="goal-expand" style="display:none">' +
+          (g.description ? '<div class="goal-desc">' + esc(g.description) + '</div>' : '') +
+          '<div class="goal-actions">' +
+            '<button class="goal-action-btn" data-action="edit" data-id="' + esc(g.id) + '">Edit</button>' +
+            '<button class="goal-action-btn" data-action="archive" data-id="' + esc(g.id) + '">Archive</button>' +
+            '<button class="goal-action-btn goal-action-delete" data-action="delete" data-id="' + esc(g.id) + '">Delete</button>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+
+    list.querySelectorAll('.goal-row').forEach(function (row) {
+      row.querySelector('.lib-row-main').addEventListener('click', function () {
+        var exp = row.querySelector('.goal-expand');
+        var isOpen = exp.style.display !== 'none';
+        list.querySelectorAll('.goal-expand').forEach(function (e) { e.style.display = 'none'; });
+        exp.style.display = isOpen ? 'none' : 'block';
+      });
+    });
+    list.querySelectorAll('[data-action]').forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var id = btn.dataset.id, action = btn.dataset.action;
+        if (action === 'edit') openGoalModal(id);
+        else if (action === 'archive') archiveGoal(id);
+        else if (action === 'delete') deleteGoal(id);
+      });
+    });
+  }
+
+  // ── RENDER NOTION ────────────────────────────────────
+  function renderNotion(filter) {
+    var content = document.getElementById('notionContent');
+    var section = document.getElementById('notionSection');
+    var refreshBtn = document.getElementById('notionRefreshBtn');
+    if (!content) return;
+
+    if (!integration) {
+      section.style.display = '';
+      refreshBtn.style.display = 'none';
+      content.innerHTML =
+        '<div class="notion-connect-card">' +
+          '<div class="notion-connect-text">Sync your Notion pages to search and read them here.</div>' +
+          '<button class="lib-connect-btn" id="connectNotionBtn">Connect Notion</button>' +
+        '</div>';
+      document.getElementById('connectNotionBtn').addEventListener('click', function () { openModal('notionModalBg'); });
+      return;
+    }
+
+    refreshBtn.style.display = '';
+    var filtered = notionPages.filter(function (n) { return matchesQ([n.title, n.body]); });
+    if (filter && filtered.length === 0) { section.style.display = 'none'; return; }
+    section.style.display = '';
+
+    var syncLabel = '';
+    if (integration.last_synced_at) {
+      var mins = Math.round((Date.now() - new Date(integration.last_synced_at)) / 60000);
+      syncLabel = mins < 60 ? mins + 'm ago' : Math.round(mins / 60) + 'h ago';
+    }
+    var rows = filtered.length === 0
+      ? '<div class="lib-empty">No pages synced yet. Make sure your integration has access to at least one page, then tap ↻ to sync.</div>'
+      : filtered.map(function (n) {
+          return '<div class="lib-row" data-id="' + esc(n.id) + '" data-source="notion">' +
+            '<div class="lib-row-main">' +
+              '<span class="notion-glyph">N</span>' +
+              '<span class="lib-row-title">' + esc(n.title) + '</span>' +
+              '<span class="lib-row-meta">' + relDate(n.updated_at) + '</span>' +
+            '</div>' +
+          '</div>';
+        }).join('');
+
+    content.innerHTML =
+      (syncLabel ? '<div class="lib-sync-label">Last synced ' + syncLabel + '</div>' : '') +
+      '<div class="lib-list">' + rows + '</div>';
+
+    content.querySelectorAll('.lib-row[data-source="notion"]').forEach(function (row) {
+      row.addEventListener('click', function () {
+        var note = notionPages.find(function (n) { return n.id === row.dataset.id; });
+        if (note) openFullView(note.title, note.body, note.external_url);
+      });
+    });
+  }
+
+  // ── RENDER APPLE NOTES ───────────────────────────────
+  function renderApple(filter) {
+    var list = document.getElementById('appleList');
+    var section = document.getElementById('appleSection');
+    if (!list) return;
+    var filtered = appleNotes.filter(function (n) { return matchesQ([n.title, n.body]); });
+    if (filter && filtered.length === 0) { section.style.display = 'none'; return; }
+    section.style.display = '';
+    if (filtered.length === 0) {
+      list.innerHTML = '<div class="lib-empty">No notes uploaded. Tap "+ Upload notes" to add .pdf or .txt files.</div>';
+      return;
+    }
+    list.innerHTML = filtered.map(function (n) {
+      return '<div class="lib-row" data-id="' + esc(n.id) + '" data-source="apple">' +
+        '<div class="lib-row-main">' +
+          '<div class="lib-row-text-col">' +
+            '<span class="lib-row-title">' + esc(n.title) + '</span>' +
+            (n.body ? '<span class="lib-row-snippet">' + esc(n.body.slice(0, 80)) + '</span>' : '') +
+          '</div>' +
+          '<span class="lib-row-meta">' + relDate(n.created_at) + '</span>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+
+    list.querySelectorAll('.lib-row[data-source="apple"]').forEach(function (row) {
+      row.addEventListener('click', function () {
+        var note = appleNotes.find(function (n) { return n.id === row.dataset.id; });
+        if (note) openFullView(note.title, note.body, null);
+      });
+    });
+  }
+
+  function renderAll() {
+    var filter = !!searchQuery;
+    renderGoals(filter);
+    renderNotion(filter);
+    renderApple(filter);
+  }
+
+  // ── GOAL CRUD ────────────────────────────────────────
+  async function addGoal(title, description, deadline) {
+    if (!sb) return;
+    var r = await sb.from('goals').insert({
+      title: title,
+      description: description || null,
+      deadline: deadline || null
+    }).select().single();
+    if (r.data) goals.unshift(r.data);
+    renderGoals(false);
+  }
+  async function updateGoal(id, patch) {
+    if (!sb) return;
+    await sb.from('goals').update(patch).eq('id', id);
+    var idx = goals.findIndex(function (g) { return g.id === id; });
+    if (idx !== -1) goals[idx] = Object.assign({}, goals[idx], patch);
+    renderGoals(false);
+  }
+  async function archiveGoal(id) {
+    if (!sb) return;
+    await sb.from('goals').update({ status: 'archived' }).eq('id', id);
+    goals = goals.filter(function (g) { return g.id !== id; });
+    renderGoals(false);
+  }
+  async function deleteGoal(id) {
+    if (!sb) return;
+    if (!confirm('Delete this goal permanently?')) return;
+    await sb.from('goals').delete().eq('id', id);
+    goals = goals.filter(function (g) { return g.id !== id; });
+    renderGoals(false);
+  }
+
+  // ── NOTION SYNC ──────────────────────────────────────
+  async function syncNotion(apiKey) {
+    var refreshBtn = document.getElementById('notionRefreshBtn');
+    if (refreshBtn) { refreshBtn.textContent = '…'; refreshBtn.disabled = true; }
+    try {
+      var res = await fetch('/api/notion-sync', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ apiKey: apiKey })
+      });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      var json = await res.json();
+      var pages = json.pages || [];
+      var now = new Date().toISOString();
+
+      for (var i = 0; i < pages.length; i++) {
+        var page = pages[i];
+        var existing = notionPages.find(function (n) { return n.external_id === page.id; });
+        if (existing) {
+          await sb.from('library_notes').update({
+            title: page.title, body: page.body,
+            updated_at: page.updatedAt, last_synced_at: now
+          }).eq('id', existing.id);
+        } else {
+          await sb.from('library_notes').insert({
+            source: 'notion', title: page.title, body: page.body,
+            external_id: page.id, external_url: page.url,
+            updated_at: page.updatedAt, last_synced_at: now
+          });
+        }
+      }
+      await sb.from('library_integrations').update({ last_synced_at: now }).eq('id', integration.id);
+      await Promise.all([loadNotes(), loadIntegration()]);
+      renderNotion(false);
+    } catch (e) {
+      alert('Sync failed. Check your token and make sure pages are shared with your Nova integration.\n\n' + e.message);
+    } finally {
+      if (refreshBtn) { refreshBtn.textContent = '↻'; refreshBtn.disabled = false; }
+    }
+  }
+
+  // ── APPLE NOTES UPLOAD ───────────────────────────────
+  async function parseFile(file) {
+    if (file.type === 'text/plain' || file.name.endsWith('.txt')) {
+      return file.text();
+    }
+    if (typeof pdfjsLib === 'undefined') throw new Error('PDF parser not loaded yet — try again in a moment');
+    pdfjsLib.GlobalWorkerOptions.workerSrc =
+      'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    var buf = await file.arrayBuffer();
+    var pdf = await pdfjsLib.getDocument({ data: buf }).promise;
+    var text = '';
+    for (var i = 1; i <= pdf.numPages; i++) {
+      var pg = await pdf.getPage(i);
+      var c = await pg.getTextContent();
+      text += c.items.map(function (s) { return s.str; }).join(' ') + '\n';
+    }
+    return text.trim();
+  }
+  async function handleUpload(files) {
+    for (var i = 0; i < files.length; i++) {
+      var file = files[i];
+      try {
+        var body = await parseFile(file);
+        var title = file.name.replace(/\.[^.]+$/, '');
+        var now = new Date().toISOString();
+        var r = await sb.from('library_notes').insert({
+          source: 'apple', title: title, body: body,
+          updated_at: now
+        }).select().single();
+        if (r.data) appleNotes.unshift(r.data);
+      } catch (e) {
+        alert('Failed to upload ' + file.name + ':\n' + e.message);
+      }
+    }
+    renderApple(false);
+  }
+
+  // ── MODALS ───────────────────────────────────────────
+  function openModal(id) {
+    document.getElementById(id).classList.add('show');
+    document.body.classList.add('topbar-modal-open');
+  }
+  function closeModal(id) {
+    document.getElementById(id).classList.remove('show');
+    if (!document.querySelector('.lib-modal-bg.show, .lib-fullview-bg.show')) {
+      document.body.classList.remove('topbar-modal-open');
+    }
+  }
+  function openGoalModal(id) {
+    editingGoalId = id || null;
+    var titleEl = document.getElementById('goalModalTitle');
+    var tIn = document.getElementById('goalTitleInput');
+    var dIn = document.getElementById('goalDescInput');
+    var dlIn = document.getElementById('goalDeadlineInput');
+    if (id) {
+      var g = goals.find(function (x) { return x.id === id; });
+      titleEl.textContent = 'Edit Goal';
+      tIn.value = g.title || '';
+      dIn.value = g.description || '';
+      dlIn.value = g.deadline || '';
+    } else {
+      titleEl.textContent = 'Add Goal';
+      tIn.value = ''; dIn.value = ''; dlIn.value = '';
+    }
+    openModal('goalModalBg');
+    setTimeout(function () { tIn.focus(); }, 60);
+  }
+  function openFullView(title, body, link) {
+    document.getElementById('fullviewTitle').textContent = title || '';
+    document.getElementById('fullviewBody').textContent = body || '(empty)';
+    var linkEl = document.getElementById('fullviewLink');
+    if (link) { linkEl.href = link; linkEl.style.display = ''; }
+    else { linkEl.style.display = 'none'; }
+    openModal('fullviewBg');
+  }
+
+  // ── INIT ─────────────────────────────────────────────
+  async function init() {
+    // Goal modal
+    document.getElementById('addGoalBtn').addEventListener('click', function () { openGoalModal(null); });
+    document.getElementById('goalModalCancel').addEventListener('click', function () { closeModal('goalModalBg'); });
+    document.getElementById('goalModalSave').addEventListener('click', async function () {
+      var title = document.getElementById('goalTitleInput').value.trim();
+      if (!title) { document.getElementById('goalTitleInput').focus(); return; }
+      var desc = document.getElementById('goalDescInput').value.trim();
+      var deadline = document.getElementById('goalDeadlineInput').value;
+      closeModal('goalModalBg');
+      if (editingGoalId) await updateGoal(editingGoalId, { title: title, description: desc || null, deadline: deadline || null });
+      else await addGoal(title, desc, deadline);
+    });
+    document.getElementById('goalModalBg').addEventListener('click', function (e) {
+      if (e.target.id === 'goalModalBg') closeModal('goalModalBg');
+    });
+
+    // Notion modal
+    document.getElementById('notionRefreshBtn').addEventListener('click', function () {
+      if (integration) syncNotion(integration.api_key);
+    });
+    document.getElementById('notionModalCancel').addEventListener('click', function () { closeModal('notionModalBg'); });
+    document.getElementById('notionModalSave').addEventListener('click', async function () {
+      var token = document.getElementById('notionTokenInput').value.trim();
+      if (!token) { document.getElementById('notionTokenInput').focus(); return; }
+      closeModal('notionModalBg');
+      var patch = { service: 'notion', api_key: token };
+      if (integration) {
+        await sb.from('library_integrations').update(patch).eq('id', integration.id);
+        integration = Object.assign({}, integration, patch);
+      } else {
+        var r = await sb.from('library_integrations').insert(patch).select().single();
+        integration = r.data;
+      }
+      await syncNotion(token);
+    });
+    document.getElementById('notionModalBg').addEventListener('click', function (e) {
+      if (e.target.id === 'notionModalBg') closeModal('notionModalBg');
+    });
+
+    // Full view
+    document.getElementById('fullviewClose').addEventListener('click', function () { closeModal('fullviewBg'); });
+    document.getElementById('fullviewBg').addEventListener('click', function (e) {
+      if (e.target.id === 'fullviewBg') closeModal('fullviewBg');
+    });
+
+    // Upload
+    document.getElementById('appleUpload').addEventListener('change', async function (e) {
+      if (e.target.files.length) await handleUpload(Array.from(e.target.files));
+      e.target.value = '';
+    });
+
+    // Search
+    document.getElementById('libSearch').addEventListener('input', function (e) {
+      searchQuery = e.target.value.toLowerCase();
+      renderAll();
+    });
+
+    // Load
+    await Promise.all([loadGoals(), loadNotes(), loadIntegration()]);
+    renderAll();
+
+    // Auto-sync Notion if >1 hour since last sync
+    if (integration && integration.last_synced_at) {
+      var sinceMs = Date.now() - new Date(integration.last_synced_at);
+      if (sinceMs > 3600000) syncNotion(integration.api_key);
+    }
+  }
+
+  init();
+})();
+</script>
+</body>
+</html>

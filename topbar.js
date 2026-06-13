@@ -112,6 +112,10 @@ body.has-bottombar { padding-bottom: calc(72px + env(safe-area-inset-bottom)) !i
   .tabbar { padding-left: 12px; padding-right: 12px; }
 }
 html, body { -webkit-text-size-adjust: 100%; }
+@media (max-width: 560px) {
+  .tabbar-inner:has(.tab:nth-child(6)) .tab { flex-direction: column; gap: 2px; padding: 7px 1px; font-size: 9px; }
+  .tabbar-inner:has(.tab:nth-child(6)) .tab-icon { width: 14px; height: 14px; }
+}
 @media (max-width: 768px) {
   html { touch-action: pan-y; }
   ::-webkit-scrollbar { width: 0; height: 0; display: none; }
@@ -160,6 +164,7 @@ body.topbar-modal-open { overflow: hidden; touch-action: none; }
     <a href="po-coach.html" class="tab" data-page="fitness"><span class="tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="10" width="4" height="4" rx="1"/><rect x="19" y="10" width="4" height="4" rx="1"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>Fitness</a>
     <a href="finance.html" class="tab" data-page="finance"><span class="tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></span>Finance</a>
     <a href="productivity.html" class="tab" data-page="productivity"><span class="tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></span>Focus</a>
+    <a href="library.html" class="tab" data-page="library"><span class="tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span>Library</a>
   </div>
 </nav>`;
 
@@ -177,6 +182,7 @@ body.topbar-modal-open { overflow: hidden; touch-action: none; }
     if (p.endsWith('po-coach.html')) return 'fitness';
     if (p.endsWith('finance.html')) return 'finance';
     if (p.endsWith('productivity.html')) return 'productivity';
+    if (p.endsWith('library.html')) return 'library';
     return 'main';
   }
 
