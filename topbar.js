@@ -85,35 +85,22 @@
   font-size: 20px; line-height: 1;
   filter: grayscale(100%) brightness(1.4); opacity: 0.85;
 }
-.bottombar {
-  position: fixed; bottom: 0; left: 0; right: 0; z-index: 40;
-  display: flex; justify-content: space-around; align-items: stretch;
-  padding: 6px max(0px, env(safe-area-inset-right)) calc(6px + env(safe-area-inset-bottom)) max(0px, env(safe-area-inset-left));
-  background: #0a0a0b;
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif;
-}
-.bottombar-tab {
-  flex: 1;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  gap: 3px; padding: 6px 0 4px; text-decoration: none;
-  color: rgba(255, 255, 255, 0.45);
-  font-size: 10px; font-weight: 600; letter-spacing: 0.04em;
-  -webkit-tap-highlight-color: transparent; transition: color 0.15s;
-}
-.bottombar-tab-icon {
-  font-size: 24px; line-height: 1;
-  filter: grayscale(100%) brightness(1.2); opacity: 0.55;
-  transition: opacity 0.15s, filter 0.15s, transform 0.10s;
-}
-.bottombar-tab.active { color: #FAFAFA; }
-.bottombar-tab.active .bottombar-tab-icon {
-  filter: grayscale(100%) brightness(1.6); opacity: 1;
-}
-.bottombar-tab:active .bottombar-tab-icon { transform: scale(0.92); }
-body.has-bottombar {
-  padding-bottom: calc(72px + env(safe-area-inset-bottom)) !important;
-}
+.tabbar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 50; display: flex; justify-content: center;
+  padding: 10px max(16px, env(safe-area-inset-right)) calc(10px + env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+  background: linear-gradient(180deg, rgba(5,5,6,0) 0%, rgba(5,5,6,0.78) 38%, rgba(5,5,6,0.94) 100%);
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); pointer-events: none; }
+.tabbar-inner { pointer-events: auto; display: flex; width: 100%; max-width: 560px;
+  gap: 6px; padding: 6px; background: rgba(20,20,22,0.72);
+  border: 1px solid rgba(255,255,255,0.06); border-radius: 18px; box-shadow: 0 12px 36px rgba(0,0,0,0.55); }
+.tab { flex: 1 1 0; display: inline-flex; align-items: center; justify-content: center;
+  gap: 6px; padding: 10px 6px; border-radius: 13px; font-size: 11px; font-weight: 600;
+  color: rgba(255,255,255,0.6); text-decoration: none; background: transparent; border: 1px solid transparent;
+  transition: color 0.15s, background 0.15s, border-color 0.15s; -webkit-tap-highlight-color: transparent; }
+.tab:hover { color: #fff; }
+.tab[aria-current="page"] { color: #fff; background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.10); }
+.tab-icon { width: 16px; height: 16px; display: inline-flex; align-items: center; justify-content: center; }
+.tab-icon svg { width: 100%; height: 100%; display: block; }
+body.has-bottombar { padding-bottom: calc(72px + env(safe-area-inset-bottom)) !important; }
 @media (max-width: 480px) {
   .topbar { gap: 6px; }
   .topbar-water-pill { padding: 8px 11px; gap: 6px; }
@@ -121,8 +108,8 @@ body.has-bottombar {
   .topbar-water-add { width: 40px; font-size: 18px; }
   .topbar-finance-btn { width: 40px; height: 38px; }
   .topbar-finance-icon { font-size: 18px; }
-  .bottombar-tab-icon { font-size: 22px; }
-  .bottombar-tab { font-size: 10px; }
+  .tab { padding: 9px 4px; font-size: 10px; }
+  .tabbar { padding-left: 12px; padding-right: 12px; }
 }
 html, body { -webkit-text-size-adjust: 100%; }
 @media (max-width: 768px) {
@@ -166,16 +153,14 @@ body.topbar-modal-open { overflow: hidden; touch-action: none; }
 </header>`;
 
   const bottombarHtml = `
-<nav class="bottombar" id="bottombar" role="navigation" aria-label="Main tabs">
-  <a href="index.html" class="bottombar-tab" data-page="main">
-    <span class="bottombar-tab-icon">🏠</span><span>Main</span>
-  </a>
-  <a href="health.html" class="bottombar-tab" data-page="health">
-    <span class="bottombar-tab-icon">💊</span><span>Health</span>
-  </a>
-  <a href="po-coach.html" class="bottombar-tab" data-page="fitness">
-    <span class="bottombar-tab-icon">💪</span><span>Fitness</span>
-  </a>
+<nav class="tabbar" id="bottombar" role="navigation" aria-label="Main tabs">
+  <div class="tabbar-inner">
+    <a href="index.html" class="tab" data-page="main"><span class="tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9.5z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>Main</a>
+    <a href="health.html" class="tab" data-page="health"><span class="tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></span>Health</a>
+    <a href="po-coach.html" class="tab" data-page="fitness"><span class="tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="10" width="4" height="4" rx="1"/><rect x="19" y="10" width="4" height="4" rx="1"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>Fitness</a>
+    <a href="finance.html" class="tab" data-page="finance"><span class="tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></span>Finance</a>
+    <a href="productivity.html" class="tab" data-page="productivity"><span class="tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></span>Focus</a>
+  </div>
 </nav>`;
 
   function isFinancePage() {
@@ -190,27 +175,33 @@ body.topbar-modal-open { overflow: hidden; touch-action: none; }
     const p = (window.location.pathname || '').toLowerCase();
     if (p.endsWith('health.html')) return 'health';
     if (p.endsWith('po-coach.html')) return 'fitness';
+    if (p.endsWith('finance.html')) return 'finance';
+    if (p.endsWith('productivity.html')) return 'productivity';
     return 'main';
   }
 
   function injectStyleAndHTML() {
-    if (document.getElementById('topbar') || document.getElementById('bottombar')) return;
-    if (!shouldShowChrome()) return;
-    const style = document.createElement('style');
-    style.id = 'topbar-style';
-    style.textContent = css;
-    document.head.appendChild(style);
-    const topWrap = document.createElement('div');
-    topWrap.innerHTML = topbarHtml.trim();
-    document.body.insertBefore(topWrap.firstChild, document.body.firstChild);
-    const bottomWrap = document.createElement('div');
-    bottomWrap.innerHTML = bottombarHtml.trim();
-    document.body.appendChild(bottomWrap.firstChild);
-    const active = currentPageKey();
-    document.querySelectorAll('.bottombar-tab').forEach((t) => {
-      t.classList.toggle('active', t.getAttribute('data-page') === active);
-    });
-    document.body.classList.add('has-bottombar');
+    if (!document.getElementById('topbar-style')) {
+      const style = document.createElement('style');
+      style.id = 'topbar-style';
+      style.textContent = css;
+      document.head.appendChild(style);
+    }
+    if (!document.getElementById('bottombar') && !isEmbedded()) {
+      const bottomWrap = document.createElement('div');
+      bottomWrap.innerHTML = bottombarHtml.trim();
+      document.body.appendChild(bottomWrap.firstChild);
+      const active = currentPageKey();
+      document.querySelectorAll('.tab[data-page]').forEach((t) => {
+        if (t.getAttribute('data-page') === active) t.setAttribute('aria-current', 'page');
+      });
+      document.body.classList.add('has-bottombar');
+    }
+    if (!document.getElementById('topbar') && !isFinancePage() && !isEmbedded()) {
+      const topWrap = document.createElement('div');
+      topWrap.innerHTML = topbarHtml.trim();
+      document.body.insertBefore(topWrap.firstChild, document.body.firstChild);
+    }
   }
 
   function calendarDateKey() {
@@ -343,6 +334,9 @@ body.topbar-modal-open { overflow: hidden; touch-action: none; }
     window.addEventListener('focus', render);
     document.addEventListener('visibilitychange', () => { if (!document.hidden) render(); });
     setInterval(render, 30 * 1000);
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js').catch(() => {});
+    }
   }
 
   if (document.readyState === 'loading') {

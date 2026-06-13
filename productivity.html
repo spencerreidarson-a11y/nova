@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" href="/nova_icon.png">
+  <link rel="apple-touch-icon" href="/nova_icon.png">
+  <link rel="manifest" href="/manifest.json">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;1,9..144,400&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0a0a0b">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="color-scheme" content="dark">
+  <title>Focus</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="topbar.js" defer></script>
+</head>
+<style>
+:root {
+  --bg: #050506;
+  --bg-card: rgba(255,255,255,0.04);
+  --bg-secondary: rgba(255,255,255,0.035);
+  --border: rgba(255,255,255,0.06);
+  --border-strong: rgba(255,255,255,0.12);
+  --text-primary: #FAFAFA;
+  --text-secondary: #B8B6B0;
+  --text-tertiary: #76746E;
+  --text-quaternary: #4D4B47;
+  --font: -apple-system,BlinkMacSystemFont,"Inter","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --font-mono: ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --lime: #c2ef4e;
+  --lime-glow: rgba(194,239,78,0.20);
+  --text-3: rgba(255,255,255,0.4);
+  --good: #6ee7b7;
+  --info: #7DD3FC;
+}
+
+* { box-sizing: border-box; }
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg);
+  color: var(--text-secondary);
+  font-family: var(--font);
+  font-size: 15px; line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+body { min-height: 100vh; position: relative; overflow-x: hidden; }
+body::before {
+  content: ''; position: fixed; inset: 0;
+  background:
+    radial-gradient(60% 50% at 78% 10%, rgba(194,239,78,0.07) 0%, transparent 60%),
+    radial-gradient(50% 40% at 18% 90%, rgba(180,180,200,0.06) 0%, transparent 60%);
+  filter: blur(40px);
+  pointer-events: none; z-index: 0;
+  animation: drift 36s ease-in-out infinite alternate;
+}
+body::after {
+  content: ''; position: fixed; inset: 0;
+  background-image: radial-gradient(rgba(255,255,255,0.014) 1px, transparent 1px);
+  background-size: 3px 3px;
+  pointer-events: none; z-index: 1;
+}
+@keyframes drift { 0% { transform: translate(0,0); } 100% { transform: translate(-2%,2%); } }
+
+main {
+  position: relative; z-index: 2;
+  max-width: 720px; margin: 0 auto;
+  padding: 16px 20px 24px;
+}
+
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 22px 20px 18px;
+  margin-bottom: 14px;
+}
+
+.gc-section-eyebrow {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--text-tertiary);
+  font-family: var(--font-mono);
+}
+
+/* ── TIMER CARD ─────────────────────────────────────── */
+.focus-timer-card { text-align: center; padding: 32px 20px 28px; }
+
+.focus-time {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(56px, 18vw, 96px);
+  font-weight: 400; color: #fff;
+  letter-spacing: -0.02em; line-height: 1;
+  margin: 18px 0 26px;
+  font-variant-numeric: tabular-nums;
+}
+
+.focus-start-btn {
+  width: 100%; height: 64px;
+  background: linear-gradient(180deg, #ffffff 0%, #e8e5dd 100%);
+  color: #0a0a0b; border: none; border-radius: 16px;
+  font-family: var(--font); font-size: 18px; font-weight: 700;
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.55), 0 4px 20px rgba(0,0,0,0.45);
+  transition: transform 0.10s, box-shadow 0.10s;
+  letter-spacing: 0.01em;
+}
+.focus-start-btn:hover { transform: translateY(-1px); box-shadow: inset 0 1px 0 rgba(255,255,255,0.55), 0 6px 24px rgba(0,0,0,0.5); }
+.focus-start-btn:active { transform: scale(0.98); }
+
+.focus-btn-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+.focus-pause-btn {
+  height: 56px; border-radius: 14px;
+  background: transparent; border: 1px solid rgba(255,255,255,0.18);
+  color: var(--text-primary); font-family: var(--font); font-size: 16px; font-weight: 700;
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+  transition: background 0.15s;
+}
+.focus-pause-btn:hover { background: rgba(255,255,255,0.06); }
+.focus-pause-btn:active { transform: scale(0.97); }
+
+.focus-stop-btn {
+  height: 56px; border-radius: 14px; border: none;
+  background: var(--lime); color: #0a0a0b;
+  font-family: var(--font); font-size: 16px; font-weight: 700;
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+  box-shadow: 0 0 16px var(--lime-glow);
+  transition: transform 0.10s;
+}
+.focus-stop-btn:hover { transform: translateY(-1px); }
+.focus-stop-btn:active { transform: scale(0.97); }
+
+.focus-today {
+  font-size: 12px; color: var(--text-tertiary);
+  margin-top: 14px; min-height: 18px;
+  letter-spacing: 0.04em;
+}
+
+/* ── DAILY GOAL ──────────────────────────────────────── */
+.focus-goal-head {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 14px;
+}
+.focus-goal-gear {
+  background: transparent; border: none; cursor: pointer;
+  color: var(--text-tertiary); font-size: 17px; padding: 4px 2px;
+  -webkit-tap-highlight-color: transparent; transition: color 0.15s; line-height: 1;
+}
+.focus-goal-gear:hover { color: var(--text-secondary); }
+.focus-goal-row { display: flex; align-items: baseline; gap: 6px; margin-bottom: 2px; }
+.focus-goal-current {
+  font-size: 42px; font-weight: 700; color: var(--text-primary);
+  letter-spacing: -0.03em; line-height: 1; font-variant-numeric: tabular-nums;
+}
+.focus-goal-sep { font-size: 22px; color: var(--text-tertiary); font-weight: 300; }
+.focus-goal-target { font-size: 22px; color: var(--text-tertiary); font-weight: 500; }
+
+/* Progress bar */
+.water-bar-wrap { position: relative; margin: 14px 0 4px; }
+.water-bar-track {
+  position: relative; height: 28px; border-radius: 14px;
+  background: rgba(255,255,255,0.04); overflow: hidden;
+}
+.water-bar-fill {
+  position: absolute; top: 0; bottom: 0; left: 0; border-radius: 14px;
+  background: linear-gradient(90deg, rgba(194,239,78,0.55), var(--lime));
+  transition: width 0.4s ease;
+  box-shadow: 0 0 18px rgba(194,239,78,0.18);
+}
+.water-bar-zone { position: absolute; top: 0; bottom: 0; width: 1px; background: rgba(255,255,255,0.18); }
+.water-bar-labels {
+  display: flex; justify-content: space-between; margin-top: 6px;
+  font-size: 10px; color: var(--text-tertiary); font-family: var(--font-mono);
+}
+.water-bar-labels .water-zone-name { color: var(--lime); font-weight: 700; letter-spacing: 0.10em; text-transform: lowercase; }
+
+/* ── 7-DAY CHART ─────────────────────────────────────── */
+.focus-chart-head {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 20px;
+}
+.focus-week-total { font-size: 11px; color: var(--text-tertiary); font-family: var(--font-mono); }
+.focus-bars {
+  display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px;
+  align-items: flex-end;
+}
+.focus-bar-col { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.focus-bar-fill-wrap { display: flex; align-items: flex-end; height: 80px; width: 100%; }
+.focus-bar { width: 100%; border-radius: 4px 4px 0 0; min-height: 4px; transition: height 0.4s ease; }
+.focus-bar-label {
+  font-size: 9px; color: var(--text-quaternary); font-family: var(--font-mono);
+  text-transform: uppercase; letter-spacing: 0.04em; text-align: center;
+  white-space: nowrap;
+}
+.focus-bar-label.today { color: var(--lime); font-weight: 700; }
+.focus-bar-val { font-size: 8px; color: var(--text-tertiary); font-family: var(--font-mono); text-align: center; }
+
+/* ── STREAK ──────────────────────────────────────────── */
+.focus-streak-inner { display: flex; align-items: center; gap: 16px; }
+.focus-streak-fire { font-size: 32px; line-height: 1; }
+.focus-streak-num { font-size: 18px; font-weight: 700; color: var(--text-primary); letter-spacing: -0.02em; }
+.focus-streak-sub { font-size: 11px; color: var(--text-tertiary); margin-top: 2px; }
+
+/* ── RECENT SESSIONS ─────────────────────────────────── */
+.focus-session-row {
+  display: flex; align-items: center; gap: 10px; padding: 10px 0;
+}
+.focus-session-divider { border-top: 1px solid var(--border); }
+.focus-session-date { font-size: 13px; color: var(--text-secondary); flex: 1; white-space: nowrap; }
+.focus-session-dur {
+  font-size: 13px; color: var(--text-primary); font-family: var(--font-mono);
+  font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap;
+}
+.focus-session-cat {
+  font-size: 11px; color: var(--text-tertiary); text-align: right;
+  min-width: 60px; white-space: nowrap;
+}
+.focus-sessions-empty {
+  font-size: 13px; color: var(--text-tertiary); text-align: center; padding: 16px 0;
+}
+
+/* ── CATEGORY DONUT ──────────────────────────────────── */
+.focus-donut-wrap { display: flex; align-items: center; gap: 24px; }
+.focus-donut-stage { position: relative; width: 140px; height: 140px; flex-shrink: 0; }
+.focus-donut-svg { width: 140px; height: 140px; transform: rotate(-90deg); display: block; }
+.focus-donut-center {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700; color: var(--text-primary);
+  font-family: var(--font-mono); pointer-events: none; text-align: center;
+  line-height: 1.3;
+}
+.focus-donut-legend { flex: 1; display: flex; flex-direction: column; gap: 9px; min-width: 0; }
+.focus-leg { display: flex; align-items: center; gap: 8px; font-size: 12px; }
+.focus-leg-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.focus-leg-name { flex: 1; color: var(--text-secondary); }
+.focus-leg-pct { color: var(--text-primary); font-family: var(--font-mono); font-weight: 700; font-size: 11px; }
+
+/* ── CATEGORY SELECT MODAL ───────────────────────────── */
+.focus-modal-bg {
+  display: none; position: fixed; inset: 0; z-index: 200;
+  background: rgba(0,0,0,0.8); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  align-items: flex-end; justify-content: center;
+  padding: 0 12px max(24px, env(safe-area-inset-bottom));
+}
+.focus-modal-bg.show { display: flex; }
+.focus-modal {
+  width: 100%; max-width: 500px;
+  background: rgba(14,14,16,0.98); border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 24px 24px 20px 20px; padding: 28px 16px 16px;
+}
+.focus-modal-title {
+  font-size: 19px; font-weight: 700; color: var(--text-primary);
+  letter-spacing: -0.02em; margin-bottom: 20px; text-align: center;
+}
+.focus-modal-cats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.focus-cat-btn {
+  padding: 18px 12px; border-radius: 14px;
+  background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08);
+  color: var(--text-primary); font-family: var(--font); font-size: 15px; font-weight: 600;
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+.focus-cat-btn:hover { background: rgba(255,255,255,0.09); border-color: rgba(255,255,255,0.16); }
+.focus-cat-btn:active { background: rgba(194,239,78,0.12); border-color: rgba(194,239,78,0.3); color: var(--lime); transform: scale(0.97); }
+
+/* ── GOAL EDIT MODAL ─────────────────────────────────── */
+.focus-goal-modal-bg {
+  display: none; position: fixed; inset: 0; z-index: 200;
+  background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  align-items: center; justify-content: center; padding: 20px 16px;
+}
+.focus-goal-modal-bg.show { display: flex; }
+.focus-goal-modal {
+  width: 100%; max-width: 320px;
+  background: rgba(14,14,16,0.97); border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 20px; padding: 24px 20px 20px;
+}
+.focus-goal-modal-title { font-size: 17px; font-weight: 700; color: var(--text-primary); margin-bottom: 16px; }
+.focus-goal-modal-label {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--text-tertiary); margin-bottom: 8px; display: block;
+}
+.focus-goal-modal-input {
+  width: 100%; padding: 12px 14px;
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 10px; color: var(--text-primary);
+  font-family: var(--font-mono); font-size: 20px; font-weight: 700;
+  text-align: center; outline: none; appearance: none;
+}
+.focus-goal-modal-input:focus { border-color: rgba(255,255,255,0.3); }
+.focus-goal-modal-hint { font-size: 11px; color: var(--text-tertiary); text-align: center; margin: 8px 0 18px; }
+.focus-goal-modal-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.focus-goal-modal-save {
+  padding: 12px; border-radius: 12px; border: none;
+  background: var(--lime); color: #0a0a0b;
+  font-family: var(--font); font-size: 14px; font-weight: 700;
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+}
+.focus-goal-modal-cancel {
+  padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.12);
+  background: transparent; color: var(--text-secondary);
+  font-family: var(--font); font-size: 14px; font-weight: 600;
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+}
+
+@media (max-width: 375px) {
+  .focus-goal-current { font-size: 34px; }
+  .focus-modal-cats { grid-template-columns: 1fr 1fr; }
+  .focus-cat-btn { font-size: 14px; padding: 14px 8px; }
+}
+</style>
+<body>
+<main>
+
+  <!-- ── Timer Card ──────────────────────────────────────── -->
+  <div class="card focus-timer-card">
+    <div class="gc-section-eyebrow">DEEP FOCUS</div>
+    <div class="focus-time" id="focusTime">00:00:00</div>
+    <div id="focusControls"></div>
+    <div class="focus-today" id="focusToday"></div>
+  </div>
+
+  <!-- ── Daily Focus Goal ───────────────────────────────── -->
+  <div class="card">
+    <div class="focus-goal-head">
+      <div class="gc-section-eyebrow">DAILY FOCUS GOAL</div>
+      <button class="focus-goal-gear" id="focusGoalGear" aria-label="Edit goal">⚙︎</button>
+    </div>
+    <div class="focus-goal-row">
+      <span class="focus-goal-current" id="focusGoalCurrent">0m</span>
+      <span class="focus-goal-sep">/</span>
+      <span class="focus-goal-target" id="focusGoalTarget">4h</span>
+    </div>
+    <div class="water-bar-wrap">
+      <div class="water-bar-track">
+        <div class="water-bar-fill" id="focusBarFill" style="width:0%"></div>
+        <div class="water-bar-zone" id="focusZone1"></div>
+        <div class="water-bar-zone" id="focusZone2"></div>
+      </div>
+      <div class="water-bar-labels">
+        <span>0</span>
+        <span class="water-zone-name">healthy zone</span>
+        <span id="focusGoalMax">4h+</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Last 7 Days Chart ──────────────────────────────── -->
+  <div class="card">
+    <div class="focus-chart-head">
+      <div class="gc-section-eyebrow">LAST 7 DAYS</div>
+      <div class="focus-week-total" id="focusWeekTotal"></div>
+    </div>
+    <div class="focus-bars" id="focusBars"></div>
+  </div>
+
+  <!-- ── Streak (hidden when 0) ─────────────────────────── -->
+  <div class="card" id="focusStreakCard" style="display:none"></div>
+
+  <!-- ── Recent Sessions ───────────────────────────────── -->
+  <div class="card">
+    <div class="gc-section-eyebrow" style="margin-bottom:14px">RECENT SESSIONS</div>
+    <div id="focusSessionsList"></div>
+  </div>
+
+  <!-- ── Category Breakdown ────────────────────────────── -->
+  <div class="card">
+    <div class="gc-section-eyebrow" style="margin-bottom:18px">LAST 30 DAYS</div>
+    <div class="focus-donut-wrap">
+      <div class="focus-donut-stage">
+        <svg class="focus-donut-svg" id="focusDonutSvg" viewBox="0 0 140 140" aria-hidden="true"></svg>
+        <div class="focus-donut-center" id="focusDonutCenter">—</div>
+      </div>
+      <div class="focus-donut-legend" id="focusDonutLegend"></div>
+    </div>
+  </div>
+
+</main>
+
+<!-- ── Category select modal ─────────────────────────── -->
+<div class="focus-modal-bg" id="focusModalBg">
+  <div class="focus-modal">
+    <div class="focus-modal-title">What were you working on?</div>
+    <div class="focus-modal-cats">
+      <button class="focus-cat-btn" data-cat="Coding">💻 Coding</button>
+      <button class="focus-cat-btn" data-cat="Reading">📚 Reading</button>
+      <button class="focus-cat-btn" data-cat="School">🎓 School</button>
+      <button class="focus-cat-btn" data-cat="Other">✦ Other</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Goal edit modal ───────────────────────────────── -->
+<div class="focus-goal-modal-bg" id="focusGoalModalBg">
+  <div class="focus-goal-modal">
+    <div class="focus-goal-modal-title">Daily Focus Goal</div>
+    <label class="focus-goal-modal-label" for="focusGoalInput">Target (minutes)</label>
+    <input type="number" class="focus-goal-modal-input" id="focusGoalInput" min="15" max="720" value="240">
+    <div class="focus-goal-modal-hint">Default: 240 min (4 hours)</div>
+    <div class="focus-goal-modal-actions">
+      <button class="focus-goal-modal-save" id="focusGoalSave">Save</button>
+      <button class="focus-goal-modal-cancel" id="focusGoalCancel">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  const SUPA_URL = 'https://gmmmrfldwjwbektgbifq.supabase.co';
+  const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdtbW1yZmxkd2p3YmVrdGdiaWZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1MDA5NTQsImV4cCI6MjA5NjA3Njk1NH0.sTUJrqcAwkl3lzbcGMU_0Gc5S_Vth0WxvfF6YU8rlJc';
+  const sb = window.supabase ? window.supabase.createClient(SUPA_URL, SUPA_KEY) : null;
+
+  // ── Helpers ──────────────────────────────────────────────
+  function dateStr(d) {
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  }
+  function todayStr() { return dateStr(new Date()); }
+  function formatHMS(ms) {
+    const s = Math.floor(ms / 1000);
+    const h = Math.floor(s / 3600);
+    const m = Math.floor((s % 3600) / 60);
+    const sec = s % 60;
+    return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0') + ':' + String(sec).padStart(2, '0');
+  }
+  function formatHM(seconds) {
+    if (!seconds || seconds < 60) return (seconds || 0) + 's';
+    const h = Math.floor(seconds / 3600);
+    const m = Math.floor((seconds % 3600) / 60);
+    if (h === 0) return m + 'm';
+    if (m === 0) return h + 'h';
+    return h + 'h ' + m + 'm';
+  }
+
+  // ── Timer state ──────────────────────────────────────────
+  let timerState = 'idle'; // 'idle' | 'running' | 'paused'
+  let timerInterval = null;
+  let timerStartTime = null;     // epoch ms: when current run segment began
+  let timerAccumulatedMs = 0;    // ms from all completed segments
+  let timerPausedAt = null;      // epoch ms: when paused
+  let sessionStartEpoch = null;  // wall clock start of the whole session
+
+  function loadTimerState() {
+    try {
+      const st = JSON.parse(localStorage.getItem('focus_timer') || 'null');
+      if (!st) return;
+      timerState = st.state || 'idle';
+      timerStartTime = st.startTime || null;
+      timerAccumulatedMs = st.accumulatedMs || 0;
+      timerPausedAt = st.pausedAt || null;
+      sessionStartEpoch = st.sessionStartEpoch || null;
+    } catch (e) {}
+  }
+  function saveTimerState() {
+    try {
+      localStorage.setItem('focus_timer', JSON.stringify({
+        state: timerState, startTime: timerStartTime,
+        accumulatedMs: timerAccumulatedMs, pausedAt: timerPausedAt,
+        sessionStartEpoch
+      }));
+    } catch (e) {}
+  }
+  function getCurrentMs() {
+    if (timerState === 'running' && timerStartTime)
+      return timerAccumulatedMs + (Date.now() - timerStartTime);
+    if (timerState === 'paused' && timerStartTime && timerPausedAt)
+      return timerAccumulatedMs + (timerPausedAt - timerStartTime);
+    return timerAccumulatedMs;
+  }
+  function clearTimerState() {
+    timerState = 'idle'; timerStartTime = null;
+    timerAccumulatedMs = 0; timerPausedAt = null; sessionStartEpoch = null;
+    saveTimerState();
+  }
+
+  function startTimer() {
+    timerState = 'running';
+    timerStartTime = Date.now();
+    timerAccumulatedMs = 0;
+    timerPausedAt = null;
+    sessionStartEpoch = Date.now();
+    saveTimerState();
+    timerInterval = setInterval(tick, 1000);
+    renderTimerUI();
+  }
+  function pauseTimer() {
+    if (timerState !== 'running') return;
+    clearInterval(timerInterval); timerInterval = null;
+    timerPausedAt = Date.now();
+    timerAccumulatedMs += timerPausedAt - timerStartTime;
+    timerStartTime = null;
+    timerState = 'paused';
+    saveTimerState(); renderTimerUI();
+  }
+  function resumeTimer() {
+    if (timerState !== 'paused') return;
+    timerState = 'running';
+    timerStartTime = Date.now();
+    timerPausedAt = null;
+    saveTimerState();
+    timerInterval = setInterval(tick, 1000);
+    renderTimerUI();
+  }
+  function stopTimer() {
+    if (timerState === 'running') {
+      clearInterval(timerInterval); timerInterval = null;
+      timerAccumulatedMs += Date.now() - timerStartTime;
+      timerStartTime = null;
+    }
+    showCategoryModal();
+  }
+  function tick() {
+    const el = document.getElementById('focusTime');
+    if (el) el.textContent = formatHMS(getCurrentMs());
+  }
+
+  function renderTimerUI() {
+    const timeEl = document.getElementById('focusTime');
+    const ctrlEl = document.getElementById('focusControls');
+    const todayEl = document.getElementById('focusToday');
+    if (!ctrlEl) return;
+    if (timeEl) timeEl.textContent = formatHMS(getCurrentMs());
+
+    if (timerState === 'idle') {
+      ctrlEl.innerHTML = '<button class="focus-start-btn" id="focusStartBtn">Start Focus</button>';
+      const btn = document.getElementById('focusStartBtn');
+      if (btn) btn.addEventListener('click', startTimer);
+      if (todayEl) {
+        const s = getTodaySeconds();
+        todayEl.textContent = s >= 60 ? formatHM(s) + ' focused today' : '';
+      }
+    } else {
+      const isPaused = timerState === 'paused';
+      ctrlEl.innerHTML = `<div class="focus-btn-row">
+        <button class="focus-pause-btn" id="focusPauseBtn">${isPaused ? 'Resume' : 'Pause'}</button>
+        <button class="focus-stop-btn" id="focusStopBtn">Stop</button>
+      </div>`;
+      const pb = document.getElementById('focusPauseBtn');
+      const sb2 = document.getElementById('focusStopBtn');
+      if (pb) pb.addEventListener('click', isPaused ? resumeTimer : pauseTimer);
+      if (sb2) sb2.addEventListener('click', stopTimer);
+      if (todayEl) todayEl.textContent = '';
+    }
+  }
+
+  // ── Category modal ───────────────────────────────────────
+  function showCategoryModal() {
+    const bg = document.getElementById('focusModalBg');
+    if (bg) bg.classList.add('show');
+  }
+  function hideCategoryModal() {
+    const bg = document.getElementById('focusModalBg');
+    if (bg) bg.classList.remove('show');
+  }
+  document.querySelectorAll('.focus-cat-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      const category = btn.getAttribute('data-cat');
+      hideCategoryModal();
+      saveSession(category);
+    });
+  });
+
+  // ── Session save ─────────────────────────────────────────
+  function saveSession(category) {
+    const endTime = Date.now();
+    const durationMs = timerAccumulatedMs;
+    const durationSeconds = Math.round(durationMs / 1000);
+    const startTime = sessionStartEpoch || (endTime - durationMs);
+
+    if (durationSeconds < 10) { clearTimerState(); renderTimerUI(); renderAll(); return; }
+
+    const session = {
+      startTime: new Date(startTime).toISOString(),
+      endTime: new Date(endTime).toISOString(),
+      durationSeconds, category,
+      date: dateStr(new Date(startTime))
+    };
+
+    const cache = getSessionsCache();
+    cache.unshift(session);
+    cache.splice(200, cache.length);
+    setSessionsCache(cache);
+    sessions = cache;
+
+    if (sb) {
+      sb.from('focus_sessions').insert({
+        start_time: session.startTime,
+        end_time: session.endTime,
+        duration_seconds: durationSeconds,
+        category
+      }).then(function (r) {
+        if (r.error) console.warn('[Focus] Supabase insert:', r.error.message);
+      });
+    }
+
+    clearTimerState();
+    renderTimerUI();
+    renderAll();
+  }
+
+  // ── Data ─────────────────────────────────────────────────
+  let sessions = [];
+
+  function getSessionsCache() {
+    try { return JSON.parse(localStorage.getItem('focus_sessions_cache') || '[]'); } catch { return []; }
+  }
+  function setSessionsCache(arr) {
+    try { localStorage.setItem('focus_sessions_cache', JSON.stringify(arr)); } catch {}
+  }
+
+  async function loadSessions() {
+    if (sb) {
+      try {
+        const cutoff = new Date();
+        cutoff.setDate(cutoff.getDate() - 60);
+        const { data, error } = await sb.from('focus_sessions')
+          .select('start_time,end_time,duration_seconds,category')
+          .gte('start_time', cutoff.toISOString())
+          .order('start_time', { ascending: false });
+        if (!error && data && data.length > 0) {
+          const norm = data.map(function (r) {
+            return {
+              startTime: r.start_time, endTime: r.end_time,
+              durationSeconds: r.duration_seconds, category: r.category,
+              date: (r.start_time || '').slice(0, 10)
+            };
+          });
+          setSessionsCache(norm);
+          sessions = norm;
+          return;
+        }
+      } catch (e) {}
+    }
+    sessions = getSessionsCache();
+  }
+
+  function getTodaySeconds() {
+    const t = todayStr();
+    return sessions.filter(function (s) { return s.date === t; })
+      .reduce(function (sum, s) { return sum + (s.durationSeconds || 0); }, 0);
+  }
+  function getWeekTotals() {
+    const result = [];
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date(); d.setDate(d.getDate() - i);
+      const ds = dateStr(d);
+      const sec = sessions.filter(function (s) { return s.date === ds; })
+        .reduce(function (sum, s) { return sum + (s.durationSeconds || 0); }, 0);
+      result.push({ date: ds, seconds: sec, label: d.toLocaleDateString('en-US', { weekday: 'short' }) });
+    }
+    return result;
+  }
+  function getStreak() {
+    const THRESHOLD = 1800;
+    const byDate = {};
+    sessions.forEach(function (s) { byDate[s.date] = (byDate[s.date] || 0) + (s.durationSeconds || 0); });
+    const t = todayStr();
+    const yest = dateStr(new Date(Date.now() - 86400000));
+    if (!byDate[t] && !byDate[yest]) return 0;
+    let count = 0;
+    const d = new Date();
+    if (!byDate[t] || byDate[t] < THRESHOLD) d.setDate(d.getDate() - 1);
+    while (true) {
+      const ds = dateStr(d);
+      if (!byDate[ds] || byDate[ds] < THRESHOLD) break;
+      count++; d.setDate(d.getDate() - 1);
+    }
+    return count;
+  }
+  function getCategoryBreakdown(days) {
+    const cutoff = new Date(); cutoff.setDate(cutoff.getDate() - days);
+    const cutoffStr = dateStr(cutoff);
+    const result = { Coding: 0, Reading: 0, School: 0, Other: 0 };
+    sessions.filter(function (s) { return s.date >= cutoffStr; })
+      .forEach(function (s) {
+        const cat = (s.category in result) ? s.category : 'Other';
+        result[cat] += s.durationSeconds || 0;
+      });
+    return result;
+  }
+
+  // ── Goal ─────────────────────────────────────────────────
+  function getGoalMinutes() {
+    try { return parseInt(localStorage.getItem('focus_goal_minutes')) || 240; } catch { return 240; }
+  }
+  function setGoalMinutes(m) {
+    localStorage.setItem('focus_goal_minutes', String(Math.max(15, parseInt(m) || 240)));
+  }
+
+  // ── Render ───────────────────────────────────────────────
+  function renderGoal() {
+    const goalSec = getGoalMinutes() * 60;
+    const todaySec = getTodaySeconds();
+    const pct = Math.min(100, (todaySec / goalSec) * 100);
+    const fillEl = document.getElementById('focusBarFill');
+    const curEl = document.getElementById('focusGoalCurrent');
+    const tgtEl = document.getElementById('focusGoalTarget');
+    const maxEl = document.getElementById('focusGoalMax');
+    const z1 = document.getElementById('focusZone1');
+    const z2 = document.getElementById('focusZone2');
+    if (fillEl) fillEl.style.width = pct + '%';
+    if (curEl) curEl.textContent = formatHM(todaySec);
+    if (tgtEl) tgtEl.textContent = formatHM(goalSec);
+    if (maxEl) maxEl.textContent = formatHM(goalSec) + '+';
+    if (z1) z1.style.left = '50%';
+    if (z2) z2.style.left = '87.5%';
+  }
+
+  function renderChart() {
+    const el = document.getElementById('focusBars');
+    const totEl = document.getElementById('focusWeekTotal');
+    if (!el) return;
+    const week = getWeekTotals();
+    const max = Math.max.apply(null, week.map(function (d) { return d.seconds; }).concat([1]));
+    const total = week.reduce(function (s, d) { return s + d.seconds; }, 0);
+    const t = todayStr();
+    if (totEl) totEl.textContent = total > 0 ? formatHM(total) + ' this week' : '';
+    el.innerHTML = week.map(function (d) {
+      const h = Math.max(4, Math.round((d.seconds / max) * 80));
+      const isT = d.date === t;
+      return '<div class="focus-bar-col">'
+        + '<div class="focus-bar-fill-wrap">'
+        + '<div class="focus-bar" style="height:' + h + 'px;background:' + (isT ? '#c2ef4e' : 'rgba(255,255,255,0.15)') + ';' + (isT ? 'box-shadow:0 0 10px rgba(194,239,78,0.3)' : '') + '"></div>'
+        + '</div>'
+        + '<div class="focus-bar-label' + (isT ? ' today' : '') + '">' + (isT ? 'Today' : d.label) + '</div>'
+        + (d.seconds > 0 ? '<div class="focus-bar-val">' + formatHM(d.seconds) + '</div>' : '')
+        + '</div>';
+    }).join('');
+  }
+
+  function renderStreak() {
+    const card = document.getElementById('focusStreakCard');
+    if (!card) return;
+    const s = getStreak();
+    if (s < 1) { card.style.display = 'none'; return; }
+    card.style.display = '';
+    card.innerHTML = '<div class="focus-streak-inner">'
+      + '<span class="focus-streak-fire">🔥</span>'
+      + '<div>'
+      + '<div class="focus-streak-num">' + s + ' day streak</div>'
+      + '<div class="focus-streak-sub">Keep focusing at least 30 min / day to continue</div>'
+      + '</div></div>';
+  }
+
+  function renderSessionsList() {
+    const el = document.getElementById('focusSessionsList');
+    if (!el) return;
+    const recent = sessions.slice(0, 10);
+    if (!recent.length) {
+      el.innerHTML = '<div class="focus-sessions-empty">No sessions yet — start your first focus block above</div>';
+      return;
+    }
+    el.innerHTML = recent.map(function (s, i) {
+      let label = '—';
+      try {
+        const d = new Date(s.startTime);
+        label = d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+      } catch (e) {}
+      return '<div class="focus-session-row' + (i > 0 ? ' focus-session-divider' : '') + '">'
+        + '<span class="focus-session-date">' + label + '</span>'
+        + '<span class="focus-session-dur">' + formatHM(s.durationSeconds) + '</span>'
+        + '<span class="focus-session-cat">' + (s.category || '—') + '</span>'
+        + '</div>';
+    }).join('');
+  }
+
+  function donutArcPath(cx, cy, rO, rI, a1, a2) {
+    var x1o = cx + rO * Math.cos(a1), y1o = cy + rO * Math.sin(a1);
+    var x2o = cx + rO * Math.cos(a2), y2o = cy + rO * Math.sin(a2);
+    var x1i = cx + rI * Math.cos(a2), y1i = cy + rI * Math.sin(a2);
+    var x2i = cx + rI * Math.cos(a1), y2i = cy + rI * Math.sin(a1);
+    var large = (a2 - a1) > Math.PI ? 1 : 0;
+    return 'M ' + x1o.toFixed(2) + ' ' + y1o.toFixed(2)
+      + ' A ' + rO + ' ' + rO + ' 0 ' + large + ' 1 ' + x2o.toFixed(2) + ' ' + y2o.toFixed(2)
+      + ' L ' + x1i.toFixed(2) + ' ' + y1i.toFixed(2)
+      + ' A ' + rI + ' ' + rI + ' 0 ' + large + ' 0 ' + x2i.toFixed(2) + ' ' + y2i.toFixed(2) + ' Z';
+  }
+
+  const CAT_COLORS = { Coding: '#6BE3A4', Reading: '#6BA3E3', School: '#C2A3FF', Other: '#FF8A8A' };
+
+  function renderDonut() {
+    const svg = document.getElementById('focusDonutSvg');
+    const center = document.getElementById('focusDonutCenter');
+    const legend = document.getElementById('focusDonutLegend');
+    if (!svg) return;
+    const breakdown = getCategoryBreakdown(30);
+    const slices = Object.keys(breakdown)
+      .filter(function (cat) { return breakdown[cat] > 0; })
+      .map(function (cat) { return { cat: cat, sec: breakdown[cat], color: CAT_COLORS[cat] || '#FF8A8A' }; })
+      .sort(function (a, b) { return b.sec - a.sec; });
+    if (!slices.length) {
+      svg.innerHTML = '<circle cx="70" cy="70" r="60" fill="rgba(255,255,255,0.025)"/><circle cx="70" cy="70" r="44" fill="#050506"/>';
+      if (center) center.textContent = '—';
+      if (legend) legend.innerHTML = '';
+      return;
+    }
+    const total = slices.reduce(function (s, x) { return s + x.sec; }, 0);
+    if (center) center.textContent = formatHM(total);
+    let angle = -Math.PI / 2, html = '';
+    slices.forEach(function (s) {
+      const sa = (s.sec / total) * Math.PI * 2;
+      const pad = slices.length > 1 ? 0.015 : 0;
+      const a1 = angle + pad, a2 = angle + sa - pad;
+      if (a2 > a1) html += '<path d="' + donutArcPath(70, 70, 60, 44, a1, a2) + '" fill="' + s.color + '"></path>';
+      angle += sa;
+    });
+    svg.innerHTML = html;
+    if (legend) {
+      legend.innerHTML = slices.map(function (s) {
+        const pct = ((s.sec / total) * 100).toFixed(0);
+        return '<div class="focus-leg">'
+          + '<span class="focus-leg-dot" style="background:' + s.color + '"></span>'
+          + '<span class="focus-leg-name">' + s.cat + '</span>'
+          + '<span class="focus-leg-pct">' + pct + '%</span>'
+          + '</div>';
+      }).join('');
+    }
+  }
+
+  function renderAll() {
+    renderGoal();
+    renderChart();
+    renderStreak();
+    renderSessionsList();
+    renderDonut();
+    if (timerState === 'idle') {
+      const todayEl = document.getElementById('focusToday');
+      const s = getTodaySeconds();
+      if (todayEl) todayEl.textContent = s >= 60 ? formatHM(s) + ' focused today' : '';
+    }
+  }
+
+  // ── Goal modal events ────────────────────────────────────
+  const gearBtn = document.getElementById('focusGoalGear');
+  const goalBg = document.getElementById('focusGoalModalBg');
+  const goalInput = document.getElementById('focusGoalInput');
+  const goalSave = document.getElementById('focusGoalSave');
+  const goalCancel = document.getElementById('focusGoalCancel');
+  if (gearBtn) gearBtn.addEventListener('click', function () {
+    if (goalInput) goalInput.value = getGoalMinutes();
+    if (goalBg) goalBg.classList.add('show');
+  });
+  if (goalCancel) goalCancel.addEventListener('click', function () {
+    if (goalBg) goalBg.classList.remove('show');
+  });
+  if (goalSave) goalSave.addEventListener('click', function () {
+    const val = parseInt(goalInput && goalInput.value);
+    if (val >= 15) { setGoalMinutes(val); renderGoal(); }
+    if (goalBg) goalBg.classList.remove('show');
+  });
+
+  // ── Init ─────────────────────────────────────────────────
+  loadTimerState();
+  renderTimerUI();
+  if (timerState === 'running') {
+    tick();
+    timerInterval = setInterval(tick, 1000);
+  }
+  (async function () {
+    await loadSessions();
+    renderAll();
+  }());
+
+}());
+</script>
+</body>
+</html>

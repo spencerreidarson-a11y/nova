@@ -1,10 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="icon" href="nova_icon.png">
-  <link rel="apple-touch-icon" href="nova_icon.png">
+  <link rel="icon" href="/nova_icon.png">
+  <link rel="apple-touch-icon" href="/nova_icon.png">
+  <link rel="manifest" href="/manifest.json">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0a0a0b">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>My Dashboard</title>
   <style>
     :root {
@@ -698,6 +702,85 @@
       .day-ring-percent { font-size: 32px; }
       .day-ring-status { font-size: 13px; }
     }
+
+    /* ===== DAILY HABITS ===== */
+    .habits-row {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;
+      margin-bottom: 4px;
+    }
+    @media (max-width: 400px) {
+      .habits-row { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    }
+    .habit-tile {
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+      cursor: pointer; -webkit-tap-highlight-color: transparent; user-select: none;
+    }
+    .habit-circle {
+      width: 64px; height: 64px; border-radius: 50%;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 2px; transition: border-color 0.2s, box-shadow 0.2s;
+      touch-action: none;
+    }
+    .habit-circle.is-active {
+      border-color: rgba(194,239,78,0.55);
+      box-shadow: 0 0 16px rgba(194,239,78,0.22);
+    }
+    .habit-circle-icon  { font-size: 22px; line-height: 1; }
+    .habit-circle-count { font-size: 13px; font-weight: 700; color: var(--text-secondary); font-family: var(--font-mono); }
+    .habit-circle.is-active .habit-circle-count { color: #c2ef4e; }
+    .habit-label { font-size: 10px; font-weight: 600; color: var(--text-tertiary); text-align: center; max-width: 72px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .habit-add-tile {
+      width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      border: 1px dashed rgba(255,255,255,0.18); background: transparent;
+      color: rgba(255,255,255,0.28); font-size: 26px; cursor: pointer;
+      transition: border-color 0.2s, color 0.2s; line-height: 1;
+    }
+    .habit-add-tile:hover { border-color: rgba(255,255,255,0.4); color: rgba(255,255,255,0.55); }
+    .habits-streak { margin-top: 10px; font-size: 12px; color: var(--text-tertiary); text-align: center; min-height: 18px; }
+
+    /* Habit modal */
+    .habit-modal-bg {
+      display: none; position: fixed; inset: 0; z-index: 300;
+      background: rgba(0,0,0,0.72); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      align-items: center; justify-content: center;
+      padding: max(20px, env(safe-area-inset-top)) 16px max(20px, env(safe-area-inset-bottom));
+    }
+    .habit-modal-bg.show { display: flex; }
+    .habit-modal {
+      width: 100%; max-width: 320px;
+      background: rgba(14,14,16,0.97); border: 1px solid rgba(255,255,255,0.09);
+      border-radius: 20px; padding: 24px 20px 20px;
+    }
+    .habit-modal-title { font-size: 17px; font-weight: 700; color: var(--text-primary); margin-bottom: 18px; letter-spacing: -0.02em; }
+    .habit-modal-field { margin-bottom: 14px; }
+    .habit-modal-label { display: block; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-tertiary); margin-bottom: 6px; }
+    .habit-modal-input {
+      width: 100%; box-sizing: border-box; padding: 10px 12px;
+      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px; color: var(--text-primary); font-family: var(--font-body);
+      font-size: 15px; outline: none;
+    }
+    .habit-modal-input:focus { border-color: rgba(255,255,255,0.3); }
+    .habit-modal-actions { display: flex; gap: 8px; margin-top: 20px; }
+    .habit-modal-save {
+      flex: 1; padding: 13px; border: none; border-radius: 11px;
+      background: linear-gradient(180deg,#fff 0%,#e8e5dd 100%);
+      color: #0a0a0b; font-family: var(--font-body); font-size: 14px; font-weight: 700;
+      cursor: pointer; box-shadow: inset 0 1px 0 rgba(255,255,255,0.55), 0 4px 14px rgba(0,0,0,0.3);
+    }
+    .habit-modal-delete {
+      padding: 13px 16px; border: 1px solid rgba(255,100,100,0.35);
+      background: rgba(255,100,100,0.08); color: #FF8A8A;
+      border-radius: 11px; font-family: var(--font-body); font-size: 14px; font-weight: 600; cursor: pointer;
+    }
+    .habit-modal-cancel {
+      display: block; width: 100%; margin-top: 10px; padding: 12px;
+      border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04);
+      color: var(--text-secondary); border-radius: 11px;
+      font-family: var(--font-body); font-size: 14px; font-weight: 600; cursor: pointer; text-align: center;
+    }
   </style>
   <script src="topbar.js" defer></script>
 </head>
@@ -751,6 +834,12 @@
         <div class="day-ring-remaining" id="dayRingRemaining">—</div>
         <div class="day-ring-hours">8:00 AM – 12:00 AM</div>
       </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Daily Habits</div>
+      <div class="habits-row" id="habitsRow"></div>
+      <div class="habits-streak" id="habitsStreak"></div>
     </div>
 
     <div class="section">
@@ -1497,7 +1586,249 @@
     }
 
     init();
+
+    // ── Daily Habits ─────────────────────────────────────────
+    (function() {
+      'use strict';
+      const MAX_HABITS = 6;
+      const DEFAULT_HABITS = [
+        { name: 'Read',      icon: '📖' },
+        { name: 'Workout',   icon: '🏋️' },
+        { name: 'Restraint', icon: '🧘' },
+        { name: 'Learn',     icon: '🧠' },
+      ];
+
+      let habits      = [];
+      let todayCounts = {};
+      let logHistory  = {};
+      let editingId   = null;
+
+      function habitsToday() { return getActiveDateString(); }
+      function ds(d) {
+        return d.getFullYear() + '-' +
+          String(d.getMonth()+1).padStart(2,'0') + '-' +
+          String(d.getDate()).padStart(2,'0');
+      }
+
+      function lsGetHabits() { try { return JSON.parse(localStorage.getItem('habits_config')) || []; } catch { return []; } }
+      function lsSetHabits(h) { try { localStorage.setItem('habits_config', JSON.stringify(h)); } catch {} }
+      function lsGetLog(dk) { try { return JSON.parse(localStorage.getItem('habits_log:'+dk)) || {}; } catch { return {}; } }
+      function lsSetLog(dk, c) { try { localStorage.setItem('habits_log:'+dk, JSON.stringify(c)); } catch {} }
+
+      async function loadHabits() {
+        if (!sb) { habits = lsGetHabits(); return; }
+        try {
+          const { data, error } = await sb.from('habits').select('*').order('sort_order');
+          if (!error && data) { habits = data.map(r => ({ id: r.id, name: r.name, icon: r.icon, sortOrder: r.sort_order })); lsSetHabits(habits); }
+          else habits = lsGetHabits();
+        } catch { habits = lsGetHabits(); }
+      }
+
+      async function seedDefaults() {
+        const rows = DEFAULT_HABITS.map((h, i) => ({ name: h.name, icon: h.icon, sort_order: i }));
+        if (sb) {
+          try {
+            const { data, error } = await sb.from('habits').insert(rows).select();
+            if (!error && data) { habits = data.map(r => ({ id: r.id, name: r.name, icon: r.icon, sortOrder: r.sort_order })); lsSetHabits(habits); return; }
+          } catch {}
+        }
+        habits = rows.map((h, i) => ({ id: 'local-' + Date.now() + '-' + i, name: h.name, icon: h.icon, sortOrder: i }));
+        lsSetHabits(habits);
+      }
+
+      async function loadLogs() {
+        const dates = [];
+        for (let i = 0; i < 60; i++) { const d = new Date(); d.setDate(d.getDate()-i); dates.push(ds(d)); }
+        const t = habitsToday();
+        if (sb) {
+          try {
+            const { data, error } = await sb.from('habit_logs').select('habit_id, date, count').in('date', dates);
+            if (!error && data) {
+              data.forEach(r => {
+                const id = r.habit_id;
+                const day = typeof r.date === 'string' ? r.date.slice(0,10) : ds(new Date(r.date));
+                if (!logHistory[id]) logHistory[id] = new Set();
+                if (r.count > 0) logHistory[id].add(day);
+                if (day === t) todayCounts[id] = r.count;
+              });
+              return;
+            }
+          } catch {}
+        }
+        dates.forEach(day => {
+          const log = lsGetLog(day);
+          Object.entries(log).forEach(([id, cnt]) => {
+            if (!logHistory[id]) logHistory[id] = new Set();
+            if (cnt > 0) logHistory[id].add(day);
+            if (day === t) todayCounts[id] = cnt;
+          });
+        });
+      }
+
+      function renderHabits() {
+        const row = document.getElementById('habitsRow');
+        if (!row) return;
+        row.innerHTML = habits.map(h => {
+          const cnt = todayCounts[h.id] || 0;
+          return `<div class="habit-tile" data-id="${h.id}">
+            <div class="habit-circle${cnt > 0 ? ' is-active' : ''}">
+              <span class="habit-circle-icon">${h.icon}</span>
+              <span class="habit-circle-count">${cnt || '·'}</span>
+            </div>
+            <span class="habit-label">${h.name}</span>
+          </div>`;
+        }).join('') + (habits.length < MAX_HABITS
+          ? `<div class="habit-tile"><button class="habit-add-tile" id="habitAddTile" aria-label="Add habit">+</button><span class="habit-label" style="visibility:hidden">·</span></div>`
+          : '');
+        habits.forEach(h => {
+          const tile = row.querySelector(`[data-id="${h.id}"]`);
+          if (!tile) return;
+          let pressTimer = null, didLong = false;
+          tile.addEventListener('pointerdown',  () => { didLong = false; pressTimer = setTimeout(() => { didLong = true; openEdit(h.id); }, 500); });
+          tile.addEventListener('pointerup',    () => clearTimeout(pressTimer));
+          tile.addEventListener('pointerleave', () => clearTimeout(pressTimer));
+          tile.addEventListener('click',        () => { if (!didLong) tapHabit(h.id); });
+        });
+        const addTile = document.getElementById('habitAddTile');
+        if (addTile) addTile.addEventListener('click', openAdd);
+      }
+
+      function renderStreak() {
+        const el = document.getElementById('habitsStreak');
+        if (!el) return;
+        const t = habitsToday();
+        const yest = ds(new Date(new Date().setDate(new Date().getDate()-1)));
+        let best = { count: 0, name: '' };
+        habits.forEach(h => {
+          const set = logHistory[h.id] || new Set();
+          if (!set.has(t) && !set.has(yest)) return;
+          let count = 0, d = new Date();
+          while (true) { const day = ds(d); if (!set.has(day)) break; count++; d.setDate(d.getDate()-1); }
+          if (count > best.count) best = { count, name: h.name };
+        });
+        el.textContent = best.count >= 2 ? `🔥 ${best.count} day streak — ${best.name}` : '';
+      }
+
+      function tapHabit(id) {
+        todayCounts[id] = (todayCounts[id] || 0) + 1;
+        const cnt = todayCounts[id];
+        const tile = document.querySelector(`[data-id="${id}"]`);
+        if (tile) {
+          const circle = tile.querySelector('.habit-circle');
+          const countEl = tile.querySelector('.habit-circle-count');
+          if (circle) circle.classList.toggle('is-active', cnt > 0);
+          if (countEl) countEl.textContent = cnt || '·';
+        }
+        const t = habitsToday();
+        const log = lsGetLog(t); log[id] = cnt; lsSetLog(t, log);
+        if (sb) sb.from('habit_logs').upsert({ habit_id: id, date: t, count: cnt }, { onConflict: 'habit_id,date' })
+          .then(r => { if (r.error) console.warn('Habit log upsert:', r.error.message); });
+        if (!logHistory[id]) logHistory[id] = new Set();
+        if (cnt > 0) logHistory[id].add(t); else logHistory[id].delete(t);
+        renderStreak();
+      }
+
+      function openEdit(id) {
+        editingId = id;
+        const h = habits.find(x => x.id === id);
+        if (!h) return;
+        document.getElementById('habitModalTitle').textContent = 'Edit Habit';
+        document.getElementById('habitModalName').value  = h.name;
+        document.getElementById('habitModalIcon').value  = h.icon;
+        document.getElementById('habitModalDelete').style.display = '';
+        document.getElementById('habitModalBg').classList.add('show');
+      }
+      function openAdd() {
+        editingId = null;
+        document.getElementById('habitModalTitle').textContent = 'Add Habit';
+        document.getElementById('habitModalName').value  = '';
+        document.getElementById('habitModalIcon').value  = '';
+        document.getElementById('habitModalDelete').style.display = 'none';
+        document.getElementById('habitModalBg').classList.add('show');
+        setTimeout(() => document.getElementById('habitModalName').focus(), 80);
+      }
+      function closeHabitModal() { document.getElementById('habitModalBg').classList.remove('show'); }
+
+      async function saveHabitModal() {
+        const name = document.getElementById('habitModalName').value.trim();
+        const icon = document.getElementById('habitModalIcon').value.trim() || '✅';
+        if (!name) { document.getElementById('habitModalName').focus(); return; }
+        if (editingId) {
+          const h = habits.find(x => x.id === editingId);
+          if (!h) return;
+          h.name = name; h.icon = icon;
+          lsSetHabits(habits);
+          if (sb) sb.from('habits').update({ name, icon }).eq('id', editingId)
+            .then(r => { if (r.error) console.warn('Habit update:', r.error.message); });
+        } else {
+          if (habits.length >= MAX_HABITS) return;
+          const sortOrder = habits.length;
+          let newId = 'local-' + Date.now();
+          if (sb) {
+            try {
+              const { data, error } = await sb.from('habits').insert({ name, icon, sort_order: sortOrder }).select().single();
+              if (!error && data) newId = data.id;
+            } catch {}
+          }
+          habits.push({ id: newId, name, icon, sortOrder });
+          lsSetHabits(habits);
+        }
+        closeHabitModal();
+        renderHabits();
+        renderStreak();
+      }
+
+      async function deleteHabit() {
+        if (!editingId) return;
+        const idx = habits.findIndex(x => x.id === editingId);
+        if (idx === -1) return;
+        if (sb) sb.from('habits').delete().eq('id', editingId)
+          .then(r => { if (r.error) console.warn('Habit delete:', r.error.message); });
+        delete todayCounts[editingId];
+        delete logHistory[editingId];
+        habits.splice(idx, 1);
+        habits.forEach((h, i) => h.sortOrder = i);
+        lsSetHabits(habits);
+        closeHabitModal();
+        renderHabits();
+        renderStreak();
+      }
+
+      async function initHabits() {
+        await loadHabits();
+        if (!habits.length) await seedDefaults();
+        await loadLogs();
+        renderHabits();
+        renderStreak();
+        document.getElementById('habitModalSave').addEventListener('click', saveHabitModal);
+        document.getElementById('habitModalDelete').addEventListener('click', deleteHabit);
+        document.getElementById('habitModalCancel').addEventListener('click', closeHabitModal);
+        document.getElementById('habitModalBg').addEventListener('click', e => { if (e.target === document.getElementById('habitModalBg')) closeHabitModal(); });
+        document.getElementById('habitModalName').addEventListener('keydown', e => { if (e.key === 'Enter') saveHabitModal(); });
+      }
+      initHabits();
+    })();
   </script>
+
+<!-- Habit edit/add modal -->
+<div class="habit-modal-bg" id="habitModalBg">
+  <div class="habit-modal">
+    <div class="habit-modal-title" id="habitModalTitle">Edit Habit</div>
+    <div class="habit-modal-field">
+      <label class="habit-modal-label" for="habitModalName">Name</label>
+      <input type="text" class="habit-modal-input" id="habitModalName" placeholder="e.g. Read" maxlength="20" autocomplete="off">
+    </div>
+    <div class="habit-modal-field">
+      <label class="habit-modal-label" for="habitModalIcon">Icon (emoji)</label>
+      <input type="text" class="habit-modal-input" id="habitModalIcon" placeholder="📖" maxlength="2" autocomplete="off">
+    </div>
+    <div class="habit-modal-actions">
+      <button class="habit-modal-save"   id="habitModalSave">Save</button>
+      <button class="habit-modal-delete" id="habitModalDelete">Remove</button>
+    </div>
+    <button class="habit-modal-cancel" id="habitModalCancel">Cancel</button>
+  </div>
+</div>
 
 </body>
 </html>

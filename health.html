@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="icon" href="nova_icon.png">
-  <link rel="apple-touch-icon" href="nova_icon.png">
+  <link rel="icon" href="/nova_icon.png">
+  <link rel="apple-touch-icon" href="/nova_icon.png">
+  <link rel="manifest" href="/manifest.json">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;1,9..144,400&family=Bodoni+Moda:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#050506">
+<meta name="theme-color" content="#0a0a0b">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="color-scheme" content="dark">
 <title>Health</title>
 
@@ -541,16 +545,13 @@ main {
   padding: 22px 22px 18px;
   box-shadow: 0 1px 0 0 rgba(255,255,255,0.06) inset, 0 12px 40px rgba(0,0,0,0.45);
 }
-.gc-header {
-  display: flex; align-items: center; gap: 10px; margin-bottom: 20px;
-}
+.gc-header { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
 .gc-brand-mark {
   width: 26px; height: 26px; border-radius: 50%;
   background: #fff; color: #0a0a0b;
   font-weight: 900; font-size: 13px; letter-spacing: -0.04em;
   display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 0 10px rgba(107,227,164,0.35);
-  flex-shrink: 0;
+  box-shadow: 0 0 10px rgba(107,227,164,0.35); flex-shrink: 0;
 }
 .gc-wordmark { font-weight: 800; font-size: 13px; letter-spacing: 0.18em; color: var(--text-primary); }
 .gc-subline  { font-size: 10px; color: var(--text-tertiary); letter-spacing: 0.08em; margin-top: 1px; }
@@ -568,9 +569,9 @@ main {
   display: flex; flex-direction: column; align-items: center;
   text-align: center; padding: 20px 8px 12px; gap: 8px;
 }
-.gc-empty-icon { font-size: 32px; opacity: 0.35; }
+.gc-empty-icon  { font-size: 32px; opacity: 0.35; }
 .gc-empty-title { font-size: 16px; font-weight: 700; color: var(--text-primary); }
-.gc-empty-sub { font-size: 12px; color: var(--text-tertiary); max-width: 240px; line-height: 1.5; }
+.gc-empty-sub   { font-size: 12px; color: var(--text-tertiary); max-width: 240px; line-height: 1.5; }
 .gc-log-cta {
   margin-top: 8px; padding: 11px 22px; border-radius: 999px;
   border: 1px solid rgba(255,255,255,0.85);
@@ -579,113 +580,86 @@ main {
   cursor: pointer; box-shadow: inset 0 1px 0 rgba(255,255,255,0.55), 0 4px 14px rgba(0,0,0,0.3);
   transition: transform 0.12s;
 }
-.gc-log-cta:hover { transform: translateY(-1px); }
+.gc-log-cta:hover  { transform: translateY(-1px); }
 .gc-log-cta:active { transform: scale(0.98); }
 
-/* Hero ring */
-.gc-hero { display: flex; justify-content: center; margin-bottom: 22px; }
-.gc-ring-wrap { position: relative; width: 220px; max-width: 70%; aspect-ratio: 1; }
-.gc-ring-svg { width: 100%; height: 100%; transform: rotate(-90deg); }
-.gc-ring-track { fill: none; stroke: rgba(255,255,255,0.06); stroke-width: 12; }
-.gc-ring-fill {
-  fill: none; stroke: #6BE3A4; stroke-width: 12; stroke-linecap: round;
-  stroke-dasharray: 603.19; stroke-dashoffset: 603.19;
-  transition: stroke-dashoffset 0.9s cubic-bezier(0.22,1,0.36,1), stroke 0.4s, filter 0.4s;
+/* Section eyebrow */
+.gc-section-eyebrow {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--text-tertiary);
 }
-.gc-ring-center {
+
+/* Section 1 — Daily Snapshot rings */
+.gc-snapshot { display: flex; gap: 12px; margin-bottom: 28px; }
+.gc-snap-card {
+  flex: 1; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 20px; padding: 18px 8px 20px; text-align: center; min-width: 0;
+}
+.gc-snap-label {
+  font-size: 11px; font-weight: 400; letter-spacing: 0.2em; text-transform: uppercase;
+  color: rgba(255,255,255,0.35); margin-bottom: 14px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+}
+.gc-snap-ring-wrap {
+  position: relative; width: 88%; max-width: 180px; margin: 0 auto; aspect-ratio: 1;
+}
+.gc-snap-svg { width: 100%; height: 100%; transform: rotate(-90deg); overflow: visible; }
+.gc-snap-track { fill: none; stroke: rgba(255,255,255,0.07); stroke-width: 14; }
+.gc-snap-glow {
+  fill: none; stroke: #6DFFB0; stroke-width: 14; stroke-linecap: round;
+  stroke-dasharray: 515.22; stroke-dashoffset: 515.22;
+  transition: stroke-dashoffset 0.9s cubic-bezier(0.22,1,0.36,1), stroke 0.4s;
+}
+.gc-snap-fill {
+  fill: none; stroke: #6DFFB0; stroke-width: 14; stroke-linecap: round;
+  stroke-dasharray: 515.22; stroke-dashoffset: 515.22;
+  transition: stroke-dashoffset 0.9s cubic-bezier(0.22,1,0.36,1), stroke 0.4s;
+}
+.gc-snap-center {
   position: absolute; inset: 0;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 3px;
 }
-.gc-ring-num {
-  font-size: 58px; font-weight: 700; letter-spacing: -0.04em;
-  color: var(--text-primary); line-height: 1; font-variant-numeric: tabular-nums;
+.gc-snap-num {
+  font-family: 'Fraunces', serif; /* swap to 'Bodoni Moda' to try the sharper variant */
+  font-size: clamp(44px, 12vw, 80px); font-weight: 400;
+  color: #FFFFFF; line-height: 1;
 }
-.gc-ring-lbl {
-  font-size: 10px; font-weight: 700; letter-spacing: 0.22em;
-  text-transform: uppercase; color: var(--text-tertiary); margin-top: 8px;
+.gc-snap-status {
+  font-family: 'Fraunces', serif; font-style: italic; font-weight: 400;
+  font-size: 14px; line-height: 1;
 }
-.gc-ring-badge {
-  margin-top: 6px; font-size: 11px; font-weight: 800;
-  letter-spacing: 0.12em; text-transform: uppercase;
-  padding: 3px 10px; border-radius: 999px; border: 1px solid;
-}
-.gc-ring-badge.green  { color: #6BE3A4; border-color: rgba(107,227,164,0.35); background: rgba(107,227,164,0.10); }
-.gc-ring-badge.yellow { color: #F2C063; border-color: rgba(242,192,99,0.35);  background: rgba(242,192,99,0.10); }
-.gc-ring-badge.red    { color: #FF8A8A; border-color: rgba(255,138,138,0.35); background: rgba(255,138,138,0.10); }
+.gc-snap-status-green  { color: #6DFFB0; }
+.gc-snap-status-yellow { color: #F2C063; }
+.gc-snap-status-red    { color: #FF8A8A; }
 
-/* Stats grid */
-.gc-stats {
-  display: grid; grid-template-columns: repeat(4,1fr); gap: 8px;
-  padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.05);
-  margin-bottom: 20px;
-}
-.gc-stat {
-  position: relative;
-  background: rgba(255,255,255,0.025); border: 1px solid rgba(255,255,255,0.05);
-  border-radius: 12px; padding: 12px 10px; text-align: center;
-}
-.gc-stat-label { font-size: 10px; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.14em; font-weight: 700; margin-bottom: 6px; }
-.gc-stat-value { font-size: 22px; font-weight: 700; color: var(--text-primary); line-height: 1; font-variant-numeric: tabular-nums; letter-spacing: -0.03em; }
-.gc-stat-sub   { font-size: 10px; color: var(--text-tertiary); margin-top: 4px; font-family: var(--font-mono); }
-.gc-dot {
-  position: absolute; top: 8px; right: 8px;
-  width: 7px; height: 7px; border-radius: 50%;
-  background: rgba(255,255,255,0.12);
-}
-.gc-dot.green  { background: #6BE3A4; box-shadow: 0 0 6px rgba(107,227,164,0.55); }
-.gc-dot.white  { background: rgba(255,255,255,0.30); }
-.gc-dot.yellow { background: #F2C063; box-shadow: 0 0 6px rgba(242,192,99,0.55); }
-.gc-dot.red    { background: #FF8A8A; box-shadow: 0 0 6px rgba(255,138,138,0.55); }
+/* Section 2 — Sleep breakdown */
+.gc-sleep { margin-bottom: 20px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.05); }
+.gc-sleep-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
+.gc-sleep-total { font-size: 12px; font-weight: 700; color: var(--text-primary); font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+.gc-sleep-bar { display: flex; height: 10px; border-radius: 999px; overflow: hidden; background: rgba(255,255,255,0.04); margin-bottom: 12px; }
+.gc-sleep-seg { height: 100%; transition: width 0.7s cubic-bezier(0.22,1,0.36,1); }
+.gc-sleep-legend { display: grid; grid-template-columns: repeat(4,1fr); gap: 6px; margin-bottom: 16px; }
+.gc-sleg { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.gc-sleg-dot  { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
+.gc-sleg-name { font-size: 9.5px; color: var(--text-secondary); font-weight: 600; }
+.gc-sleg-dur  { font-size: 10px; color: var(--text-primary); font-family: var(--font-mono); font-weight: 700; }
+.gc-secondary { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.05); }
+.gc-sec-item { background: rgba(255,255,255,0.025); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 11px 8px; text-align: center; }
+.gc-sec-label { font-size: 9px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-tertiary); margin-bottom: 4px; }
+.gc-sec-val   { font-size: 20px; font-weight: 700; color: var(--text-primary); line-height: 1; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+.gc-sec-unit  { font-size: 9px; color: var(--text-tertiary); margin-top: 3px; }
 
-/* Sleep stages */
-.gc-stages { margin-bottom: 20px; }
-.gc-stages-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
-.gc-stages-eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-tertiary); }
-.gc-stages-meta { font-size: 11px; color: var(--text-primary); font-family: var(--font-mono); font-weight: 700; font-variant-numeric: tabular-nums; }
-.gc-stages-bar { display: flex; height: 10px; background: rgba(255,255,255,0.04); border-radius: 999px; overflow: hidden; margin-bottom: 10px; }
-.gc-stage { height: 100%; transition: width 0.7s cubic-bezier(0.22,1,0.36,1); }
-.gc-stage-rem   { background: #a78bfa; }
-.gc-stage-deep  { background: #6BE3A4; }
-.gc-stage-light { background: #60a5fa; }
-.gc-stage-awake { background: rgba(255,255,255,0.15); }
-.gc-stages-legend { display: grid; grid-template-columns: repeat(4,1fr); gap: 6px; }
-.gc-leg { display: flex; align-items: center; gap: 5px; font-size: 10.5px; color: var(--text-secondary); }
-.gc-leg-dot { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
-.gc-leg-val { margin-left: auto; font-weight: 700; font-family: var(--font-mono); font-size: 10px; color: var(--text-primary); }
-
-/* Bio strip */
-.gc-bio { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-bottom: 18px; }
-.gc-bio-item {
-  background: rgba(255,255,255,0.025); border: 1px solid rgba(255,255,255,0.05);
-  border-radius: 12px; padding: 11px 12px; text-align: center;
-}
-.gc-bio-label { font-size: 9.5px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-tertiary); margin-bottom: 4px; }
-.gc-bio-val   { font-size: 18px; font-weight: 700; color: var(--text-primary); font-variant-numeric: tabular-nums; letter-spacing: -0.02em; line-height: 1; }
-.gc-bio-unit  { font-size: 10px; color: var(--text-tertiary); margin-top: 2px; }
-
-/* Verdict */
-.gc-verdict {
-  padding: 14px 16px; border-radius: 0 12px 12px 0;
-  border-left: 2px solid rgba(255,255,255,0.3);
-  background: rgba(255,255,255,0.025);
-  border-top: 1px solid rgba(255,255,255,0.04);
-  border-right: 1px solid rgba(255,255,255,0.04);
-  border-bottom: 1px solid rgba(255,255,255,0.04);
-}
-.gc-verdict.green  { border-left-color: #6BE3A4; background: rgba(107,227,164,0.06); }
-.gc-verdict.yellow { border-left-color: #F2C063; background: rgba(242,192,99,0.06); }
-.gc-verdict.red    { border-left-color: #FF8A8A; background: rgba(255,138,138,0.06); }
-.gc-verdict-head { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
-.gc-verdict-eyebrow { font-size: 10px; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.18em; font-weight: 700; }
-.gc-verdict-badge {
-  font-size: 9.5px; font-weight: 800; padding: 3px 9px; border-radius: 999px;
-  letter-spacing: 0.14em; text-transform: uppercase; border: 1px solid;
-}
-.gc-verdict-badge.green  { color: #6BE3A4; border-color: rgba(107,227,164,0.35); background: rgba(107,227,164,0.10); }
-.gc-verdict-badge.yellow { color: #F2C063; border-color: rgba(242,192,99,0.35);  background: rgba(242,192,99,0.10); }
-.gc-verdict-badge.red    { color: #FF8A8A; border-color: rgba(255,138,138,0.35); background: rgba(255,138,138,0.10); }
-.gc-verdict-headline { font-size: 15px; font-weight: 600; color: var(--text-primary); line-height: 1.4; margin-bottom: 6px; letter-spacing: -0.01em; }
-.gc-verdict-desc     { font-size: 12.5px; color: var(--text-secondary); line-height: 1.6; }
+/* Section 3 — 7-day trend charts */
+.gc-trends { margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 18px; }
+.gc-trend { margin-bottom: 18px; }
+.gc-trend:last-child { margin-bottom: 0; }
+.gc-trend-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.gc-trend-avg  { font-size: 10px; color: var(--text-tertiary); font-family: var(--font-mono); }
+.gc-trend-svg  { width: 100%; height: 70px; display: block; overflow: visible; }
+.gc-trend-days { display: grid; grid-template-columns: repeat(7,1fr); margin-top: 4px; }
+.gc-trend-days span { font-size: 9px; color: var(--text-quaternary); font-weight: 600; text-align: center; }
 
 /* Log modal */
 .gc-log-bg {
@@ -731,6 +705,18 @@ main {
 .gc-dur-row input[type=number]:focus { border-color: rgba(255,255,255,0.3); }
 .gc-dur-sep { font-size: 20px; color: var(--text-tertiary); font-weight: 300; }
 .gc-dur-lbl { font-size: 10px; color: var(--text-tertiary); text-align: center; margin-top: 4px; }
+.gc-hrv-seg { display: flex; gap: 6px; }
+.gc-hrv-seg button {
+  flex: 1; padding: 10px 6px; border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.04);
+  color: var(--text-secondary); font-family: inherit; font-size: 13px; font-weight: 600;
+  cursor: pointer; transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+.gc-hrv-seg button.active {
+  background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.3); color: var(--text-primary);
+}
+.gc-hrv-seg button:hover:not(.active) { background: rgba(255,255,255,0.08); }
+.gc-log-divider { height: 1px; background: rgba(255,255,255,0.06); margin: 18px 0; }
 .gc-log-actions { display: flex; gap: 8px; margin-top: 22px; }
 .gc-save-btn {
   flex: 1; padding: 14px; border: none; border-radius: 12px;
@@ -744,15 +730,77 @@ main {
   border-radius: 12px; font-family: inherit; font-size: 15px; font-weight: 600; cursor: pointer;
 }
 .gc-cancel-btn:hover { background: rgba(255,255,255,0.08); }
-.gc-log-divider { height: 1px; background: rgba(255,255,255,0.06); margin: 18px 0; }
 
 @media (max-width: 480px) {
-  .gc-stats { grid-template-columns: repeat(2,1fr); }
-  .gc-ring-wrap { width: 180px; }
-  .gc-ring-num { font-size: 48px; }
-  .gc-stages-legend { grid-template-columns: repeat(2,1fr); }
-  .gc-bio { grid-template-columns: repeat(2,1fr); }
+  .gc-secondary { grid-template-columns: repeat(2,1fr); }
+  .gc-sleep-legend { grid-template-columns: repeat(2,1fr); }
+  .gc-sleep-feedback-row { grid-template-columns: 1fr; gap: 2px; }
+  .gc-debt-bars { height: 64px; }
 }
+
+/* Sleep stage feedback rows */
+.gc-sleep-feedback { margin-top: 14px; display: flex; flex-direction: column; gap: 8px; }
+.gc-sleep-feedback-row {
+  display: grid; grid-template-columns: 80px 1fr auto; align-items: center;
+  gap: 8px; font-size: 11px;
+}
+.gc-sfb-stage { color: var(--text-secondary); font-weight: 600; }
+.gc-sfb-msg   { color: rgba(255,255,255,0.45); line-height: 1.4; }
+.gc-sfb-badge {
+  font-size: 13px; flex-shrink: 0; width: 20px; text-align: center;
+}
+
+/* Sleep debt / bank */
+.gc-debt {
+  margin: 20px 0; padding-top: 20px;
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+.gc-debt-head {
+  display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 14px;
+}
+.gc-debt-badge {
+  font-size: 12px; font-weight: 700; font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+.gc-debt-bars {
+  position: relative; display: flex; align-items: flex-end;
+  gap: 6px; height: 80px;
+}
+.gc-debt-target-line {
+  position: absolute; left: 0; right: 0; height: 1px;
+  border-top: 1px dashed rgba(255,255,255,0.22); pointer-events: none;
+}
+.gc-debt-col {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; gap: 5px; height: 100%;
+  justify-content: flex-end;
+}
+.gc-debt-bar {
+  width: 100%; border-radius: 4px 4px 0 0;
+  min-height: 3px; transition: height 0.5s cubic-bezier(0.22,1,0.36,1);
+}
+.gc-debt-day {
+  font-size: 9px; font-weight: 600; color: var(--text-quaternary);
+  white-space: nowrap;
+}
+
+/* Coaching card */
+.gc-coaching {
+  margin-top: 20px; padding-top: 20px;
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+.gc-coaching-title {
+  font-family: 'Fraunces', serif; font-style: italic; font-weight: 400;
+  font-size: 18px; color: var(--text-primary); margin-bottom: 16px; line-height: 1.2;
+}
+.gc-coaching-bullets { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 16px; }
+.gc-coaching-bullet  { display: flex; gap: 12px; align-items: flex-start; }
+.gc-coaching-dot {
+  width: 6px; height: 6px; border-radius: 50%; background: #c2ef4e;
+  flex-shrink: 0; margin-top: 5px;
+}
+.gc-coaching-text { font-size: 13px; line-height: 1.6; color: rgba(255,255,255,0.72); }
+.gc-coaching-text strong { color: #FAFAFA; font-weight: 600; display: block; margin-bottom: 2px; font-style: normal; }
 </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
   <script src="topbar.js" defer></script>
@@ -771,7 +819,7 @@ main {
         <div class="gc-wordmark">GARMIN</div>
         <div class="gc-subline">Fenix 8</div>
       </div>
-      <button class="gc-edit-btn" id="gcEditBtn" title="Log today's recovery" aria-label="Log recovery">
+      <button class="gc-edit-btn" id="gcEditBtn" title="Log today's data" aria-label="Log today">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
         </svg>
@@ -781,102 +829,119 @@ main {
     <!-- Empty state -->
     <div id="gcEmpty" class="gc-empty">
       <div class="gc-empty-icon">⌚</div>
-      <div class="gc-empty-title">No recovery logged yet</div>
-      <div class="gc-empty-sub">Log your Garmin metrics each morning to track recovery, sleep, and training readiness.</div>
+      <div class="gc-empty-title">No data logged yet</div>
+      <div class="gc-empty-sub">Log your Garmin metrics each morning to track sleep, recovery, and training readiness.</div>
       <button class="gc-log-cta" id="gcLogBtnEmpty">Log Today</button>
     </div>
 
     <!-- Filled state -->
     <div id="gcFilled" style="display:none">
 
-      <!-- Hero ring -->
-      <div class="gc-hero">
-        <div class="gc-ring-wrap">
-          <svg class="gc-ring-svg" viewBox="0 0 220 220" aria-hidden="true">
-            <circle class="gc-ring-track" cx="110" cy="110" r="96"/>
-            <circle class="gc-ring-fill"  cx="110" cy="110" r="96" id="gcRingFill"/>
-          </svg>
-          <div class="gc-ring-center">
-            <div class="gc-ring-num" id="gcRecoveryNum">--</div>
-            <div class="gc-ring-lbl">recovery</div>
-            <div class="gc-ring-badge" id="gcZoneBadge">--</div>
+      <!-- Section 1: Daily Snapshot — three rings -->
+      <div class="gc-snapshot">
+        <div class="gc-snap-card">
+          <div class="gc-snap-label">Sleep Score</div>
+          <div class="gc-snap-ring-wrap">
+            <svg class="gc-snap-svg" viewBox="0 0 200 200" overflow="visible" aria-hidden="true">
+              <defs>
+                <filter id="ringGlow-sleep" x="-80%" y="-80%" width="260%" height="260%">
+                  <feGaussianBlur stdDeviation="12" result="blurred"/>
+                </filter>
+              </defs>
+              <circle class="gc-snap-track" cx="100" cy="100" r="82"/>
+              <circle class="gc-snap-glow" cx="100" cy="100" r="82"
+                      filter="url(#ringGlow-sleep)" id="gcGlowSleep" opacity="0.6"/>
+              <circle class="gc-snap-fill" cx="100" cy="100" r="82" id="gcRingSleep"/>
+            </svg>
+            <div class="gc-snap-center">
+              <div class="gc-snap-num" id="gcNumSleep">--</div>
+              <div class="gc-snap-status" id="gcStatusSleep">--</div>
+            </div>
+          </div>
+        </div>
+        <div class="gc-snap-card">
+          <div class="gc-snap-label">Body Battery</div>
+          <div class="gc-snap-ring-wrap">
+            <svg class="gc-snap-svg" viewBox="0 0 200 200" overflow="visible" aria-hidden="true">
+              <defs>
+                <filter id="ringGlow-batt" x="-80%" y="-80%" width="260%" height="260%">
+                  <feGaussianBlur stdDeviation="12" result="blurred"/>
+                </filter>
+              </defs>
+              <circle class="gc-snap-track" cx="100" cy="100" r="82"/>
+              <circle class="gc-snap-glow" cx="100" cy="100" r="82"
+                      filter="url(#ringGlow-batt)" id="gcGlowBatt" opacity="0.6"/>
+              <circle class="gc-snap-fill" cx="100" cy="100" r="82" id="gcRingBatt"/>
+            </svg>
+            <div class="gc-snap-center">
+              <div class="gc-snap-num" id="gcNumBatt">--</div>
+              <div class="gc-snap-status" id="gcStatusBatt">--</div>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- Stats grid -->
-      <div class="gc-stats">
-        <div class="gc-stat">
-          <span class="gc-dot" id="gcDotSleep"></span>
-          <div class="gc-stat-label">Sleep</div>
-          <div class="gc-stat-value" id="gcSleepPerf">--</div>
-          <div class="gc-stat-sub">%</div>
+      <!-- Section 2: Sleep Breakdown -->
+      <div class="gc-sleep">
+        <div class="gc-sleep-head">
+          <span class="gc-section-eyebrow">Sleep Breakdown</span>
+          <span class="gc-sleep-total" id="gcSleepTotal">--</span>
         </div>
-        <div class="gc-stat">
-          <span class="gc-dot" id="gcDotHrv"></span>
-          <div class="gc-stat-label">HRV</div>
-          <div class="gc-stat-value" id="gcHrv">--</div>
-          <div class="gc-stat-sub">ms</div>
+        <div class="gc-sleep-bar">
+          <div class="gc-sleep-seg" id="gcSegDeep"  style="background:#60a5fa;width:0%"></div>
+          <div class="gc-sleep-seg" id="gcSegRem"   style="background:#a78bfa;width:0%"></div>
+          <div class="gc-sleep-seg" id="gcSegLight" style="background:#34d399;width:0%"></div>
+          <div class="gc-sleep-seg" id="gcSegAwake" style="background:rgba(255,255,255,0.18);width:0%"></div>
         </div>
-        <div class="gc-stat">
-          <span class="gc-dot" id="gcDotRhr"></span>
-          <div class="gc-stat-label">RHR</div>
-          <div class="gc-stat-value" id="gcRhr">--</div>
-          <div class="gc-stat-sub">bpm</div>
+        <div class="gc-sleep-legend">
+          <div class="gc-sleg"><span class="gc-sleg-dot" style="background:#60a5fa"></span><span class="gc-sleg-name">Deep</span><span class="gc-sleg-dur" id="gcDurDeep">--</span></div>
+          <div class="gc-sleg"><span class="gc-sleg-dot" style="background:#a78bfa"></span><span class="gc-sleg-name">REM</span><span class="gc-sleg-dur" id="gcDurRem">--</span></div>
+          <div class="gc-sleg"><span class="gc-sleg-dot" style="background:#34d399"></span><span class="gc-sleg-name">Light</span><span class="gc-sleg-dur" id="gcDurLight">--</span></div>
+          <div class="gc-sleg"><span class="gc-sleg-dot" style="background:rgba(255,255,255,0.25);border:1px solid rgba(255,255,255,0.2)"></span><span class="gc-sleg-name">Awake</span><span class="gc-sleg-dur" id="gcDurAwake">--</span></div>
         </div>
-        <div class="gc-stat">
-          <span class="gc-dot" id="gcDotBattery"></span>
-          <div class="gc-stat-label">Battery</div>
-          <div class="gc-stat-value" id="gcBattery">--</div>
-          <div class="gc-stat-sub">/100</div>
-        </div>
-      </div>
-
-      <!-- Sleep stages bar -->
-      <div class="gc-stages">
-        <div class="gc-stages-head">
-          <span class="gc-stages-eyebrow">Sleep stages <span style="font-weight:400;opacity:0.5">(est.)</span></span>
-          <span class="gc-stages-meta" id="gcSleepDur">--h --m</span>
-        </div>
-        <div class="gc-stages-bar">
-          <div class="gc-stage gc-stage-rem"   id="gcSegRem"   style="width:0%"></div>
-          <div class="gc-stage gc-stage-deep"  id="gcSegDeep"  style="width:0%"></div>
-          <div class="gc-stage gc-stage-light" id="gcSegLight" style="width:0%"></div>
-          <div class="gc-stage gc-stage-awake" id="gcSegAwake" style="width:0%"></div>
-        </div>
-        <div class="gc-stages-legend">
-          <div class="gc-leg"><span class="gc-leg-dot" style="background:#a78bfa"></span>REM<span class="gc-leg-val" id="gcLegRem">--</span></div>
-          <div class="gc-leg"><span class="gc-leg-dot" style="background:#6BE3A4"></span>Deep<span class="gc-leg-val" id="gcLegDeep">--</span></div>
-          <div class="gc-leg"><span class="gc-leg-dot" style="background:#60a5fa"></span>Light<span class="gc-leg-val" id="gcLegLight">--</span></div>
-          <div class="gc-leg"><span class="gc-leg-dot" style="background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.15)"></span>Awake<span class="gc-leg-val" id="gcLegAwake">--</span></div>
+        <div class="gc-sleep-feedback" id="gcSleepFeedback"></div>
+        <div class="gc-secondary">
+          <div class="gc-sec-item">
+            <div class="gc-sec-label">SpO2</div>
+            <div class="gc-sec-val" id="gcSpo2">--</div>
+            <div class="gc-sec-unit">%</div>
+          </div>
         </div>
       </div>
 
-      <!-- Bio strip -->
-      <div class="gc-bio">
-        <div class="gc-bio-item">
-          <div class="gc-bio-label">Stress</div>
-          <div class="gc-bio-val" id="gcStress">--</div>
-          <div class="gc-bio-unit">/100</div>
+      <!-- Sleep Bank -->
+      <div class="gc-debt" id="gcDebt">
+        <div class="gc-debt-head">
+          <span class="gc-section-eyebrow">Sleep Bank</span>
+          <span class="gc-debt-badge" id="gcDebtBadge">--</span>
         </div>
-        <div class="gc-bio-item">
-          <div class="gc-bio-label">Sleep Dur.</div>
-          <div class="gc-bio-val" id="gcSleepDurBio" style="font-size:14px;letter-spacing:-0.02em">--</div>
+        <div class="gc-debt-bars" id="gcDebtBars"></div>
+      </div>
+
+      <!-- Section 3: 7-Day Trends -->
+      <div class="gc-trends">
+        <div class="gc-trend">
+          <div class="gc-trend-head">
+            <span class="gc-section-eyebrow">Sleep Score</span>
+            <span class="gc-trend-avg" id="gcAvgSleep"></span>
+          </div>
+          <svg class="gc-trend-svg" id="gcChartSleep" viewBox="0 0 300 70" preserveAspectRatio="none" aria-hidden="true"></svg>
+          <div class="gc-trend-days" id="gcDaysSleep"></div>
         </div>
-        <div class="gc-bio-item">
-          <div class="gc-bio-label">Logged</div>
-          <div class="gc-bio-val" id="gcLoggedAt" style="font-size:12px;letter-spacing:0">--</div>
+        <div class="gc-trend">
+          <div class="gc-trend-head">
+            <span class="gc-section-eyebrow">Body Battery</span>
+            <span class="gc-trend-avg" id="gcAvgBatt"></span>
+          </div>
+          <svg class="gc-trend-svg" id="gcChartBatt" viewBox="0 0 300 70" preserveAspectRatio="none" aria-hidden="true"></svg>
+          <div class="gc-trend-days" id="gcDaysBatt"></div>
         </div>
       </div>
 
-      <!-- Today's call verdict -->
-      <div class="gc-verdict" id="gcVerdict">
-        <div class="gc-verdict-head">
-          <span class="gc-verdict-eyebrow">Today's call</span>
-          <span class="gc-verdict-badge" id="gcVerdictBadge"></span>
-        </div>
-        <div class="gc-verdict-headline" id="gcVerdictLine"></div>
-        <div class="gc-verdict-desc"     id="gcVerdictDesc"></div>
+      <!-- Coaching card -->
+      <div class="gc-coaching" id="gcCoaching">
+        <div class="gc-coaching-title">How to improve today</div>
+        <ul class="gc-coaching-bullets" id="gcCoachingBullets"></ul>
       </div>
 
     </div><!-- /#gcFilled -->
@@ -886,78 +951,66 @@ main {
 <!-- Log modal -->
 <div class="gc-log-bg" id="gcLogBg">
   <div class="gc-log-modal">
-    <div class="gc-log-title">Log Today's Recovery</div>
-    <div class="gc-log-sub">Read the values from your Garmin Connect app each morning.</div>
+    <div class="gc-log-title">Log Today's Data</div>
+    <div class="gc-log-sub">Read values from Garmin Connect each morning.</div>
 
-    <!-- Recovery Score -->
     <div class="gc-log-field">
-      <div class="gc-log-label">Recovery Score <span id="gcValRecovery">50</span></div>
+      <div class="gc-log-label">Sleep Score <span id="gcVSleepScore">70</span></div>
       <div class="gc-range-row">
-        <input type="range" id="gcRangeRecovery" min="0" max="100" value="50">
-        <input type="number" id="gcNumRecovery" min="0" max="100" value="50">
+        <input type="range" id="gcRSleepScore" min="0" max="100" value="70">
+        <input type="number" id="gcNSleepScore" min="0" max="100" value="70">
       </div>
     </div>
-
-    <!-- HRV -->
     <div class="gc-log-field">
-      <div class="gc-log-label">HRV <span id="gcValHrv">50</span> ms</div>
+      <div class="gc-log-label">Body Battery <span id="gcVBattery">60</span></div>
       <div class="gc-range-row">
-        <input type="range" id="gcRangeHrv" min="10" max="150" value="50">
-        <input type="number" id="gcNumHrv" min="1" max="300" value="50">
-      </div>
-    </div>
-
-    <!-- RHR -->
-    <div class="gc-log-field">
-      <div class="gc-log-label">Resting Heart Rate <span id="gcValRhr">60</span> bpm</div>
-      <div class="gc-range-row">
-        <input type="range" id="gcRangeRhr" min="35" max="100" value="60">
-        <input type="number" id="gcNumRhr" min="30" max="120" value="60">
-      </div>
-    </div>
-
-    <!-- Sleep Performance -->
-    <div class="gc-log-field">
-      <div class="gc-log-label">Sleep Performance <span id="gcValSleepPerf">70</span>%</div>
-      <div class="gc-range-row">
-        <input type="range" id="gcRangeSleepPerf" min="0" max="100" value="70">
-        <input type="number" id="gcNumSleepPerf" min="0" max="100" value="70">
-      </div>
-    </div>
-
-    <!-- Sleep Duration -->
-    <div class="gc-log-field">
-      <div class="gc-log-label">Sleep Duration</div>
-      <div class="gc-dur-row">
-        <div>
-          <input type="number" id="gcNumSleepH" min="0" max="12" value="7" placeholder="7">
-          <div class="gc-dur-lbl">hrs</div>
-        </div>
-        <div class="gc-dur-sep">:</div>
-        <div>
-          <input type="number" id="gcNumSleepM" min="0" max="59" value="30" placeholder="30">
-          <div class="gc-dur-lbl">min</div>
-        </div>
+        <input type="range" id="gcRBattery" min="0" max="100" value="60">
+        <input type="number" id="gcNBattery" min="0" max="100" value="60">
       </div>
     </div>
 
     <div class="gc-log-divider"></div>
 
-    <!-- Body Battery -->
     <div class="gc-log-field">
-      <div class="gc-log-label">Body Battery <span id="gcValBattery">60</span></div>
-      <div class="gc-range-row">
-        <input type="range" id="gcRangeBattery" min="0" max="100" value="60">
-        <input type="number" id="gcNumBattery" min="0" max="100" value="60">
+      <div class="gc-log-label">Deep Sleep</div>
+      <div class="gc-dur-row">
+        <div><input type="number" id="gcDeepH" min="0" max="12" value="1"><div class="gc-dur-lbl">hrs</div></div>
+        <div class="gc-dur-sep">:</div>
+        <div><input type="number" id="gcDeepM" min="0" max="59" value="20"><div class="gc-dur-lbl">min</div></div>
+      </div>
+    </div>
+    <div class="gc-log-field">
+      <div class="gc-log-label">REM Sleep</div>
+      <div class="gc-dur-row">
+        <div><input type="number" id="gcRemH" min="0" max="12" value="1"><div class="gc-dur-lbl">hrs</div></div>
+        <div class="gc-dur-sep">:</div>
+        <div><input type="number" id="gcRemM" min="0" max="59" value="30"><div class="gc-dur-lbl">min</div></div>
+      </div>
+    </div>
+    <div class="gc-log-field">
+      <div class="gc-log-label">Light Sleep</div>
+      <div class="gc-dur-row">
+        <div><input type="number" id="gcLightH" min="0" max="12" value="4"><div class="gc-dur-lbl">hrs</div></div>
+        <div class="gc-dur-sep">:</div>
+        <div><input type="number" id="gcLightM" min="0" max="59" value="0"><div class="gc-dur-lbl">min</div></div>
+      </div>
+    </div>
+    <div class="gc-log-field">
+      <div class="gc-log-label">Awake</div>
+      <div class="gc-dur-row">
+        <div><input type="number" id="gcAwakeH" min="0" max="4" value="0"><div class="gc-dur-lbl">hrs</div></div>
+        <div class="gc-dur-sep">:</div>
+        <div><input type="number" id="gcAwakeM" min="0" max="59" value="15"><div class="gc-dur-lbl">min</div></div>
       </div>
     </div>
 
-    <!-- Stress Level -->
+    <div class="gc-log-divider"></div>
+
     <div class="gc-log-field">
-      <div class="gc-log-label">Stress Level <span id="gcValStress">30</span></div>
+      <div class="gc-log-label">SpO2 <span id="gcVSpo2">96</span>%</div>
       <div class="gc-range-row">
-        <input type="range" id="gcRangeStress" min="0" max="100" value="30">
-        <input type="number" id="gcNumStress" min="0" max="100" value="30">
+        <input type="range" id="gcRSpo2" min="85" max="100" value="96">
+        <input type="number" id="gcNSpo2" min="85" max="100" value="96">
       </div>
     </div>
 
@@ -1135,237 +1188,443 @@ main {
   const SUPA_URL = 'https://gmmmrfldwjwbektgbifq.supabase.co';
   const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdtbW1yZmxkd2p3YmVrdGdiaWZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1MDA5NTQsImV4cCI6MjA5NjA3Njk1NH0.sTUJrqcAwkl3lzbcGMU_0Gc5S_Vth0WxvfF6YU8rlJc';
   const sb = window.supabase ? window.supabase.createClient(SUPA_URL, SUPA_KEY) : null;
-  const LS_KEY = 'gc_manual_v1';
+  const LS_TODAY = 'gc_v2';
 
   const $ = id => document.getElementById(id);
 
-  function todayKey() {
+  // ── Date helpers ────────────────────────────────────────────
+  function activeDate() {
     const d = new Date();
     if (d.getHours() < 6) d.setDate(d.getDate() - 1);
-    return 'garmin:' + d.toISOString().slice(0, 10);
+    return d;
+  }
+  function toDateStr(d) { return d.toISOString().slice(0, 10); }
+  function todayKey() { return 'garmin:' + toDateStr(activeDate()); }
+  function last7Keys() {
+    const base = activeDate();
+    const keys = [];
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date(base); d.setDate(base.getDate() - i);
+      keys.push('garmin:' + toDateStr(d));
+    }
+    return keys;
   }
 
   // ── Zone helpers ────────────────────────────────────────────
-  function recoveryZone(score) {
-    if (score >= 80) return { zone: 'green',  label: 'Peak',     color: '#6BE3A4' };
-    if (score >= 67) return { zone: 'green',  label: 'High',     color: '#6BE3A4' };
-    if (score >= 34) return { zone: 'yellow', label: 'Moderate', color: '#F2C063' };
-    return             { zone: 'red',    label: 'Low',      color: '#FF8A8A' };
-  }
-  const sleepDot   = p => p >= 80 ? 'green' : p >= 60 ? 'white' : p >= 40 ? 'yellow' : 'red';
-  const hrvDot     = v => v >= 60 ? 'green' : v >= 40 ? 'white' : v >= 25 ? 'yellow' : 'red';
-  const rhrDot     = v => v <= 55 ? 'green' : v <= 65 ? 'white' : v <= 75 ? 'yellow' : 'red';
-  const battDot    = v => v >= 70 ? 'green' : v >= 40 ? 'white' : v >= 20 ? 'yellow' : 'red';
-
-  function buildVerdict(d) {
-    let label = recoveryZone(d.recoveryScore).label;
-    if (d.hrv < 40 && d.stress > 60) {
-      if (label === 'Peak') label = 'High';
-      else if (label === 'High') label = 'Moderate';
-    }
-    const z = recoveryZone(d.recoveryScore);
-    const map = {
-      Peak:     { hl: 'Green light — push hard today.',      desc: `Recovery at ${d.recoveryScore}%. Your body is fully charged. Hit that heavy session.` },
-      High:     { hl: 'Looking good — solid training day.',  desc: `Recovery at ${d.recoveryScore}%. Strong baseline. Train with intention.` },
-      Moderate: { hl: 'Moderate intensity recommended.',     desc: `Recovery at ${d.recoveryScore}%. Steady-state work is fine. Skip the PRs today.` },
-      Low:      { hl: 'Rest day — let your body recover.',   desc: `Recovery at ${d.recoveryScore}%. Pushing hard here digs a deeper hole. Walk, stretch, sleep.` },
-    };
-    return { zone: z.zone, color: z.color, label, ...(map[label] || map.Moderate) };
-  }
-
-  function estimateStages(perf, totalMins) {
-    const p = perf / 100;
-    const rem   = Math.round(totalMins * (0.20 + p * 0.05));
-    const deep  = Math.round(totalMins * (0.13 + p * 0.07));
-    const awake = Math.round(totalMins * 0.05);
-    const light = Math.max(0, totalMins - rem - deep - awake);
-    return { rem, deep, light, awake };
-  }
-
-  function fmtMins(m) {
-    if (!m && m !== 0) return '--';
-    const h = Math.floor(m / 60), mm = m % 60;
-    return `${h}h ${String(mm).padStart(2,'0')}m`;
-  }
-
-  function fmtRelTime(iso) {
-    const diff = Date.now() - new Date(iso).getTime();
-    const m = Math.round(diff / 60000);
-    if (m < 1) return 'just now';
-    if (m < 60) return `${m}m ago`;
-    const h = Math.round(m / 60);
-    return `${h}h ago`;
-  }
-
+  const ZONES = {
+    sleep:   v => v >= 85 ? {l:'Excellent',z:'green',c:'#6DFFB0'} : v >= 70 ? {l:'Good',z:'green',c:'#6DFFB0'} : v >= 50 ? {l:'Fair',z:'yellow',c:'#F2C063'} : {l:'Poor',z:'red',c:'#FF8A8A'},
+    battery: v => v >= 70 ? {l:'Peak',z:'green',c:'#6DFFB0'}     : v >= 40 ? {l:'High',z:'green',c:'#6DFFB0'} : v >= 20 ? {l:'Moderate',z:'yellow',c:'#F2C063'} : {l:'Low',z:'red',c:'#FF8A8A'},
+  };
   // ── Ring animation ──────────────────────────────────────────
-  const CIRC = 2 * Math.PI * 96;
-  function animateRing(score, color) {
-    const fill = $('gcRingFill');
-    fill.style.stroke = color;
-    fill.style.filter = `drop-shadow(0 0 18px ${color}80)`;
-    const offset = CIRC - (score / 100) * CIRC;
-    fill.style.strokeDashoffset = CIRC;
+  const CIRC = 2 * Math.PI * 82;
+  function animateRing(fillId, glowId, score, color) {
+    const el = $(fillId), glow = $(glowId);
+    if (!el) return;
+    const offset = CIRC - (Math.max(0, Math.min(100, score)) / 100) * CIRC;
+    el.style.stroke = color;
+    if (glow) glow.style.stroke = color;
+    el.style.strokeDashoffset = CIRC;
+    if (glow) glow.style.strokeDashoffset = CIRC;
     requestAnimationFrame(() => requestAnimationFrame(() => {
-      fill.style.strokeDashoffset = offset;
+      el.style.strokeDashoffset = offset;
+      if (glow) glow.style.strokeDashoffset = offset;
     }));
   }
 
   // ── DOM helpers ─────────────────────────────────────────────
-  function setText(id, v) { const e = $(id); if (e) e.textContent = v ?? '--'; }
-  function setDot(id, cls) { const e = $(id); if (e) e.className = 'gc-dot ' + (cls || 'dim'); }
-  function setWidth(id, ratio) { const e = $(id); if (e) e.style.width = (Math.max(0, Math.min(1, ratio || 0)) * 100) + '%'; }
-  function setBadge(id, label, zone) {
-    const e = $(id); if (!e) return;
-    e.textContent = label;
-    e.className = (e.className.split(' ')[0]) + ' ' + zone;
+  function setText(id, v) { const e=$(id); if(e) e.textContent = (v == null ? '--' : v); }
+  function setW(id, pct)  { const e=$(id); if(e) e.style.width = pct + '%'; }
+  function fmtMins(m) {
+    if (m == null || isNaN(m) || m < 0) return '--';
+    return Math.floor(m/60) + 'h ' + String(m%60).padStart(2,'0') + 'm';
   }
 
-  // ── Render ──────────────────────────────────────────────────
-  function render(data) {
-    if (!data || data.recoveryScore == null) {
-      $('gcEmpty').style.display  = '';
-      $('gcFilled').style.display = 'none';
+  // ── Section 1: Snapshot rings ─────────────────────────────
+  function renderSnapshot(data) {
+    const ss = ZONES.sleep(data.sleepScore    ?? 0);
+    const bb = ZONES.battery(data.bodyBattery ?? 0);
+    animateRing('gcRingSleep', 'gcGlowSleep', data.sleepScore  ?? 0, ss.c);
+    animateRing('gcRingBatt',  'gcGlowBatt',  data.bodyBattery ?? 0, bb.c);
+    setText('gcNumSleep', data.sleepScore  ?? '--');
+    setText('gcNumBatt',  data.bodyBattery ?? '--');
+    const setStatus = (id, z) => {
+      const e=$(id); if(!e) return;
+      e.textContent = z.l;
+      e.className = 'gc-snap-status gc-snap-status-' + z.z;
+    };
+    setStatus('gcStatusSleep', ss);
+    setStatus('gcStatusBatt',  bb);
+  }
+
+  // ── Section 2: Sleep breakdown ────────────────────────────
+  function renderSleepBar(data) {
+    const deepMins  = (data.deepSleepH  ||0)*60 + (data.deepSleepM  ||0);
+    const remMins   = (data.remSleepH   ||0)*60 + (data.remSleepM   ||0);
+    const lightMins = (data.lightSleepH ||0)*60 + (data.lightSleepM ||0);
+    const awakeMins = (data.awakeSleepH ||0)*60 + (data.awakeSleepM ||0);
+    const total = deepMins + remMins + lightMins + awakeMins;
+    if (total > 0) {
+      setW('gcSegDeep',  deepMins  / total * 100);
+      setW('gcSegRem',   remMins   / total * 100);
+      setW('gcSegLight', lightMins / total * 100);
+      setW('gcSegAwake', awakeMins / total * 100);
+    }
+    setText('gcDurDeep',  fmtMins(deepMins));
+    setText('gcDurRem',   fmtMins(remMins));
+    setText('gcDurLight', fmtMins(lightMins));
+    setText('gcDurAwake', fmtMins(awakeMins));
+    setText('gcSleepTotal', total > 0 ? fmtMins(total) : '--');
+    setText('gcSpo2', data.spo2 ?? '--');
+    renderSleepFeedback(deepMins, remMins, lightMins, awakeMins, total);
+  }
+
+  // ── Section 3: 7-day trend charts ─────────────────────────
+  const SVG_NS = 'http://www.w3.org/2000/svg';
+  function drawChart(svgId, daysId, avgId, values, labels, color, minVal, maxVal, labelFn) {
+    const svg=$(svgId), daysEl=$(daysId);
+    if (!svg) return;
+    while (svg.firstChild) svg.removeChild(svg.firstChild);
+    const W=300,H=60,PL=6,PR=6,PT=8,PB=10;
+    const pw=W-PL-PR, ph=H-PT-PB, N=values.length;
+    const xOf = i => PL + (i/(N-1))*pw;
+    const rng  = (maxVal-minVal)||1;
+    const yOf  = v => PT + ph - ((v-minVal)/rng)*ph;
+    const valid = values.filter(v => v!==null);
+    if (valid.length===0) {
+      if (daysEl) daysEl.innerHTML = labels.map(d=>'<span>'+d+'</span>').join('');
       return;
     }
-    $('gcEmpty').style.display  = 'none';
-    $('gcFilled').style.display = '';
+    const avg = valid.reduce((a,b)=>a+b,0)/valid.length;
+    const avgY = yOf(avg);
+    const avgLine = document.createElementNS(SVG_NS,'line');
+    avgLine.setAttribute('x1',PL); avgLine.setAttribute('x2',W-PR);
+    avgLine.setAttribute('y1',avgY); avgLine.setAttribute('y2',avgY);
+    avgLine.setAttribute('stroke','rgba(255,255,255,0.18)');
+    avgLine.setAttribute('stroke-width','1');
+    avgLine.setAttribute('stroke-dasharray','3,3');
+    svg.appendChild(avgLine);
+    const segments=[]; let seg=[];
+    values.forEach((v,i) => {
+      if (v!==null) { seg.push([xOf(i),yOf(v)]); }
+      else { if(seg.length){segments.push(seg);seg=[];} }
+    });
+    if (seg.length) segments.push(seg);
+    segments.forEach(s => {
+      if (!s.length) return;
+      const first=s[0], last=s[s.length-1];
+      const ptStr=s.map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' ');
+      const area=document.createElementNS(SVG_NS,'polygon');
+      area.setAttribute('points', ptStr+' '+last[0].toFixed(1)+','+(H-PB)+' '+first[0].toFixed(1)+','+(H-PB));
+      area.setAttribute('fill', color+'22');
+      svg.appendChild(area);
+      if (s.length>1) {
+        const line=document.createElementNS(SVG_NS,'polyline');
+        line.setAttribute('points',ptStr); line.setAttribute('fill','none');
+        line.setAttribute('stroke',color); line.setAttribute('stroke-width','1.8');
+        line.setAttribute('stroke-linecap','round'); line.setAttribute('stroke-linejoin','round');
+        svg.appendChild(line);
+      }
+    });
+    values.forEach((v,i) => {
+      if (v===null) return;
+      const isToday=(i===N-1);
+      const dot=document.createElementNS(SVG_NS,'circle');
+      dot.setAttribute('cx',xOf(i).toFixed(1)); dot.setAttribute('cy',yOf(v).toFixed(1));
+      dot.setAttribute('r', isToday?'4':'2.5');
+      dot.setAttribute('fill', isToday?color:'rgba(255,255,255,0.45)');
+      if (isToday) dot.setAttribute('filter','drop-shadow(0 0 4px '+color+')');
+      svg.appendChild(dot);
+    });
+    if (avgId) setText(avgId, 'avg '+(labelFn?labelFn(avg):Math.round(avg)));
+    if (daysEl) daysEl.innerHTML = labels.map(d=>'<span>'+d+'</span>').join('');
+  }
 
-    const z = recoveryZone(data.recoveryScore);
-    const v = buildVerdict(data);
+  function renderTrends(history) {
+    const keys = last7Keys();
+    const labels = keys.map(k => {
+      const d = new Date(k.replace('garmin:','')+' 12:00:00');
+      return ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()];
+    });
+    const sleepVals = keys.map(k => (history[k]?.sleepScore  ?? null));
+    const battVals  = keys.map(k => (history[k]?.bodyBattery ?? null));
+    drawChart('gcChartSleep','gcDaysSleep','gcAvgSleep', sleepVals, labels, '#6DFFB0', 0, 100, v=>Math.round(v));
+    drawChart('gcChartBatt', 'gcDaysBatt', 'gcAvgBatt',  battVals,  labels, '#F2C063', 0, 100, v=>Math.round(v));
+  }
 
-    animateRing(data.recoveryScore, z.color);
-    setText('gcRecoveryNum', data.recoveryScore);
-    setBadge('gcZoneBadge', z.label, z.zone);
+  // ── Sleep stage feedback ──────────────────────────────────
+  const STAGE_CFG = [
+    { key:'deep',  label:'Deep',  color:'#60a5fa', lo:13, hi:23,
+      msgs: { lo: 'Slightly low — avoid alcohol within 3h of bed; it suppresses deep sleep.',
+              hi: 'Above average — excellent physical recovery.',
+              ok: 'On target — physical restoration complete.' } },
+    { key:'rem',   label:'REM',   color:'#a78bfa', lo:20, hi:25,
+      msgs: { lo: 'Slightly low — REM concentrates in the final third. Push bedtime 20 min earlier or sleep in.',
+              hi: 'High — strong cognitive restoration and memory consolidation.',
+              ok: 'Optimal — cognitive restoration solid.' } },
+    { key:'light', label:'Light', color:'#34d399', lo:45, hi:55,
+      msgs: { lo: 'Low — light sleep scaffolds transitions between stages; may indicate fragmentation.',
+              hi: 'Above range — more deep or REM would improve recovery quality.',
+              ok: 'Normal filler — no action needed.' } },
+    { key:'awake', label:'Awake', color:'rgba(255,255,255,0.5)', lo:0, hi:10,
+      msgs: { lo: '', /* awake can't be too low */
+              hi: 'High wakefulness — try cooler room temp or a tighter wind-down routine.',
+              ok: 'Low wakefulness — excellent sleep efficiency.' } },
+  ];
+  function renderSleepFeedback(deepMins, remMins, lightMins, awakeMins, total) {
+    const el = $('gcSleepFeedback'); if (!el) return;
+    if (!total) { el.innerHTML = ''; return; }
+    const vals = { deep: deepMins, rem: remMins, light: lightMins, awake: awakeMins };
+    el.innerHTML = STAGE_CFG.map(s => {
+      const mins = vals[s.key];
+      const pct  = Math.round(mins / total * 100);
+      const diff = pct < s.lo ? s.lo - pct : pct > s.hi ? pct - s.hi : 0;
+      const dir  = pct < s.lo ? 'lo' : pct > s.hi ? 'hi' : 'ok';
+      let icon, iconColor;
+      if (diff === 0)      { icon = '✓'; iconColor = '#6DFFB0'; }
+      else if (diff <= 5)  { icon = '⚠'; iconColor = '#F2C063'; }
+      else                 { icon = '✗'; iconColor = '#FF8A8A'; }
+      const target = s.hi === Infinity ? `<${s.hi+10}%` : `${s.lo}–${s.hi}%`;
+      const msg  = s.msgs[dir] || '';
+      const range = s.key === 'awake' ? `<${s.hi}%` : `${s.lo}–${s.hi}%`;
+      return `<div class="gc-sleep-feedback-row">
+        <span class="gc-sfb-stage" style="color:${s.color}">${s.label} · ${pct}%</span>
+        <span class="gc-sfb-msg">${msg}</span>
+        <span class="gc-sfb-badge" style="color:${iconColor}">${icon}</span>
+      </div>`;
+    }).join('');
+  }
 
-    setText('gcSleepPerf', data.sleepPerf); setDot('gcDotSleep',   sleepDot(data.sleepPerf));
-    setText('gcHrv',       data.hrv);       setDot('gcDotHrv',     hrvDot(data.hrv));
-    setText('gcRhr',       data.rhr);       setDot('gcDotRhr',     rhrDot(data.rhr));
-    setText('gcBattery',   data.bodyBattery); setDot('gcDotBattery', battDot(data.bodyBattery));
+  // ── Sleep debt / bank ─────────────────────────────────────
+  const SLEEP_TARGET = 480;
+  function totalSleepMins(d) {
+    if (!d) return null;
+    return (d.deepSleepH||0)*60+(d.deepSleepM||0)
+          +(d.remSleepH||0)*60 +(d.remSleepM||0)
+          +(d.lightSleepH||0)*60+(d.lightSleepM||0)
+          +(d.awakeSleepH||0)*60+(d.awakeSleepM||0);
+  }
+  function renderSleepDebt(history) {
+    const barsEl = $('gcDebtBars'), badgeEl = $('gcDebtBadge');
+    if (!barsEl) return;
+    const keys   = last7Keys();
+    const labels = keys.map(k => {
+      const d = new Date(k.replace('garmin:','')+' 12:00:00');
+      return ['Su','Mo','Tu','We','Th','Fr','Sa'][d.getDay()];
+    });
+    const nightly = keys.map(k => totalSleepMins(history[k]));
+    const logged  = nightly.filter(v => v !== null);
+    if (!logged.length) { barsEl.innerHTML = ''; if(badgeEl) badgeEl.textContent = '--'; return; }
+    const netMins = logged.reduce((s, v) => s + (v - SLEEP_TARGET), 0);
+    const absH = Math.abs(Math.floor(netMins / 60));
+    const absM = Math.abs(Math.round(netMins % 60));
+    const label = netMins >= 0
+      ? `+${absH}h ${absM}m banked`
+      : `owed ${absH}h ${absM}m`;
+    const col = netMins >= 0 ? '#6DFFB0' : Math.abs(netMins) > 240 ? '#FF8A8A' : '#F2C063';
+    if (badgeEl) { badgeEl.textContent = label; badgeEl.style.color = col; }
+    const BAR_H   = barsEl.offsetHeight || 80;
+    const MAX_MINS = 720;
+    const TARGET_PCT = (SLEEP_TARGET / MAX_MINS) * 100;
+    let html = `<div class="gc-debt-target-line" style="bottom:${TARGET_PCT}%"></div>`;
+    nightly.forEach((mins, i) => {
+      const barPct = mins === null ? 0 : Math.min(100, Math.round(mins / MAX_MINS * 100));
+      const barCol = mins === null ? 'rgba(255,255,255,0.1)'
+                   : mins >= SLEEP_TARGET ? '#6DFFB0'
+                   : mins >= 300 ? '#F2C063' : 'rgba(255,100,100,0.75)';
+      html += `<div class="gc-debt-col">
+        <div class="gc-debt-bar" style="height:${barPct}%;background:${barCol}"></div>
+        <div class="gc-debt-day">${labels[i]}</div>
+      </div>`;
+    });
+    barsEl.innerHTML = html;
+  }
 
-    const totalMins = (data.sleepHours || 0) * 60 + (data.sleepMins || 0);
-    const s = estimateStages(data.sleepPerf || 50, totalMins);
-    if (totalMins > 0) {
-      setWidth('gcSegRem',   s.rem   / totalMins);
-      setWidth('gcSegDeep',  s.deep  / totalMins);
-      setWidth('gcSegLight', s.light / totalMins);
-      setWidth('gcSegAwake', s.awake / totalMins);
+  // ── Coaching card ─────────────────────────────────────────
+  function renderCoaching(data, history) {
+    const el = $('gcCoachingBullets'); if (!el) return;
+    const deep  = (data.deepSleepH||0)*60+(data.deepSleepM||0);
+    const rem   = (data.remSleepH||0)*60 +(data.remSleepM||0);
+    const light = (data.lightSleepH||0)*60+(data.lightSleepM||0);
+    const awake = (data.awakeSleepH||0)*60+(data.awakeSleepM||0);
+    const total = deep + rem + light + awake;
+    const ss = data.sleepScore  ?? 0;
+    const bb = data.bodyBattery ?? 0;
+    const bullets = [];
+    const pct = v => total ? Math.round(v / total * 100) : 0;
+    const fmt = m => `${Math.floor(m/60)}h ${String(m%60).padStart(2,'0')}m`;
+
+    // Rule 1: readiness
+    if (ss >= 80 && bb >= 80) {
+      bullets.push({ obs: `Sleep score ${ss}, body battery ${bb} — green light to push.`,
+                     act: 'Stack the hardest training or cognitive work in your peak window.' });
+    } else if (ss >= 60 && bb >= 60) {
+      bullets.push({ obs: `Sleep score ${ss}, body battery ${bb} — moderate readiness.`,
+                     act: 'Quality session is on the table — avoid max-effort PRs.' });
+    } else {
+      bullets.push({ obs: `Sleep score ${ss}, body battery ${bb} — recovery day.`,
+                     act: 'Walk, mobility, or easy cardio. Save the hard work for tomorrow.' });
     }
-    const dur = `${data.sleepHours || 0}h ${String(data.sleepMins || 0).padStart(2,'0')}m`;
-    setText('gcSleepDur', dur);
-    setText('gcSleepDurBio', dur);
-    setText('gcLegRem',   fmtMins(s.rem));
-    setText('gcLegDeep',  fmtMins(s.deep));
-    setText('gcLegLight', fmtMins(s.light));
-    setText('gcLegAwake', fmtMins(s.awake));
 
-    setText('gcStress', data.stress);
-    setText('gcLoggedAt', data.loggedAt ? fmtRelTime(data.loggedAt) : 'today');
+    // Rule 2: REM (always shown)
+    const remPct = pct(rem);
+    if (remPct < 20) {
+      bullets.push({ obs: `REM at ${remPct}% of sleep — slightly below target (20–25%).`,
+                     act: 'Push bedtime 20 min earlier — REM concentrates in the final third of the night.' });
+    } else if (remPct > 25) {
+      bullets.push({ obs: `REM at ${remPct}% — above average cognitive restoration.`,
+                     act: 'No action needed. Keep the consistent schedule that got you here.' });
+    } else {
+      bullets.push({ obs: `REM at ${remPct}% — optimal range.`,
+                     act: 'Cognitive restoration solid. No changes needed.' });
+    }
 
-    const vEl = $('gcVerdict');
-    vEl.className = `gc-verdict ${v.zone}`;
-    setBadge('gcVerdictBadge', v.label, v.zone);
-    setText('gcVerdictLine', v.hl);
-    setText('gcVerdictDesc', v.desc);
+    // Rule 3: Deep (only if outside range)
+    const deepPct = pct(deep);
+    if (deepPct < 13) {
+      bullets.push({ obs: `Deep sleep at ${deepPct}% (${fmt(deep)}) — below target (13–23%).`,
+                     act: 'Avoid alcohol within 3h of bed and keep room below 68°F — both directly suppress deep sleep.' });
+    } else if (deepPct > 23) {
+      bullets.push({ obs: `Deep at ${deepPct}% — above average physical recovery.`,
+                     act: 'Nothing to change here. Consistent bedtime is likely the reason.' });
+    }
+
+    // Rule 4: efficiency
+    const awakePct = pct(awake);
+    if (awakePct > 10) {
+      bullets.push({ obs: `${fmt(awake)} awake (${awakePct}% of sleep) — above target (<10%).`,
+                     act: 'Try a cooler room and tighter wind-down. Avoid screens and bright light 45 min before bed.' });
+    } else if (total > 0) {
+      const eff = Math.round((1 - awake/total) * 100);
+      bullets.push({ obs: `Sleep efficiency ${eff}% (${fmt(awake)} awake) — excellent.`,
+                     act: 'Keep the wind-down routine.' });
+    }
+
+    el.innerHTML = bullets.slice(0, 4).map(b =>
+      `<li class="gc-coaching-bullet">
+        <span class="gc-coaching-dot"></span>
+        <span class="gc-coaching-text"><strong>${b.obs}</strong>${b.act}</span>
+      </li>`
+    ).join('');
+  }
+
+  // ── Master render ──────────────────────────────────────────
+  function renderAll(data, history) {
+    const hasData = data && data.sleepScore != null;
+    $('gcEmpty').style.display  = hasData ? 'none' : '';
+    $('gcFilled').style.display = hasData ? ''     : 'none';
+    if (!hasData) return;
+    renderSnapshot(data);
+    renderSleepBar(data);
+    renderSleepDebt(history || {});
+    renderTrends(history || {});
+    renderCoaching(data, history || {});
   }
 
   // ── Supabase ────────────────────────────────────────────────
+  let _history = {};
+
   async function loadFromCloud() {
     if (!sb) { loadLocal(); return; }
     try {
-      const { data, error } = await sb.from('user_data').select('value').eq('key', todayKey()).maybeSingle();
-      if (!error && data && data.value) {
-        try { localStorage.setItem(LS_KEY, JSON.stringify(data.value)); } catch {}
-        render(data.value);
-      } else {
-        loadLocal();
-      }
+      const keys = last7Keys();
+      const { data, error } = await sb.from('user_data').select('key,value').in('key', keys);
+      if (!error && data && data.length) {
+        data.forEach(row => { _history[row.key] = row.value; });
+        const today = _history[todayKey()] || null;
+        if (today) try { localStorage.setItem(LS_TODAY, JSON.stringify(today)); } catch {}
+        renderAll(today, _history);
+      } else { loadLocal(); }
     } catch { loadLocal(); }
   }
 
   function loadLocal() {
-    try { render(JSON.parse(localStorage.getItem(LS_KEY))); } catch { render(null); }
+    try {
+      last7Keys().forEach(k => {
+        try {
+          const v = JSON.parse(localStorage.getItem('gc_day_'+k.replace('garmin:','')));
+          if (v) _history[k] = v;
+        } catch {}
+      });
+      const today = JSON.parse(localStorage.getItem(LS_TODAY));
+      if (today) _history[todayKey()] = today;
+      renderAll(today||null, _history);
+    } catch { renderAll(null, {}); }
   }
 
   function saveData(payload) {
     payload.loggedAt = new Date().toISOString();
-    try { localStorage.setItem(LS_KEY, JSON.stringify(payload)); } catch {}
-    render(payload);
+    const tk = todayKey();
+    _history[tk] = payload;
+    try { localStorage.setItem(LS_TODAY, JSON.stringify(payload)); } catch {}
+    try { localStorage.setItem('gc_day_'+tk.replace('garmin:',''), JSON.stringify(payload)); } catch {}
+    renderAll(payload, _history);
     if (!sb) return;
-    sb.from('user_data').upsert({ key: todayKey(), value: payload, updated_at: payload.loggedAt })
-      .then(r => { if (r.error) console.warn('Garmin sync error:', r.error.message); });
+    sb.from('user_data').upsert({ key: tk, value: payload, updated_at: payload.loggedAt })
+      .then(r => { if (r.error) console.warn('Garmin sync:', r.error.message); });
   }
 
   function setupRealtime() {
     if (!sb) return;
-    const key = todayKey();
-    sb.channel('garmin-recovery')
+    const tk = todayKey();
+    sb.channel('garmin-v2')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'user_data' }, p => {
-        if (p.new && p.new.key === key) render(p.new.value);
+        if (p.new && p.new.key===tk) { _history[tk]=p.new.value; renderAll(p.new.value,_history); }
       })
       .subscribe();
   }
 
   // ── Modal ───────────────────────────────────────────────────
-  function syncRangeNum(rangeId, numId, displayId) {
-    const r = $(rangeId), n = $(numId), d = $(displayId);
-    if (!r || !n) return;
-    const upd = () => {
-      const v = r.value;
-      n.value = v;
-      if (d) d.textContent = v;
-    };
-    r.addEventListener('input', () => { n.value = r.value; if (d) d.textContent = r.value; });
-    n.addEventListener('input', () => { r.value = n.value; if (d) d.textContent = n.value; });
+  function syncRN(rId, nId, dId) {
+    const r=$(rId), n=$(nId), d=$(dId);
+    if (!r||!n) return;
+    r.addEventListener('input', () => { n.value=r.value; if(d) d.textContent=r.value; });
+    n.addEventListener('input', () => { r.value=n.value; if(d) d.textContent=n.value; });
   }
 
   function wireModal() {
-    syncRangeNum('gcRangeRecovery',  'gcNumRecovery',  'gcValRecovery');
-    syncRangeNum('gcRangeHrv',       'gcNumHrv',       'gcValHrv');
-    syncRangeNum('gcRangeRhr',       'gcNumRhr',       'gcValRhr');
-    syncRangeNum('gcRangeSleepPerf', 'gcNumSleepPerf', 'gcValSleepPerf');
-    syncRangeNum('gcRangeBattery',   'gcNumBattery',   'gcValBattery');
-    syncRangeNum('gcRangeStress',    'gcNumStress',    'gcValStress');
+    syncRN('gcRSleepScore','gcNSleepScore','gcVSleepScore');
+    syncRN('gcRBattery',   'gcNBattery',   'gcVBattery');
+    syncRN('gcRSpo2',      'gcNSpo2',      'gcVSpo2');
 
-    function openModal() {
-      try {
-        const saved = JSON.parse(localStorage.getItem(LS_KEY)) || {};
-        if (saved.recoveryScore != null) {
-          setField('gcRangeRecovery',  'gcNumRecovery',  'gcValRecovery',  saved.recoveryScore);
-          setField('gcRangeHrv',       'gcNumHrv',       'gcValHrv',       saved.hrv ?? 50);
-          setField('gcRangeRhr',       'gcNumRhr',       'gcValRhr',       saved.rhr ?? 60);
-          setField('gcRangeSleepPerf', 'gcNumSleepPerf', 'gcValSleepPerf', saved.sleepPerf ?? 70);
-          setField('gcRangeBattery',   'gcNumBattery',   'gcValBattery',   saved.bodyBattery ?? 60);
-          setField('gcRangeStress',    'gcNumStress',    'gcValStress',    saved.stress ?? 30);
-          if ($('gcNumSleepH')) $('gcNumSleepH').value = saved.sleepHours ?? 7;
-          if ($('gcNumSleepM')) $('gcNumSleepM').value = saved.sleepMins  ?? 30;
-        }
-      } catch {}
-      $('gcLogBg').classList.add('show');
-    }
     function setField(rId, nId, dId, v) {
-      const r = $(rId), n = $(nId), d = $(dId);
-      if (r) r.value = v; if (n) n.value = v; if (d) d.textContent = v;
+      const r=$(rId), n=$(nId), d=$(dId);
+      if(r)r.value=v; if(n)n.value=v; if(d)d.textContent=v;
     }
+    function prefill(saved) {
+      if (!saved||saved.sleepScore==null) return;
+      setField('gcRSleepScore','gcNSleepScore','gcVSleepScore', saved.sleepScore  ??70);
+      setField('gcRBattery',   'gcNBattery',   'gcVBattery',   saved.bodyBattery ??60);
+      const dur=(id,v)=>{const e=$(id);if(e)e.value=v;};
+      dur('gcDeepH',  saved.deepSleepH  ??1);  dur('gcDeepM',  saved.deepSleepM  ??20);
+      dur('gcRemH',   saved.remSleepH   ??1);  dur('gcRemM',   saved.remSleepM   ??30);
+      dur('gcLightH', saved.lightSleepH ??4);  dur('gcLightM', saved.lightSleepM ??0);
+      dur('gcAwakeH', saved.awakeSleepH ??0);  dur('gcAwakeM', saved.awakeSleepM ??15);
+      setField('gcRSpo2', 'gcNSpo2', 'gcVSpo2', saved.spo2 ??96);
+    }
+
+    const openModal  = () => {
+      try { prefill(JSON.parse(localStorage.getItem(LS_TODAY))); } catch {}
+      $('gcLogBg').classList.add('show');
+    };
+    const closeModal = () => $('gcLogBg').classList.remove('show');
 
     $('gcEditBtn').addEventListener('click', openModal);
     $('gcLogBtnEmpty').addEventListener('click', openModal);
-    $('gcCancelBtn').addEventListener('click', () => $('gcLogBg').classList.remove('show'));
-    $('gcLogBg').addEventListener('click', e => { if (e.target === $('gcLogBg')) $('gcLogBg').classList.remove('show'); });
+    $('gcCancelBtn').addEventListener('click', closeModal);
+    $('gcLogBg').addEventListener('click', e => { if(e.target===$('gcLogBg')) closeModal(); });
 
     $('gcSaveBtn').addEventListener('click', () => {
-      const get = id => parseInt($(id)?.value || '0', 10);
-      const payload = {
-        recoveryScore: get('gcNumRecovery'),
-        hrv:           get('gcNumHrv'),
-        rhr:           get('gcNumRhr'),
-        sleepPerf:     get('gcNumSleepPerf'),
-        sleepHours:    get('gcNumSleepH'),
-        sleepMins:     get('gcNumSleepM'),
-        bodyBattery:   get('gcNumBattery'),
-        stress:        get('gcNumStress'),
-      };
-      saveData(payload);
-      $('gcLogBg').classList.remove('show');
+      const gi = id => parseInt($(id)?.value||'0', 10);
+      saveData({
+        sleepScore:  gi('gcNSleepScore'),
+        bodyBattery: gi('gcNBattery'),
+        deepSleepH:  gi('gcDeepH'),  deepSleepM:  gi('gcDeepM'),
+        remSleepH:   gi('gcRemH'),   remSleepM:   gi('gcRemM'),
+        lightSleepH: gi('gcLightH'), lightSleepM: gi('gcLightM'),
+        awakeSleepH: gi('gcAwakeH'), awakeSleepM: gi('gcAwakeM'),
+        spo2:        gi('gcNSpo2'),
+      });
+      closeModal();
     });
   }
 

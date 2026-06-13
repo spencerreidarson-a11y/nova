@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="icon" href="nova_icon.png">
-  <link rel="apple-touch-icon" href="nova_icon.png">
+  <link rel="icon" href="/nova_icon.png">
+  <link rel="apple-touch-icon" href="/nova_icon.png">
+  <link rel="manifest" href="/manifest.json">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#0a0a0b">
+<meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Finances</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
@@ -35,24 +37,6 @@ body::after { content: ''; position: fixed; inset: 0; z-index: -1;
 .shell { max-width: 880px; margin: 0 auto; padding: 16px 16px 100px; }
 html, body { scrollbar-width: none; -ms-overflow-style: none; }
 *::-webkit-scrollbar { width: 0 !important; height: 0 !important; display: none !important; }
-
-/* Global tabbar */
-.tabbar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 50; display: flex; justify-content: center;
-  padding: 10px max(16px, env(safe-area-inset-right)) calc(10px + env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
-  background: linear-gradient(180deg, rgba(5,5,6,0) 0%, rgba(5,5,6,0.78) 38%, rgba(5,5,6,0.94) 100%);
-  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); pointer-events: none; }
-.tabbar-inner { pointer-events: auto; display: flex; width: 100%; max-width: 560px;
-  gap: 6px; padding: 6px; background: rgba(20,20,22,0.72);
-  border: 1px solid rgba(255,255,255,0.06); border-radius: 18px; box-shadow: 0 12px 36px rgba(0,0,0,0.55); }
-.tab { flex: 1 1 0; display: inline-flex; align-items: center; justify-content: center;
-  gap: 6px; padding: 10px 6px; border-radius: 13px; font-size: 11px; font-weight: 600;
-  color: rgba(255,255,255,0.6); text-decoration: none; background: transparent; border: 1px solid transparent;
-  transition: color 0.15s, background 0.15s, border-color 0.15s; -webkit-tap-highlight-color: transparent; }
-.tab:hover { color: #fff; }
-.tab[aria-current="page"] { color: #fff; background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.10); }
-.tab-icon { width: 16px; height: 16px; display: inline-flex; align-items: center; justify-content: center; }
-.tab-icon svg { width: 100%; height: 100%; display: block; }
-@media (max-width: 480px) { .tab { padding: 9px 4px; font-size: 10px; } .tabbar { padding-left: 12px; padding-right: 12px; } }
 
 /* Internal section tabs */
 .fin-tabs { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; margin-bottom: 18px; scrollbar-width: none; }
@@ -473,14 +457,6 @@ input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0.85); op
 
 </div><!-- /.shell -->
 
-<nav class="tabbar" aria-label="Navigation">
-  <div class="tabbar-inner">
-    <a href="index.html" class="tab"><span class="tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span>Dashboard</a>
-    <a href="health.html" class="tab"><span class="tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></span>Health</a>
-    <a href="po-coach.html" class="tab"><span class="tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="10" width="4" height="4" rx="1"/><rect x="19" y="10" width="4" height="4" rx="1"/><rect x="3" y="8" width="2" height="8" rx="1"/><rect x="19" y="8" width="2" height="8" rx="1"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>Gym</a>
-    <a href="finance.html" class="tab" aria-current="page"><span class="tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></span>Finance</a>
-  </div>
-</nav>
 <script>
 (function() {
   function storeGet(key) { try { var r=localStorage.getItem(key); return r==null?null:JSON.parse(r); } catch(e){return null;} }
@@ -611,6 +587,7 @@ input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0.85); op
   }
 
   function renderAllNetWorth() {
+    cleanupDuplicateAccounts();
     var grand=0; var breakdown=[]; var sliceTotals={};
     NW_CATS.forEach(function(cat){
       var sub=renderNetWorthCategory(cat); grand+=sub; sliceTotals[cat.key]=sub;
@@ -776,6 +753,32 @@ input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0.85); op
     lowEl.textContent=fmtMoney(Math.min.apply(null,vals)); countEl.textContent=String(hist.length);
   }
 
+  var _cleanupDone = false;
+  function cleanupDuplicateAccounts() {
+    if (_cleanupDone) return;
+    _cleanupDone = true;
+    ['bank','stocks','crypto','other'].forEach(function(cat) {
+      var items = storeGet('nw:'+cat) || [];
+      if (items.length < 2) return;
+      var seen = {}, merged = [], hadDups = false;
+      items.forEach(function(item) {
+        var key = item.name.trim().toLowerCase();
+        if (seen.hasOwnProperty(key)) {
+          console.log('[Nova cleanup] Merged "'+item.name+'" in '+cat+': +'+item.amount.toFixed(2)+' (was '+merged[seen[key]].amount.toFixed(2)+')');
+          merged[seen[key]].amount += item.amount;
+          hadDups = true;
+        } else {
+          seen[key] = merged.length;
+          merged.push({name: item.name.trim(), amount: item.amount});
+        }
+      });
+      if (hadDups) {
+        storeSet('nw:'+cat, merged);
+        console.log('[Nova cleanup] '+cat+': '+items.length+' → '+merged.length+' accounts');
+      }
+    });
+  }
+
   NW_CATS.forEach(function(cat){
     var addBtn=document.getElementById(cat.addId),nameInput=document.getElementById(cat.nameId),amtInput=document.getElementById(cat.amtId);
     if(!addBtn) return;
@@ -784,7 +787,9 @@ input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0.85); op
       if(!n||isNaN(a)) return;
       var symbol='USD',rate=exchangeRates[symbol]||1,amountCHF=a/rate;
       var items=storeGet('nw:'+cat.key)||[];
-      items.push({name:n,amount:amountCHF}); storeSet('nw:'+cat.key,items);
+      var existing=items.find(function(i){return i.name.trim().toLowerCase()===n.toLowerCase();});
+      if(existing){ existing.amount+=amountCHF; } else { items.push({name:n,amount:amountCHF}); }
+      storeSet('nw:'+cat.key,items);
       logActivity(cat.key,n,amountCHF,'add'); nameInput.value=''; amtInput.value=''; renderAllNetWorth();
     }
     addBtn.addEventListener('click',doAdd);
