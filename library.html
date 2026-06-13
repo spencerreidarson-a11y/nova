@@ -705,7 +705,7 @@ input[type="date"].lib-input { color-scheme: dark; }
     var refreshBtn = document.getElementById('notionRefreshBtn');
     if (refreshBtn) { refreshBtn.textContent = '…'; refreshBtn.disabled = true; }
     try {
-      var res = await fetch('/api/notion-sync', {
+      var res = await fetch('/.netlify/functions/notion-sync', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ apiKey: apiKey })
