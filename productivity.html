@@ -84,22 +84,56 @@ main {
 }
 
 /* ── TIMER CARD ─────────────────────────────────────── */
-.focus-timer-card { text-align: center; padding: 32px 20px 28px; }
+.focus-timer-card { text-align: center; padding: 28px 20px 24px; }
+
+/* Ring */
+.focus-ring-wrap {
+  position: relative;
+  width: min(82vw, 300px);
+  margin: 0 auto 24px;
+  aspect-ratio: 1;
+}
+.focus-ring-svg {
+  width: 100%; height: 100%;
+  transform: rotate(-90deg); overflow: visible;
+}
+.focus-ring-track  { fill: none; stroke: rgba(255,255,255,0.07); stroke-width: 18; }
+.focus-ring-glow-el {
+  fill: none; stroke: #38bdf8; stroke-width: 18; stroke-linecap: round;
+  stroke-dasharray: 804.25; stroke-dashoffset: 804.25;
+  transition: stroke-dashoffset 0.9s cubic-bezier(0.22,1,0.36,1);
+}
+.focus-ring-fill {
+  fill: none; stroke: url(#focusArcGrad); stroke-width: 18; stroke-linecap: round;
+  stroke-dasharray: 804.25; stroke-dashoffset: 804.25;
+  transition: stroke-dashoffset 0.9s cubic-bezier(0.22,1,0.36,1);
+}
+.focus-ring-center {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 6px;
+}
 
 .focus-time {
   font-family: 'Fraunces', serif;
-  font-size: clamp(56px, 18vw, 96px);
+  font-size: clamp(40px, 12vw, 68px);
   font-weight: 400; color: #fff;
   letter-spacing: -0.02em; line-height: 1;
-  margin: 18px 0 26px;
-  font-variant-numeric: tabular-nums;
+  margin: 0; font-variant-numeric: tabular-nums;
+}
+.focus-ring-label {
+  font-size: 12px; font-weight: 600; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--text-tertiary);
+  font-family: var(--font-mono);
 }
 
+/* Buttons — pill style */
 .focus-start-btn {
-  width: 100%; height: 64px;
+  width: 100%; height: 52px;
   background: linear-gradient(180deg, #ffffff 0%, #e8e5dd 100%);
-  color: #0a0a0b; border: none; border-radius: 16px;
-  font-family: var(--font); font-size: 18px; font-weight: 700;
+  color: #0a0a0b; border: none; border-radius: 26px;
+  font-family: var(--font); font-size: 17px; font-weight: 700;
   cursor: pointer; -webkit-tap-highlight-color: transparent;
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.55), 0 4px 20px rgba(0,0,0,0.45);
   transition: transform 0.10s, box-shadow 0.10s;
@@ -111,9 +145,9 @@ main {
 .focus-btn-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
 .focus-pause-btn {
-  height: 56px; border-radius: 14px;
+  height: 46px; border-radius: 23px;
   background: transparent; border: 1px solid rgba(255,255,255,0.18);
-  color: var(--text-primary); font-family: var(--font); font-size: 16px; font-weight: 700;
+  color: var(--text-primary); font-family: var(--font); font-size: 15px; font-weight: 700;
   cursor: pointer; -webkit-tap-highlight-color: transparent;
   transition: background 0.15s;
 }
@@ -121,9 +155,9 @@ main {
 .focus-pause-btn:active { transform: scale(0.97); }
 
 .focus-stop-btn {
-  height: 56px; border-radius: 14px; border: none;
+  height: 46px; border-radius: 23px; border: none;
   background: var(--lime); color: #0a0a0b;
-  font-family: var(--font); font-size: 16px; font-weight: 700;
+  font-family: var(--font); font-size: 15px; font-weight: 700;
   cursor: pointer; -webkit-tap-highlight-color: transparent;
   box-shadow: 0 0 16px var(--lime-glow);
   transition: transform 0.10s;
@@ -316,8 +350,27 @@ main {
 
   <!-- ── Timer Card ──────────────────────────────────────── -->
   <div class="card focus-timer-card">
-    <div class="gc-section-eyebrow">DEEP FOCUS</div>
-    <div class="focus-time" id="focusTime">00:00:00</div>
+    <div class="focus-ring-wrap">
+      <svg class="focus-ring-svg" viewBox="0 0 300 300" overflow="visible" aria-hidden="true">
+        <defs>
+          <filter id="focusGlowFilter" x="-70%" y="-70%" width="240%" height="240%">
+            <feGaussianBlur stdDeviation="16" result="blurred"/>
+          </filter>
+          <linearGradient id="focusArcGrad" x1="0" y1="0" x2="1" y2="0" gradientUnits="objectBoundingBox">
+            <stop offset="0%" stop-color="#22d3ee"/>
+            <stop offset="100%" stop-color="#818cf8"/>
+          </linearGradient>
+        </defs>
+        <circle class="focus-ring-track" cx="150" cy="150" r="128"/>
+        <circle class="focus-ring-glow-el" cx="150" cy="150" r="128"
+                filter="url(#focusGlowFilter)" id="focusRingGlowEl"/>
+        <circle class="focus-ring-fill" cx="150" cy="150" r="128" id="focusRingFill"/>
+      </svg>
+      <div class="focus-ring-center">
+        <div class="focus-time" id="focusTime">00:00</div>
+        <div class="focus-ring-label" id="focusRingLabel">Focus</div>
+      </div>
+    </div>
     <div id="focusControls"></div>
     <div class="focus-today" id="focusToday"></div>
   </div>
@@ -397,8 +450,8 @@ main {
   <div class="focus-goal-modal">
     <div class="focus-goal-modal-title">Daily Focus Goal</div>
     <label class="focus-goal-modal-label" for="focusGoalInput">Target (minutes)</label>
-    <input type="number" class="focus-goal-modal-input" id="focusGoalInput" min="15" max="720" value="240">
-    <div class="focus-goal-modal-hint">Default: 240 min (4 hours)</div>
+    <input type="number" class="focus-goal-modal-input" id="focusGoalInput" min="15" max="720" value="120">
+    <div class="focus-goal-modal-hint">Default: 120 min (2 hours)</div>
     <div class="focus-goal-modal-actions">
       <button class="focus-goal-modal-save" id="focusGoalSave">Save</button>
       <button class="focus-goal-modal-cancel" id="focusGoalCancel">Cancel</button>
@@ -425,6 +478,15 @@ main {
     const m = Math.floor((s % 3600) / 60);
     const sec = s % 60;
     return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0') + ':' + String(sec).padStart(2, '0');
+  }
+  function formatTimerDisplay(ms) {
+    const s = Math.floor(ms / 1000);
+    const h = Math.floor(s / 3600);
+    const m = Math.floor((s % 3600) / 60);
+    const sec = s % 60;
+    const ss = String(sec).padStart(2, '0');
+    const mm = String(m).padStart(2, '0');
+    return h > 0 ? h + ':' + mm + ':' + ss : mm + ':' + ss;
   }
   function formatHM(seconds) {
     if (!seconds || seconds < 60) return (seconds || 0) + 's';
@@ -512,17 +574,32 @@ main {
     }
     showCategoryModal();
   }
+  function updateFocusRing() {
+    const CIRC = 2 * Math.PI * 128;
+    const goalSec = getGoalMinutes() * 60;
+    const todaySec = getTodaySeconds() + getCurrentMs() / 1000;
+    const offset = CIRC * (1 - Math.min(1, todaySec / goalSec));
+    const fill = document.getElementById('focusRingFill');
+    const glow = document.getElementById('focusRingGlowEl');
+    if (fill) fill.style.strokeDashoffset = offset;
+    if (glow) glow.style.strokeDashoffset = offset;
+  }
+
   function tick() {
     const el = document.getElementById('focusTime');
-    if (el) el.textContent = formatHMS(getCurrentMs());
+    if (el) el.textContent = formatTimerDisplay(getCurrentMs());
+    updateFocusRing();
   }
 
   function renderTimerUI() {
     const timeEl = document.getElementById('focusTime');
     const ctrlEl = document.getElementById('focusControls');
     const todayEl = document.getElementById('focusToday');
+    const labelEl = document.getElementById('focusRingLabel');
     if (!ctrlEl) return;
-    if (timeEl) timeEl.textContent = formatHMS(getCurrentMs());
+    if (timeEl) timeEl.textContent = formatTimerDisplay(getCurrentMs());
+    if (labelEl) labelEl.textContent = timerState === 'running' ? 'Deep Focus' : timerState === 'paused' ? 'Paused' : 'Focus';
+    updateFocusRing();
 
     if (timerState === 'idle') {
       ctrlEl.innerHTML = '<button class="focus-start-btn" id="focusStartBtn">Start Focus</button>';
@@ -684,10 +761,10 @@ main {
 
   // ── Goal ─────────────────────────────────────────────────
   function getGoalMinutes() {
-    try { return parseInt(localStorage.getItem('focus_goal_minutes')) || 240; } catch { return 240; }
+    try { return parseInt(localStorage.getItem('focus_goal_minutes')) || 120; } catch { return 240; }
   }
   function setGoalMinutes(m) {
-    localStorage.setItem('focus_goal_minutes', String(Math.max(15, parseInt(m) || 240)));
+    localStorage.setItem('focus_goal_minutes', String(Math.max(15, parseInt(m) || 120)));
   }
 
   // ── Render ───────────────────────────────────────────────
@@ -826,6 +903,7 @@ main {
     renderStreak();
     renderSessionsList();
     renderDonut();
+    updateFocusRing();
     if (timerState === 'idle') {
       const todayEl = document.getElementById('focusToday');
       const s = getTodaySeconds();
@@ -855,6 +933,7 @@ main {
   // ── Init ─────────────────────────────────────────────────
   loadTimerState();
   renderTimerUI();
+  updateFocusRing();
   if (timerState === 'running') {
     tick();
     timerInterval = setInterval(tick, 1000);

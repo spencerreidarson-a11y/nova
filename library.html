@@ -108,6 +108,50 @@ main {
 }
 .lib-add-btn:hover { opacity: 0.8; }
 
+/* ── GOALS GRID ─────────────────────────────────────── */
+.goals-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+@media (max-width: 480px) {
+  .goals-grid { grid-template-columns: 1fr; }
+}
+.goal-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border-strong);
+  border-left: 3px solid var(--lime);
+  border-radius: 14px;
+  overflow: hidden; cursor: pointer;
+  transition: background 0.14s;
+  -webkit-tap-highlight-color: transparent;
+}
+.goal-card--red   { border-left-color: var(--soft-red); }
+.goal-card--amber { border-left-color: var(--amber); }
+.goal-card--lime  { border-left-color: var(--lime); }
+.goal-card:hover  { background: rgba(255,255,255,0.07); }
+.goal-card-body   { padding: 16px 16px 14px; }
+.goal-card-top {
+  display: flex; align-items: flex-start;
+  justify-content: space-between; gap: 8px;
+  margin-bottom: 8px;
+}
+.goal-card-title {
+  font-size: 16px; font-weight: 700; color: var(--text-primary);
+  line-height: 1.3; margin: 0; flex: 1; min-width: 0;
+  word-break: break-word;
+}
+.goal-card-desc {
+  font-size: 12px; color: var(--text-tertiary);
+  line-height: 1.55; margin: 0 0 10px;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.goal-card-actions {
+  display: flex; gap: 8px; flex-wrap: wrap;
+  padding-top: 10px; border-top: 1px solid var(--border);
+}
+
 /* ── LIST ROWS ───────────────────────────────────────── */
 .lib-list {
   display: flex; flex-direction: column;
@@ -309,7 +353,7 @@ input[type="date"].lib-input { color-scheme: dark; }
       <span class="lib-eyebrow">Goals</span>
       <button class="lib-add-btn" id="addGoalBtn">+ Add goal</button>
     </div>
-    <div id="goalsList" class="lib-list">
+    <div id="goalsList" class="goals-grid">
       <div class="lib-empty">Loading…</div>
     </div>
   </div>
@@ -424,10 +468,19 @@ input[type="date"].lib-input { color-scheme: dark; }
   }
 
   // ── RENDER GOALS ─────────────────────────────────────
+  function goalAccentClass(deadline) {
+    if (!deadline) return 'goal-card--lime';
+    var today = new Date(); today.setHours(0, 0, 0, 0);
+    var days = Math.round((new Date(deadline + 'T00:00:00') - today) / 86400000);
+    if (days < 7)  return 'goal-card--red';
+    if (days < 30) return 'goal-card--amber';
+    return 'goal-card--lime';
+  }
+
   function renderGoals(filter) {
-    const list = document.getElementById('goalsList');
-    const section = document.getElementById('goalsSection');
-    const filtered = goals.filter(function (g) { return matchesQ([g.title, g.description]); });
+    var list = document.getElementById('goalsList');
+    var section = document.getElementById('goalsSection');
+    var filtered = goals.filter(function (g) { return matchesQ([g.title, g.description]); });
     if (filter && filtered.length === 0) { section.style.display = 'none'; return; }
     section.style.display = '';
     if (filtered.length === 0) {
@@ -435,14 +488,14 @@ input[type="date"].lib-input { color-scheme: dark; }
       return;
     }
     list.innerHTML = filtered.map(function (g) {
-      return '<div class="lib-row goal-row" data-id="' + esc(g.id) + '">' +
-        '<div class="lib-row-main">' +
-          '<span class="lib-row-title">' + esc(g.title) + '</span>' +
-          deadlinePill(g.deadline) +
-        '</div>' +
-        '<div class="goal-expand" style="display:none">' +
-          (g.description ? '<div class="goal-desc">' + esc(g.description) + '</div>' : '') +
-          '<div class="goal-actions">' +
+      return '<div class="goal-card ' + goalAccentClass(g.deadline) + '" data-id="' + esc(g.id) + '">' +
+        '<div class="goal-card-body">' +
+          '<div class="goal-card-top">' +
+            '<h2 class="goal-card-title">' + esc(g.title) + '</h2>' +
+            deadlinePill(g.deadline) +
+          '</div>' +
+          (g.description ? '<p class="goal-card-desc">' + esc(g.description) + '</p>' : '') +
+          '<div class="goal-card-actions" style="display:none">' +
             '<button class="goal-action-btn" data-action="edit" data-id="' + esc(g.id) + '">Edit</button>' +
             '<button class="goal-action-btn" data-action="archive" data-id="' + esc(g.id) + '">Archive</button>' +
             '<button class="goal-action-btn goal-action-delete" data-action="delete" data-id="' + esc(g.id) + '">Delete</button>' +
@@ -450,18 +503,18 @@ input[type="date"].lib-input { color-scheme: dark; }
         '</div>' +
       '</div>';
     }).join('');
-    list.querySelectorAll('.goal-row').forEach(function (row) {
-      row.querySelector('.lib-row-main').addEventListener('click', function () {
-        const exp = row.querySelector('.goal-expand');
-        const isOpen = exp.style.display !== 'none';
-        list.querySelectorAll('.goal-expand').forEach(function (e) { e.style.display = 'none'; });
-        exp.style.display = isOpen ? 'none' : 'block';
+    list.querySelectorAll('.goal-card').forEach(function (card) {
+      card.querySelector('.goal-card-body').addEventListener('click', function () {
+        var acts = card.querySelector('.goal-card-actions');
+        var isOpen = acts.style.display !== 'none';
+        list.querySelectorAll('.goal-card-actions').forEach(function (a) { a.style.display = 'none'; });
+        acts.style.display = isOpen ? 'none' : 'flex';
       });
     });
     list.querySelectorAll('[data-action]').forEach(function (btn) {
       btn.addEventListener('click', function (e) {
         e.stopPropagation();
-        const id = btn.dataset.id, action = btn.dataset.action;
+        var id = btn.dataset.id, action = btn.dataset.action;
         if (action === 'edit') openGoalModal(id);
         else if (action === 'archive') archiveGoal(id);
         else if (action === 'delete') deleteGoal(id);
