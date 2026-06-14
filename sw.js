@@ -1,4 +1,4 @@
-const CACHE = 'nova-v10';
+const CACHE = 'nova-v11';
 const APP_SHELL = [
   '/', '/index.html', '/health.html', '/finance.html', '/po-coach.html', '/productivity.html', '/library.html',
   '/topbar.js', '/manifest.json',

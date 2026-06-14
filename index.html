@@ -1680,9 +1680,9 @@
       }
 
       function renderHabits() {
-        const row = document.getElementById('habitsRow');
-        if (!row) return;
-        row.innerHTML = habits.map(h => {
+        const oldRow = document.getElementById('habitsRow');
+        if (!oldRow) return;
+        oldRow.innerHTML = habits.map(h => {
           const doneToday = (todayCounts[h.id] || 0) > 0;
           const streak = streakFor(h.id);
           const offset = doneToday ? '0' : '163.36';
@@ -1703,6 +1703,10 @@
         }).join('') + (habits.length < MAX_HABITS
           ? `<div class="habit-tile"><button class="habit-add-tile" id="habitAddTile" aria-label="Add habit">+</button><span class="habit-label" style="visibility:hidden">·</span></div>`
           : '');
+        // Clone the container to wipe any stale listeners, then re-attach exactly one set
+        const row = oldRow.cloneNode(true);
+        oldRow.parentNode.replaceChild(row, oldRow);
+        setupHabitListeners(row);
       }
 
       function setupHabitListeners(row) {
@@ -1832,8 +1836,6 @@
       }
 
       async function initHabits() {
-        const row = document.getElementById('habitsRow');
-        if (row) setupHabitListeners(row);
         await loadHabits();
         if (!habits.length) await seedDefaults();
         await loadLogs();
