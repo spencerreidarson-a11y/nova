@@ -623,7 +623,7 @@ main {
 }
 .gc-snap-num {
   font-family: 'Fraunces', serif; /* swap to 'Bodoni Moda' to try the sharper variant */
-  font-size: clamp(44px, 12vw, 80px); font-weight: 400;
+  font-size: clamp(22px, 6vw, 34px); font-weight: 400;
   color: #FFFFFF; line-height: 1;
 }
 .gc-snap-status {
@@ -645,11 +645,7 @@ main {
 .gc-sleg-dot  { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
 .gc-sleg-name { font-size: 9.5px; color: var(--text-secondary); font-weight: 600; }
 .gc-sleg-dur  { font-size: 10px; color: var(--text-primary); font-family: var(--font-mono); font-weight: 700; }
-.gc-secondary { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.05); }
-.gc-sec-item { background: rgba(255,255,255,0.025); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 11px 8px; text-align: center; }
-.gc-sec-label { font-size: 9px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-tertiary); margin-bottom: 4px; }
-.gc-sec-val   { font-size: 20px; font-weight: 700; color: var(--text-primary); line-height: 1; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
-.gc-sec-unit  { font-size: 9px; color: var(--text-tertiary); margin-top: 3px; }
+
 
 /* Section 3 — 7-day trend charts */
 .gc-trends { margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 18px; }
@@ -732,7 +728,6 @@ main {
 .gc-cancel-btn:hover { background: rgba(255,255,255,0.08); }
 
 @media (max-width: 480px) {
-  .gc-secondary { grid-template-columns: repeat(2,1fr); }
   .gc-sleep-legend { grid-template-columns: repeat(2,1fr); }
   .gc-sleep-feedback-row { grid-template-columns: 1fr; gap: 2px; }
   .gc-debt-bars { height: 64px; }
@@ -746,6 +741,7 @@ main {
 }
 .gc-sfb-stage { color: var(--text-secondary); font-weight: 600; }
 .gc-sfb-msg   { color: rgba(255,255,255,0.45); line-height: 1.4; }
+.gc-sfb-msg strong { color: rgba(255,255,255,0.78); font-weight: 600; }
 .gc-sfb-badge {
   font-size: 13px; flex-shrink: 0; width: 20px; text-align: center;
 }
@@ -845,12 +841,12 @@ main {
             <svg class="gc-snap-svg" viewBox="0 0 200 200" overflow="visible" aria-hidden="true">
               <defs>
                 <filter id="ringGlow-sleep" x="-80%" y="-80%" width="260%" height="260%">
-                  <feGaussianBlur stdDeviation="12" result="blurred"/>
+                  <feGaussianBlur stdDeviation="18" result="blurred"/>
                 </filter>
               </defs>
               <circle class="gc-snap-track" cx="100" cy="100" r="82"/>
               <circle class="gc-snap-glow" cx="100" cy="100" r="82"
-                      filter="url(#ringGlow-sleep)" id="gcGlowSleep" opacity="0.6"/>
+                      filter="url(#ringGlow-sleep)" id="gcGlowSleep"/>
               <circle class="gc-snap-fill" cx="100" cy="100" r="82" id="gcRingSleep"/>
             </svg>
             <div class="gc-snap-center">
@@ -865,12 +861,12 @@ main {
             <svg class="gc-snap-svg" viewBox="0 0 200 200" overflow="visible" aria-hidden="true">
               <defs>
                 <filter id="ringGlow-batt" x="-80%" y="-80%" width="260%" height="260%">
-                  <feGaussianBlur stdDeviation="12" result="blurred"/>
+                  <feGaussianBlur stdDeviation="18" result="blurred"/>
                 </filter>
               </defs>
               <circle class="gc-snap-track" cx="100" cy="100" r="82"/>
               <circle class="gc-snap-glow" cx="100" cy="100" r="82"
-                      filter="url(#ringGlow-batt)" id="gcGlowBatt" opacity="0.6"/>
+                      filter="url(#ringGlow-batt)" id="gcGlowBatt"/>
               <circle class="gc-snap-fill" cx="100" cy="100" r="82" id="gcRingBatt"/>
             </svg>
             <div class="gc-snap-center">
@@ -900,13 +896,6 @@ main {
           <div class="gc-sleg"><span class="gc-sleg-dot" style="background:rgba(255,255,255,0.25);border:1px solid rgba(255,255,255,0.2)"></span><span class="gc-sleg-name">Awake</span><span class="gc-sleg-dur" id="gcDurAwake">--</span></div>
         </div>
         <div class="gc-sleep-feedback" id="gcSleepFeedback"></div>
-        <div class="gc-secondary">
-          <div class="gc-sec-item">
-            <div class="gc-sec-label">SpO2</div>
-            <div class="gc-sec-val" id="gcSpo2">--</div>
-            <div class="gc-sec-unit">%</div>
-          </div>
-        </div>
       </div>
 
       <!-- Sleep Bank -->
@@ -1001,16 +990,6 @@ main {
         <div><input type="number" id="gcAwakeH" min="0" max="4" value="0"><div class="gc-dur-lbl">hrs</div></div>
         <div class="gc-dur-sep">:</div>
         <div><input type="number" id="gcAwakeM" min="0" max="59" value="15"><div class="gc-dur-lbl">min</div></div>
-      </div>
-    </div>
-
-    <div class="gc-log-divider"></div>
-
-    <div class="gc-log-field">
-      <div class="gc-log-label">SpO2 <span id="gcVSpo2">96</span>%</div>
-      <div class="gc-range-row">
-        <input type="range" id="gcRSpo2" min="85" max="100" value="96">
-        <input type="number" id="gcNSpo2" min="85" max="100" value="96">
       </div>
     </div>
 
@@ -1225,6 +1204,8 @@ main {
     if (glow) glow.style.stroke = color;
     el.style.strokeDashoffset = CIRC;
     if (glow) glow.style.strokeDashoffset = CIRC;
+    const wrap = el.closest('.gc-snap-ring-wrap');
+    if (wrap) wrap.style.filter = `drop-shadow(0 0 12px ${color}44)`;
     requestAnimationFrame(() => requestAnimationFrame(() => {
       el.style.strokeDashoffset = offset;
       if (glow) glow.style.strokeDashoffset = offset;
@@ -1274,7 +1255,6 @@ main {
     setText('gcDurLight', fmtMins(lightMins));
     setText('gcDurAwake', fmtMins(awakeMins));
     setText('gcSleepTotal', total > 0 ? fmtMins(total) : '--');
-    setText('gcSpo2', data.spo2 ?? '--');
     renderSleepFeedback(deepMins, remMins, lightMins, awakeMins, total);
   }
 
@@ -1383,12 +1363,14 @@ main {
       if (diff === 0)      { icon = '✓'; iconColor = '#6DFFB0'; }
       else if (diff <= 5)  { icon = '⚠'; iconColor = '#F2C063'; }
       else                 { icon = '✗'; iconColor = '#FF8A8A'; }
-      const target = s.hi === Infinity ? `<${s.hi+10}%` : `${s.lo}–${s.hi}%`;
       const msg  = s.msgs[dir] || '';
-      const range = s.key === 'awake' ? `<${s.hi}%` : `${s.lo}–${s.hi}%`;
+      const [verdict, ...rest] = msg.split(' — ');
+      const formattedMsg = rest.length
+        ? `<strong>${verdict}</strong> — ${rest.join(' — ')}`
+        : msg ? `<strong>${msg}</strong>` : '';
       return `<div class="gc-sleep-feedback-row">
         <span class="gc-sfb-stage" style="color:${s.color}">${s.label} · ${pct}%</span>
-        <span class="gc-sfb-msg">${msg}</span>
+        <span class="gc-sfb-msg">${formattedMsg}</span>
         <span class="gc-sfb-badge" style="color:${iconColor}">${icon}</span>
       </div>`;
     }).join('');
@@ -1584,7 +1566,6 @@ main {
   function wireModal() {
     syncRN('gcRSleepScore','gcNSleepScore','gcVSleepScore');
     syncRN('gcRBattery',   'gcNBattery',   'gcVBattery');
-    syncRN('gcRSpo2',      'gcNSpo2',      'gcVSpo2');
 
     function setField(rId, nId, dId, v) {
       const r=$(rId), n=$(nId), d=$(dId);
@@ -1599,7 +1580,6 @@ main {
       dur('gcRemH',   saved.remSleepH   ??1);  dur('gcRemM',   saved.remSleepM   ??30);
       dur('gcLightH', saved.lightSleepH ??4);  dur('gcLightM', saved.lightSleepM ??0);
       dur('gcAwakeH', saved.awakeSleepH ??0);  dur('gcAwakeM', saved.awakeSleepM ??15);
-      setField('gcRSpo2', 'gcNSpo2', 'gcVSpo2', saved.spo2 ??96);
     }
 
     const openModal  = () => {
@@ -1622,7 +1602,6 @@ main {
         remSleepH:   gi('gcRemH'),   remSleepM:   gi('gcRemM'),
         lightSleepH: gi('gcLightH'), lightSleepM: gi('gcLightM'),
         awakeSleepH: gi('gcAwakeH'), awakeSleepM: gi('gcAwakeM'),
-        spo2:        gi('gcNSpo2'),
       });
       closeModal();
     });

@@ -715,21 +715,28 @@
       display: flex; flex-direction: column; align-items: center; gap: 6px;
       cursor: pointer; -webkit-tap-highlight-color: transparent; user-select: none;
     }
-    .habit-circle {
-      width: 64px; height: 64px; border-radius: 50%;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.1);
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      gap: 2px; transition: border-color 0.2s, box-shadow 0.2s;
-      touch-action: none;
+    .habit-ring-wrap {
+      position: relative; width: 64px; height: 64px;
     }
-    .habit-circle.is-active {
-      border-color: rgba(194,239,78,0.55);
-      box-shadow: 0 0 16px rgba(194,239,78,0.22);
+    .habit-ring-svg {
+      width: 64px; height: 64px; transform: rotate(-90deg); overflow: visible;
     }
-    .habit-circle-icon  { font-size: 22px; line-height: 1; }
-    .habit-circle-count { font-size: 13px; font-weight: 700; color: var(--text-secondary); font-family: var(--font-mono); }
-    .habit-circle.is-active .habit-circle-count { color: #c2ef4e; }
+    .habit-ring-track { fill: none; stroke: rgba(255,255,255,0.08); stroke-width: 6; }
+    .habit-ring-fill {
+      fill: none; stroke: #c2ef4e; stroke-width: 6; stroke-linecap: round;
+      stroke-dasharray: 163.36; stroke-dashoffset: 163.36;
+      transition: stroke-dashoffset 0.6s cubic-bezier(0.22,1,0.36,1);
+    }
+    .habit-ring-fill.is-active { filter: drop-shadow(0 0 6px rgba(194,239,78,0.45)); }
+    .habit-ring-center {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .habit-ring-num {
+      font-size: 18px; font-weight: 700;
+      color: var(--text-primary); font-family: var(--font-mono);
+      line-height: 1; font-variant-numeric: tabular-nums;
+    }
     .habit-label { font-size: 10px; font-weight: 600; color: var(--text-tertiary); text-align: center; max-width: 72px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .habit-add-tile {
       width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
@@ -1665,15 +1672,31 @@
         });
       }
 
+      function streakFor(id) {
+        const set = logHistory[id] || new Set();
+        let count = 0, d = new Date();
+        while (set.has(ds(d))) { count++; d.setDate(d.getDate()-1); }
+        return count;
+      }
+
       function renderHabits() {
         const row = document.getElementById('habitsRow');
         if (!row) return;
         row.innerHTML = habits.map(h => {
-          const cnt = todayCounts[h.id] || 0;
+          const doneToday = (todayCounts[h.id] || 0) > 0;
+          const streak = streakFor(h.id);
+          const offset = (163.36 * (1 - Math.min(streak / 30, 1))).toFixed(2);
           return `<div class="habit-tile" data-id="${h.id}">
-            <div class="habit-circle${cnt > 0 ? ' is-active' : ''}">
-              <span class="habit-circle-icon">${h.icon}</span>
-              <span class="habit-circle-count">${cnt || '·'}</span>
+            <div class="habit-ring-wrap">
+              <svg class="habit-ring-svg" viewBox="0 0 64 64" overflow="visible">
+                <circle class="habit-ring-track" cx="32" cy="32" r="26"/>
+                <circle class="habit-ring-fill${doneToday ? ' is-active' : ''}"
+                  cx="32" cy="32" r="26"
+                  style="stroke-dashoffset:${offset}"/>
+              </svg>
+              <div class="habit-ring-center">
+                <span class="habit-ring-num">${streak}</span>
+              </div>
             </div>
             <span class="habit-label">${h.name}</span>
           </div>`;
@@ -1710,21 +1733,29 @@
       }
 
       function tapHabit(id) {
-        todayCounts[id] = (todayCounts[id] || 0) + 1;
+        const t = habitsToday();
+        const done = (todayCounts[id] || 0) > 0;
+        if (done) {
+          todayCounts[id] = 0;
+          if (logHistory[id]) logHistory[id].delete(t);
+        } else {
+          todayCounts[id] = 1;
+          if (!logHistory[id]) logHistory[id] = new Set();
+          logHistory[id].add(t);
+        }
         const cnt = todayCounts[id];
         const tile = document.querySelector(`[data-id="${id}"]`);
         if (tile) {
-          const circle = tile.querySelector('.habit-circle');
-          const countEl = tile.querySelector('.habit-circle-count');
-          if (circle) circle.classList.toggle('is-active', cnt > 0);
-          if (countEl) countEl.textContent = cnt || '·';
+          const fillEl  = tile.querySelector('.habit-ring-fill');
+          const numEl   = tile.querySelector('.habit-ring-num');
+          const streak  = streakFor(id);
+          const offset  = (163.36 * (1 - Math.min(streak / 30, 1))).toFixed(2);
+          if (fillEl)  { fillEl.classList.toggle('is-active', cnt > 0); fillEl.style.strokeDashoffset = offset; }
+          if (numEl)   numEl.textContent = streak;
         }
-        const t = habitsToday();
         const log = lsGetLog(t); log[id] = cnt; lsSetLog(t, log);
         if (sb) sb.from('habit_logs').upsert({ habit_id: id, date: t, count: cnt }, { onConflict: 'habit_id,date' })
           .then(r => { if (r.error) console.warn('Habit log upsert:', r.error.message); });
-        if (!logHistory[id]) logHistory[id] = new Set();
-        if (cnt > 0) logHistory[id].add(t); else logHistory[id].delete(t);
         renderStreak();
       }
 
