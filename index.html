@@ -1675,6 +1675,9 @@
       function streakFor(id) {
         const set = logHistory[id] || new Set();
         let count = 0, d = new Date();
+        // If today isn't logged yet, start from yesterday so the ring shows
+        // the existing running streak instead of snapping from 0 to N on tap.
+        if (!set.has(ds(d))) d.setDate(d.getDate() - 1);
         while (set.has(ds(d))) { count++; d.setDate(d.getDate()-1); }
         return count;
       }
