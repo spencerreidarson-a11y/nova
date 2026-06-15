@@ -140,6 +140,54 @@ body.topbar-modal-open { overflow: hidden; touch-action: none; }
     overflow-y: auto !important; overscroll-behavior: contain;
   }
 }
+
+/* ── Nova native-feel polish ── */
+
+/* Page transition overlay */
+#nova-overlay {
+  position: fixed; inset: 0; z-index: 9997;
+  background: #050506; opacity: 0;
+  pointer-events: none; will-change: opacity;
+  transition: opacity 0.22s ease;
+}
+#nova-overlay.active { opacity: 1; }
+
+/* Sliding tab pill — replaces background on active tab */
+.tabbar-inner { position: relative !important; }
+.tab-slide-pill {
+  position: absolute; top: 6px; bottom: 6px; left: 0;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.11);
+  border-radius: 13px; pointer-events: none;
+  will-change: transform;
+}
+.tab[aria-current="page"] {
+  color: #fff !important;
+  background: transparent !important;
+  border-color: transparent !important;
+}
+
+/* Touch feedback */
+.tab { touch-action: manipulation; }
+.tab:active { transform: scale(0.93) !important; transition: transform 0.08s ease !important; }
+button:active:not(:disabled) { transform: scale(0.97); transition: transform 0.08s ease !important; }
+
+/* Skeleton shimmer */
+@keyframes nova-skeleton-pulse {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 0.65; }
+}
+.nova-skeleton {
+  background: rgba(255,255,255,0.07) !important;
+  border-radius: 12px;
+  animation: nova-skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+/* Entrance animation keyframes (applied per-element in JS) */
+@keyframes nova-card-enter {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
 `;
 
   const topbarHtml = `
@@ -329,8 +377,78 @@ body.topbar-modal-open { overflow: hidden; touch-action: none; }
     sync();
   }
 
+  // ── Native-feel: page transition overlay ──────────────────────
+  function createNavOverlay() {
+    const d = document.createElement('div');
+    d.id = 'nova-overlay';
+    document.body.appendChild(d);
+    return d;
+  }
+
+  // ── Native-feel: sliding tab pill ─────────────────────────────
+  function setupTabPill() {
+    const inner = document.querySelector('.tabbar-inner');
+    if (!inner) return null;
+    const pill = document.createElement('div');
+    pill.className = 'tab-slide-pill';
+    inner.insertBefore(pill, inner.firstChild);
+
+    function moveTo(tab, instant) {
+      const ir = inner.getBoundingClientRect();
+      const tr = tab.getBoundingClientRect();
+      if (instant) pill.style.transition = 'none';
+      pill.style.width = tr.width + 'px';
+      pill.style.transform = 'translateX(' + (tr.left - ir.left) + 'px)';
+      if (instant) requestAnimationFrame(() => {
+        pill.style.transition = 'transform 0.3s cubic-bezier(0.22,1,0.36,1), width 0.3s cubic-bezier(0.22,1,0.36,1)';
+      });
+    }
+
+    const active = inner.querySelector('.tab[aria-current="page"]');
+    if (active) requestAnimationFrame(() => moveTo(active, true));
+
+    return { pill, moveTo };
+  }
+
+  // ── Native-feel: intercept nav clicks ─────────────────────────
+  function setupNavTransitions(overlay, pillObj) {
+    document.querySelectorAll('.tab[data-page]').forEach(tab => {
+      tab.addEventListener('click', e => {
+        const href = tab.getAttribute('href');
+        if (!href || e.metaKey || e.ctrlKey || e.shiftKey) return;
+        if (tab.getAttribute('aria-current') === 'page') { e.preventDefault(); return; }
+        e.preventDefault();
+        if (pillObj) pillObj.moveTo(tab, false);
+        overlay.classList.add('active');
+        setTimeout(() => { window.location.href = href; }, 220);
+      });
+    });
+  }
+
+  // ── Native-feel: stagger-fade entrance animation ───────────────
+  function animatePageEntrance() {
+    const container = document.querySelector('main') || document.querySelector('.page-container');
+    if (!container) return;
+    const children = Array.from(container.children).slice(0, 8);
+    children.forEach((child, i) => {
+      child.style.animation = 'nova-card-enter 0.38s ' + (i * 55) + 'ms cubic-bezier(0.22,1,0.36,1) both';
+      const cleanup = () => { child.style.animation = ''; };
+      child.addEventListener('animationend', cleanup, { once: true });
+      setTimeout(cleanup, i * 55 + 420);
+    });
+  }
+
   function boot() {
     injectStyleAndHTML();
+
+    // Native-feel enhancements (skip on finance/embedded)
+    if (!isFinancePage() && !isEmbedded()) {
+      const overlay = createNavOverlay();
+      const pillObj = setupTabPill();
+      setupNavTransitions(overlay, pillObj);
+    }
+    animatePageEntrance();
+
     const btn = document.getElementById('topbarWaterAdd');
     if (btn) btn.addEventListener('click', (e) => { e.preventDefault(); addWater(); });
     render();

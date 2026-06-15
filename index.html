@@ -728,6 +728,27 @@
       transition: stroke-dashoffset 0.6s cubic-bezier(0.22,1,0.36,1);
     }
     .habit-ring-fill.is-active { filter: drop-shadow(0 0 6px rgba(194,239,78,0.45)); }
+    @keyframes habit-tap-bounce {
+      0%   { transform: scale(1); }
+      30%  { transform: scale(1.13); }
+      65%  { transform: scale(0.94); }
+      100% { transform: scale(1); }
+    }
+    .habit-tile.tapped { animation: habit-tap-bounce 0.34s cubic-bezier(0.22,1,0.36,1); }
+    .habit-skeleton {
+      width: 64px; height: 64px; border-radius: 50%;
+      background: rgba(255,255,255,0.07);
+      animation: habit-skeleton-pulse 1.4s ease-in-out infinite;
+    }
+    @keyframes habit-skeleton-pulse {
+      0%, 100% { opacity: 0.3; }
+      50%       { opacity: 0.6; }
+    }
+    .habit-skeleton-label {
+      width: 44px; height: 9px; border-radius: 5px;
+      background: rgba(255,255,255,0.07);
+      animation: habit-skeleton-pulse 1.4s ease-in-out infinite 0.25s;
+    }
     .habit-ring-center {
       position: absolute; inset: 0;
       display: flex; align-items: center; justify-content: center;
@@ -1688,14 +1709,14 @@
         row.innerHTML = habits.map(h => {
           const doneToday = (todayCounts[h.id] || 0) > 0;
           const streak = streakFor(h.id);
-          const offset = doneToday ? '0' : '163.36';
-          return `<div class="habit-tile" data-id="${h.id}">
+          const targetOffset = doneToday ? '0' : '163.36';
+          return `<div class="habit-tile" data-id="${h.id}" data-offset="${targetOffset}">
             <div class="habit-ring-wrap">
               <svg class="habit-ring-svg" viewBox="0 0 64 64" overflow="visible">
                 <circle class="habit-ring-track" cx="32" cy="32" r="26"/>
                 <circle class="habit-ring-fill${doneToday ? ' is-active' : ''}"
                   cx="32" cy="32" r="26"
-                  style="stroke-dashoffset:${offset}"/>
+                  style="stroke-dashoffset:163.36"/>
               </svg>
               <div class="habit-ring-center">
                 <span class="habit-ring-num">${streak}</span>
@@ -1706,6 +1727,13 @@
         }).join('') + (habits.length < MAX_HABITS
           ? `<div class="habit-tile"><button class="habit-add-tile" id="habitAddTile" aria-label="Add habit">+</button><span class="habit-label" style="visibility:hidden">·</span></div>`
           : '');
+        // Animate rings from empty to their actual fill
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          row.querySelectorAll('[data-offset]').forEach(tile => {
+            const fill = tile.querySelector('.habit-ring-fill');
+            if (fill) fill.style.strokeDashoffset = tile.dataset.offset;
+          });
+        }));
       }
 
       function setupHabitListeners(row) {
@@ -1756,6 +1784,12 @@
         const cnt = todayCounts[id];
         const tile = document.querySelector(`[data-id="${id}"]`);
         if (tile) {
+          // Bounce the ring wrap
+          tile.classList.remove('tapped');
+          void tile.offsetWidth;
+          tile.classList.add('tapped');
+          tile.addEventListener('animationend', () => tile.classList.remove('tapped'), { once: true });
+
           const fillEl = tile.querySelector('.habit-ring-fill');
           const numEl  = tile.querySelector('.habit-ring-num');
           const streak = streakFor(id);
@@ -1835,6 +1869,16 @@
       }
 
       async function initHabits() {
+        // Show skeleton tiles while data loads from Supabase
+        const row = document.getElementById('habitsRow');
+        if (row) {
+          row.innerHTML = Array(4).fill(0).map(() =>
+            `<div class="habit-tile">
+              <div class="habit-skeleton"></div>
+              <div class="habit-skeleton-label" style="margin-top:6px"></div>
+            </div>`
+          ).join('');
+        }
         await loadHabits();
         if (!habits.length) await seedDefaults();
         await loadLogs();
