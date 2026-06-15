@@ -344,6 +344,46 @@ main {
   .focus-modal-cats { grid-template-columns: 1fr 1fr; }
   .focus-cat-btn { font-size: 14px; padding: 14px 8px; }
 }
+
+/* ── Screentime Tracker ──────────────────────────────── */
+.st-input-row {
+  display: flex; gap: 8px; margin-bottom: 18px; align-items: center;
+}
+.st-input {
+  flex: 1; padding: 9px 12px; border-radius: 10px;
+  background: rgba(255,255,255,0.05); border: 1px solid var(--border);
+  color: var(--text-primary); font-family: var(--font-mono); font-size: 14px;
+  outline: none; -webkit-appearance: none; appearance: none;
+  color-scheme: dark;
+}
+.st-input:focus { border-color: var(--border-strong); }
+.st-input--mins { flex: 0 0 72px; text-align: center; }
+.st-log-btn {
+  padding: 9px 18px; border-radius: 10px; border: none;
+  background: var(--lime); color: #0a0a0b;
+  font-family: var(--font); font-size: 14px; font-weight: 700;
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+  transition: transform 0.10s;
+}
+.st-log-btn:active { transform: scale(0.96); }
+.st-graph-wrap { margin: 0 -2px 16px; }
+.st-stats-row {
+  display: flex; align-items: stretch;
+  border: 1px solid var(--border); border-radius: 12px; overflow: hidden;
+}
+.st-stat {
+  flex: 1; padding: 10px 0; display: flex; flex-direction: column;
+  align-items: center; gap: 3px;
+}
+.st-stat-val {
+  font-size: 17px; font-weight: 700; color: var(--text-primary);
+  font-family: var(--font-mono); letter-spacing: -0.02em;
+}
+.st-stat-label {
+  font-size: 9px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--text-tertiary); font-family: var(--font-mono);
+}
+.st-stat-divider { width: 1px; background: var(--border); flex-shrink: 0; }
 </style>
 <body>
 <main>
@@ -407,6 +447,35 @@ main {
       <div class="focus-week-total" id="focusWeekTotal"></div>
     </div>
     <div class="focus-bars" id="focusBars"></div>
+  </div>
+
+  <!-- ── Social Media Screentime ──────────────────────── -->
+  <div class="card" id="screentimeCard">
+    <div class="gc-section-eyebrow" style="margin-bottom:14px">SOCIAL MEDIA SCREENTIME</div>
+    <div class="st-input-row">
+      <input type="date" id="stDate" class="st-input">
+      <input type="number" id="stMins" class="st-input st-input--mins" placeholder="min" min="0" max="1440">
+      <button id="stLogBtn" class="st-log-btn">Log</button>
+    </div>
+    <div class="st-graph-wrap">
+      <svg id="stSvg" viewBox="0 0 320 130" width="100%"></svg>
+    </div>
+    <div class="st-stats-row">
+      <div class="st-stat">
+        <span class="st-stat-val" id="stToday">—</span>
+        <span class="st-stat-label">today</span>
+      </div>
+      <div class="st-stat-divider"></div>
+      <div class="st-stat">
+        <span class="st-stat-val" id="stAvg">—</span>
+        <span class="st-stat-label">7-day avg</span>
+      </div>
+      <div class="st-stat-divider"></div>
+      <div class="st-stat">
+        <span class="st-stat-val" id="stUnder">—</span>
+        <span class="st-stat-label">days under goal</span>
+      </div>
+    </div>
   </div>
 
   <!-- ── Streak (hidden when 0) ─────────────────────────── -->
@@ -943,6 +1012,226 @@ main {
     renderAll();
   }());
 
+}());
+
+// ── Social Media Screentime Tracker ──────────────────────
+(function () {
+  'use strict';
+
+  const SUPA_URL = 'https://gmmmrfldwjwbektgbifq.supabase.co';
+  const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdtbW1yZmxkd2p3YmVrdGdiaWZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1MDA5NTQsImV4cCI6MjA5NjA3Njk1NH0.sTUJrqcAwkl3lzbcGMU_0Gc5S_Vth0WxvfF6YU8rlJc';
+  const stSb = window.supabase ? window.supabase.createClient(SUPA_URL, SUPA_KEY) : null;
+
+  const GOAL = 30;
+  const LS  = 'screentime:';
+  const N   = 14;
+
+  // ViewBox layout constants
+  const PL = 28, PR = 8, PT = 10, PB = 28;
+  const VW = 320, VH = 130;
+  const PX = VW - PL - PR;   // 284 — plot width
+  const PY = VH - PT - PB;   // 92  — plot height
+
+  function dsStr(d) {
+    return d.getFullYear() + '-' +
+      String(d.getMonth() + 1).padStart(2, '0') + '-' +
+      String(d.getDate()).padStart(2, '0');
+  }
+
+  function todayKey() {
+    const now = new Date();
+    if (now.getHours() < 6) { const y = new Date(now); y.setDate(y.getDate() - 1); return dsStr(y); }
+    return dsStr(now);
+  }
+
+  function getLast14() {
+    const out = [];
+    for (let i = N - 1; i >= 0; i--) {
+      const d = new Date(); d.setDate(d.getDate() - i);
+      const key = dsStr(d);
+      const raw = localStorage.getItem(LS + key);
+      out.push({ date: key, mins: raw !== null ? Math.max(0, parseInt(raw, 10)) : null });
+    }
+    return out;
+  }
+
+  function saveEntry(date, mins) {
+    localStorage.setItem(LS + date, String(mins));
+    if (stSb) {
+      stSb.from('user_data')
+        .upsert({ key: LS + date, value: mins, updated_at: new Date().toISOString() })
+        .then(function (r) { if (r.error) console.warn('screentime sync:', r.error.message); });
+    }
+  }
+
+  // Catmull-Rom → cubic bezier smooth path
+  function smoothPath(pts) {
+    if (!pts.length) return '';
+    if (pts.length === 1) return 'M' + pts[0].x + ',' + pts[0].y;
+    var d = 'M' + pts[0].x.toFixed(2) + ',' + pts[0].y.toFixed(2);
+    for (var i = 1; i < pts.length; i++) {
+      var p0 = pts[Math.max(0, i - 2)];
+      var p1 = pts[i - 1];
+      var p2 = pts[i];
+      var p3 = pts[Math.min(pts.length - 1, i + 1)];
+      var cp1x = p1.x + (p2.x - p0.x) / 6;
+      var cp1y = p1.y + (p2.y - p0.y) / 6;
+      var cp2x = p2.x - (p3.x - p1.x) / 6;
+      var cp2y = p2.y - (p3.y - p1.y) / 6;
+      d += ' C' + cp1x.toFixed(2) + ',' + cp1y.toFixed(2) +
+           ' ' + cp2x.toFixed(2) + ',' + cp2y.toFixed(2) +
+           ' ' + p2.x.toFixed(2) + ',' + p2.y.toFixed(2);
+    }
+    return d;
+  }
+
+  function renderGraph() {
+    var svg = document.getElementById('stSvg');
+    if (!svg) return;
+
+    var data   = getLast14();
+    var vals   = data.map(function (d) { return d.mins; }).filter(function (v) { return v !== null; });
+    var maxVal = Math.max(GOAL * 2, vals.length ? Math.max.apply(null, vals) : GOAL * 2);
+
+    function yFor(v) { return PT + PY * (1 - v / maxVal); }
+    function xFor(i) { return PL + (i / (N - 1)) * PX; }
+
+    var goalY = yFor(GOAL);
+
+    // Map to screen coords (null stays null)
+    var pts = data.map(function (d, i) {
+      return d.mins !== null ? { x: xFor(i), y: yFor(d.mins) } : null;
+    });
+
+    var out = '';
+
+    // Clip regions: above goal = amber/red, below goal = green
+    out += '<defs>' +
+      '<clipPath id="stAbove"><rect x="' + PL + '" y="' + PT + '" width="' + PX + '" height="' + Math.max(0, goalY - PT).toFixed(2) + '"/></clipPath>' +
+      '<clipPath id="stBelow"><rect x="' + PL + '" y="' + goalY.toFixed(2) + '" width="' + PX + '" height="' + Math.max(0, PT + PY - goalY).toFixed(2) + '"/></clipPath>' +
+      '</defs>';
+
+    // Subtle horizontal grid lines at 0, goal, max
+    [0, GOAL, Math.round(maxVal)].forEach(function (v) {
+      var y = yFor(v).toFixed(2);
+      out += '<line x1="' + PL + '" y1="' + y + '" x2="' + (VW - PR) + '" y2="' + y +
+             '" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>';
+      out += '<text x="' + (PL - 4) + '" y="' + (parseFloat(y) + 3) + '" text-anchor="end"' +
+             ' fill="#4D4B47" font-size="7" font-family="ui-monospace,monospace">' + v + '</text>';
+    });
+
+    // X-axis day labels (every 2nd day)
+    var DAYS_SHORT = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
+    data.forEach(function (d, i) {
+      if (i % 2 !== 0) return;
+      var dt  = new Date(d.date + 'T12:00:00');
+      var lbl = DAYS_SHORT[dt.getDay()] + ' ' + dt.getDate();
+      out += '<text x="' + xFor(i).toFixed(2) + '" y="' + (VH - PB + 10) + '" text-anchor="middle"' +
+             ' fill="#4D4B47" font-size="7" font-family="ui-monospace,monospace">' + lbl + '</text>';
+    });
+
+    // Goal dashed line + label
+    out += '<line x1="' + PL + '" y1="' + goalY.toFixed(2) + '" x2="' + (VW - PR) + '" y2="' + goalY.toFixed(2) +
+           '" stroke="rgba(255,255,255,0.28)" stroke-width="1" stroke-dasharray="4 4"/>';
+    out += '<text x="' + (VW - PR) + '" y="' + (goalY - 3).toFixed(2) + '" text-anchor="end"' +
+           ' fill="rgba(255,255,255,0.35)" font-size="7" font-family="ui-monospace,monospace">30 min goal</text>';
+
+    // Split pts into contiguous segments (skip null gaps)
+    var segments = [];
+    var seg = [];
+    pts.forEach(function (pt) {
+      if (pt) {
+        seg.push(pt);
+      } else {
+        if (seg.length) { segments.push(seg); seg = []; }
+      }
+    });
+    if (seg.length) segments.push(seg);
+
+    // Draw each segment: fills then line
+    segments.forEach(function (seg) {
+      var line = smoothPath(seg);
+      // Area closed to the goal line
+      var area = line +
+        ' L' + seg[seg.length - 1].x.toFixed(2) + ',' + goalY.toFixed(2) +
+        ' L' + seg[0].x.toFixed(2) + ',' + goalY.toFixed(2) + ' Z';
+
+      out += '<path d="' + area + '" fill="rgba(255,130,100,0.15)" clip-path="url(#stAbove)"/>';
+      out += '<path d="' + area + '" fill="rgba(110,231,183,0.15)" clip-path="url(#stBelow)"/>';
+      out += '<path d="' + line + '" fill="none" stroke="#c2ef4e" stroke-width="1.8"' +
+             ' stroke-linecap="round" stroke-linejoin="round"/>';
+    });
+
+    // Dots at each data point
+    pts.forEach(function (pt) {
+      if (!pt) return;
+      out += '<circle cx="' + pt.x.toFixed(2) + '" cy="' + pt.y.toFixed(2) + '" r="2.5" fill="#c2ef4e"/>';
+    });
+
+    svg.innerHTML = out;
+  }
+
+  function renderStats() {
+    var data   = getLast14();
+    var today  = todayKey();
+    var te     = data.find(function (d) { return d.date === today; });
+    var last7  = data.slice(-7).map(function (d) { return d.mins; }).filter(function (v) { return v !== null; });
+    var logged = data.filter(function (d) { return d.mins !== null; });
+    var under  = logged.filter(function (d) { return d.mins < GOAL; }).length;
+
+    var todayEl = document.getElementById('stToday');
+    var avgEl   = document.getElementById('stAvg');
+    var underEl = document.getElementById('stUnder');
+
+    if (todayEl) todayEl.textContent = te && te.mins !== null ? te.mins + 'm' : '—';
+    if (avgEl)   avgEl.textContent   = last7.length
+      ? Math.round(last7.reduce(function (a, b) { return a + b; }, 0) / last7.length) + 'm'
+      : '—';
+    if (underEl) underEl.textContent = logged.length ? under + '/' + logged.length : '—';
+  }
+
+  async function syncFromSupabase() {
+    if (!stSb) return;
+    try {
+      var res = await stSb.from('user_data').select('key, value').like('key', LS + '%');
+      if (!res.error && res.data) {
+        res.data.forEach(function (r) {
+          if (r.value !== null && r.value !== undefined) localStorage.setItem(r.key, String(r.value));
+        });
+      }
+    } catch (e) {}
+  }
+
+  function init() {
+    var dateEl = document.getElementById('stDate');
+    var minsEl = document.getElementById('stMins');
+    var logBtn = document.getElementById('stLogBtn');
+    if (!dateEl || !minsEl || !logBtn) return;
+
+    dateEl.value = todayKey();
+
+    logBtn.addEventListener('click', function () {
+      var date = dateEl.value;
+      var mins = parseInt(minsEl.value, 10);
+      if (!date || isNaN(mins) || mins < 0) return;
+      saveEntry(date, mins);
+      minsEl.value = '';
+      renderGraph();
+      renderStats();
+    });
+
+    minsEl.addEventListener('keydown', function (e) { if (e.key === 'Enter') logBtn.click(); });
+
+    renderGraph();
+    renderStats();
+    syncFromSupabase().then(function () { renderGraph(); renderStats(); });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init, { once: true });
+  } else {
+    init();
+  }
 }());
 </script>
 </body>
