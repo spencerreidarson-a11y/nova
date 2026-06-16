@@ -809,6 +809,74 @@
       color: var(--text-secondary); border-radius: 11px;
       font-family: var(--font-body); font-size: 14px; font-weight: 600; cursor: pointer; text-align: center;
     }
+
+    /* ── Morning Briefing card ── */
+    .brf-card {
+      background: var(--card-bg);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: var(--card-radius);
+      padding: 18px 16px 16px;
+      margin-bottom: 16px;
+    }
+    .brf-eyebrow {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--text-tertiary);
+      font-family: var(--font-mono); margin-bottom: 14px;
+    }
+    .brf-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    @media (min-width: 600px) {
+      .brf-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    .brf-stat {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 10px;
+      padding: 14px 10px;
+      display: flex; flex-direction: column;
+      align-items: center; gap: 5px;
+    }
+    .brf-stat--full {
+      grid-column: 1 / -1;
+      flex-direction: row; justify-content: center; gap: 10px;
+    }
+    .brf-icon { font-size: 16px; line-height: 1; }
+    .brf-val {
+      font-size: 22px; font-weight: 700;
+      font-family: var(--font-mono); color: var(--text-primary);
+      line-height: 1; letter-spacing: -0.02em;
+    }
+    .brf-val.good { color: var(--success); }
+    .brf-val.bad  { color: var(--danger); }
+    .brf-lbl {
+      font-size: 9px; font-weight: 700; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--text-tertiary);
+      font-family: var(--font-mono); text-align: center; line-height: 1.3;
+    }
+
+    /* ── Daily Quote card ── */
+    .qod-card {
+      background: var(--card-bg);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-left: 1px solid rgba(255,255,255,0.22);
+      border-radius: var(--card-radius);
+      padding: 20px 18px 18px;
+      margin-bottom: 16px;
+    }
+    .qod-text {
+      font-family: Georgia, 'Palatino Linotype', serif;
+      font-style: italic; font-size: 15px; font-weight: 400;
+      color: var(--text-primary); line-height: 1.55;
+      margin: 0 0 10px; letter-spacing: -0.005em;
+    }
+    .qod-author {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--text-tertiary);
+      font-family: var(--font-mono); margin: 0;
+    }
   </style>
   <script src="topbar.js" defer></script>
 </head>
@@ -831,37 +899,50 @@
       </div>
     </div>
 
-    <div class="day-ring-container">
-      <div class="day-ring-svg-wrap">
-        <svg viewBox="0 0 120 120" id="dayRingSvg">
-          <defs>
-            <filter id="ringGlow" x="-50%" y="-50%" width="200%" height="200%">
-              <feGaussianBlur stdDeviation="2.5" result="blur"/>
-              <feMerge>
-                <feMergeNode in="blur"/>
-                <feMergeNode in="SourceGraphic"/>
-              </feMerge>
-            </filter>
-          </defs>
-          <circle cx="60" cy="60" r="52" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="8"/>
-          <circle id="dayRingFill" cx="60" cy="60" r="52" fill="none"
-            stroke="#FFD89E" stroke-width="8" stroke-linecap="round"
-            stroke-dasharray="326.73" stroke-dashoffset="326.73"
-            transform="rotate(-90, 60, 60)"
-            filter="url(#ringGlow)"
-            style="transition: stroke-dashoffset 0.7s cubic-bezier(0.22,1,0.36,1), stroke 0.7s cubic-bezier(0.22,1,0.36,1);"/>
-        </svg>
-        <div class="day-ring-overlay">
-          <div class="day-ring-percent" id="dayRingPercent">—</div>
-          <div class="day-ring-phase" id="dayRingPhase">SLEEPING</div>
-          <div class="day-ring-clock" id="dayRingClock">—</div>
+    <div class="brf-card" id="morningBriefing">
+      <div class="brf-eyebrow">Morning Briefing</div>
+      <div class="brf-grid">
+        <div class="brf-stat">
+          <span class="brf-icon">😴</span>
+          <span class="brf-val" id="brfSleepVal">—</span>
+          <span class="brf-lbl">sleep score</span>
+        </div>
+        <div class="brf-stat">
+          <span class="brf-icon">⚡</span>
+          <span class="brf-val" id="brfBattVal">—</span>
+          <span class="brf-lbl">body battery</span>
+        </div>
+        <div class="brf-stat">
+          <span class="brf-icon">✅</span>
+          <span class="brf-val" id="brfHabitsVal">—</span>
+          <span class="brf-lbl">habits done</span>
+        </div>
+        <div class="brf-stat">
+          <span class="brf-icon">📝</span>
+          <span class="brf-val" id="brfTodosVal">—</span>
+          <span class="brf-lbl">tasks left</span>
+        </div>
+        <div class="brf-stat">
+          <span class="brf-icon">📱</span>
+          <span class="brf-val" id="brfScreentimeVal">—</span>
+          <span class="brf-lbl">screentime</span>
+        </div>
+        <div class="brf-stat">
+          <span class="brf-icon">🎯</span>
+          <span class="brf-val" id="brfFocusVal">—</span>
+          <span class="brf-lbl">focus today</span>
+        </div>
+        <div class="brf-stat brf-stat--full">
+          <span class="brf-icon">🔥</span>
+          <span class="brf-val" id="brfStreakVal">—</span>
+          <span class="brf-lbl">best streak</span>
         </div>
       </div>
-      <div class="day-ring-info">
-        <div class="day-ring-status" id="dayRingStatus">😴 Still sleeping</div>
-        <div class="day-ring-remaining" id="dayRingRemaining">—</div>
-        <div class="day-ring-hours">8:00 AM – 12:00 AM</div>
-      </div>
+    </div>
+
+    <div class="qod-card" id="quoteCard">
+      <p class="qod-text" id="qodText"></p>
+      <p class="qod-author" id="qodAuthor"></p>
     </div>
 
     <div class="section">
@@ -1598,8 +1679,6 @@
       loadToday();
       loadTomorrow();
       renderStreak();
-      updateDayBar();
-      setInterval(updateDayBar, 60 * 1000);
       startTicker();
 
       // Pull latest from Supabase and re-render if cloud data differs
@@ -1892,6 +1971,178 @@
         document.getElementById('habitModalName').addEventListener('keydown', e => { if (e.key === 'Enter') saveHabitModal(); });
       }
       initHabits();
+    })();
+
+    // ── Morning Briefing + Daily Quote ──────────────────────────
+    (function () {
+      'use strict';
+
+      function todayStr() {
+        return typeof getActiveDateString === 'function'
+          ? getActiveDateString()
+          : (function () {
+              const d = new Date();
+              if (d.getHours() < 6) d.setDate(d.getDate() - 1);
+              return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+            })();
+      }
+
+      function setVal(id, text, cls) {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.textContent = (text != null) ? text : '—';
+        el.className = 'brf-val' + (cls ? ' ' + cls : '');
+      }
+
+      function renderBriefing() {
+        const today = todayStr();
+
+        // Sleep / Body Battery (from health.html's gc_v2 key)
+        try {
+          const gc = JSON.parse(localStorage.getItem('gc_v2')) || {};
+          setVal('brfSleepVal', gc.sleepScore != null ? gc.sleepScore : null);
+          setVal('brfBattVal',  gc.bodyBattery != null ? gc.bodyBattery : null);
+        } catch (e) { setVal('brfSleepVal', null); setVal('brfBattVal', null); }
+
+        // Habits done / total
+        try {
+          const config = JSON.parse(localStorage.getItem('habits_config')) || [];
+          const log    = JSON.parse(localStorage.getItem('habits_log:' + today)) || {};
+          const done   = config.filter(h => (log[h.id] || 0) > 0).length;
+          setVal('brfHabitsVal', config.length ? done + '/' + config.length : null);
+        } catch (e) { setVal('brfHabitsVal', null); }
+
+        // Tasks remaining
+        try {
+          const goals = JSON.parse(localStorage.getItem('goals:' + today)) || [];
+          const left  = goals.filter(g => !g.done).length;
+          setVal('brfTodosVal', goals.length ? String(left) : null);
+        } catch (e) { setVal('brfTodosVal', null); }
+
+        // Screentime (green if ≤30 min goal, red if over)
+        try {
+          const st = localStorage.getItem('screentime:' + today);
+          if (st != null) {
+            const mins = parseInt(st, 10);
+            setVal('brfScreentimeVal', mins + 'm', mins <= 30 ? 'good' : 'bad');
+          } else {
+            setVal('brfScreentimeVal', null);
+          }
+        } catch (e) { setVal('brfScreentimeVal', null); }
+
+        // Focus minutes today (from productivity page's session cache)
+        try {
+          const sessions  = JSON.parse(localStorage.getItem('focus_sessions_cache')) || [];
+          const todaySess = sessions.filter(s => s.date === today);
+          if (todaySess.length) {
+            const secs = todaySess.reduce((sum, s) => sum + (s.durationSeconds || 0), 0);
+            setVal('brfFocusVal', Math.floor(secs / 60) + 'm');
+          } else {
+            setVal('brfFocusVal', null);
+          }
+        } catch (e) { setVal('brfFocusVal', null); }
+
+        // Best streak across all habits
+        try {
+          const config = JSON.parse(localStorage.getItem('habits_config')) || [];
+          const history = {};
+          for (let i = 0; i < localStorage.length; i++) {
+            const k = localStorage.key(i);
+            if (!k || !k.startsWith('habits_log:')) continue;
+            const dateKey = k.slice('habits_log:'.length);
+            const log = JSON.parse(localStorage.getItem(k)) || {};
+            Object.entries(log).forEach(([id, cnt]) => {
+              if (cnt > 0) { if (!history[id]) history[id] = new Set(); history[id].add(dateKey); }
+            });
+          }
+          const ds = d => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+          let best = 0;
+          config.forEach(h => {
+            const set = history[h.id] || new Set();
+            let n = 0, d = new Date();
+            if (!set.has(ds(d))) d.setDate(d.getDate() - 1);
+            while (set.has(ds(d))) { n++; d.setDate(d.getDate() - 1); }
+            if (n > best) best = n;
+          });
+          setVal('brfStreakVal', best > 0 ? best + 'd' : null);
+        } catch (e) { setVal('brfStreakVal', null); }
+      }
+
+      // ── Daily Quote ─────────────────────────────────────────────
+      const QUOTES = [
+        { text: "We suffer more in imagination than in reality.", author: "Seneca" },
+        { text: "The obstacle is the way.", author: "Marcus Aurelius" },
+        { text: "You could leave life right now. Let that determine what you do and say and think.", author: "Marcus Aurelius" },
+        { text: "Discipline equals freedom.", author: "Jocko Willink" },
+        { text: "It is not that we have a short time to live, but that we waste a great deal of it.", author: "Seneca" },
+        { text: "Waste no more time arguing about what a good man should be. Be one.", author: "Marcus Aurelius" },
+        { text: "Be tolerant with others and strict with yourself.", author: "Marcus Aurelius" },
+        { text: "Comfort is the enemy of progress.", author: "P.T. Barnum" },
+        { text: "The more you sweat in training, the less you bleed in combat.", author: "Richard Marcinko" },
+        { text: "Hard times create strong men.", author: "G. Michael Hopf" },
+        { text: "A man who procrastinates in his choosing will have his choice made for him by circumstance.", author: "Hunter S. Thompson" },
+        { text: "The best time to plant a tree was 20 years ago. The second best time is now.", author: "Chinese Proverb" },
+        { text: "What stands in the way becomes the way.", author: "Marcus Aurelius" },
+        { text: "The man who moves a mountain begins by carrying away small stones.", author: "Confucius" },
+        { text: "Energy and persistence conquer all things.", author: "Benjamin Franklin" },
+        { text: "No man is free who is not master of himself.", author: "Epictetus" },
+        { text: "If it is endurable, then endure it.", author: "Marcus Aurelius" },
+        { text: "The world breaks everyone, and afterward, some are strong at the broken places.", author: "Hemingway" },
+        { text: "Risk comes from not knowing what you are doing.", author: "Warren Buffett" },
+        { text: "The market can stay irrational longer than you can stay solvent.", author: "Keynes" },
+        { text: "In the middle of difficulty lies opportunity.", author: "Einstein" },
+        { text: "He who has a why to live can bear almost any how.", author: "Nietzsche" },
+        { text: "Never fool yourself — and you are the easiest person to fool.", author: "Richard Feynman" },
+        { text: "Luck is what happens when preparation meets opportunity.", author: "Seneca" },
+        { text: "If you want to be tougher mentally, it is simple. Be tougher.", author: "Jocko Willink" },
+        { text: "Everyone has a plan until they get punched in the mouth.", author: "Mike Tyson" },
+        { text: "A wealth of information creates a poverty of attention.", author: "Herbert Simon" },
+        { text: "You are what you repeatedly do. Excellence is not an act but a habit.", author: "Aristotle" },
+        { text: "Don't count the days. Make the days count.", author: "Muhammad Ali" },
+        { text: "The lion does not turn around when a small dog barks.", author: "African Proverb" },
+        { text: "Think in terms of decades. Act in terms of days.", author: "Naval Ravikant" },
+        { text: "Play long-term games with long-term people.", author: "Naval Ravikant" },
+        { text: "If you're not embarrassed by the first version, you shipped too late.", author: "Reid Hoffman" },
+        { text: "The cost of being wrong is less than the cost of doing nothing.", author: "Seth Godin" },
+        { text: "Do something today that your future self will thank you for.", author: "Unknown" },
+        { text: "Life moves pretty fast. If you don't stop and look around once in a while, you could miss it.", author: "Ferris Bueller" },
+        { text: "All it takes is ten seconds of courage.", author: "We Bought a Zoo" },
+        { text: "Just go. Don't think.", author: "Unknown" },
+        { text: "Be yourself. To be anything else is to be a coward.", author: "Unknown" },
+        { text: "When you avoid the hard things, you force someone else to do them later — at greater cost. The bill comes due, with interest.", author: "Unknown" },
+        { text: "Name one good thing that did not require a few hard seconds of bravery.", author: "Ryan Holiday" },
+        { text: "If fear must drive you, fear what you'll miss. Fear the cost of playing small.", author: "Ryan Holiday" },
+        { text: "There is nothing worth doing that is not scary. No one achieves greatness without wrestling their own demons.", author: "Ryan Holiday" },
+        { text: "For a few seconds of embarrassing bravery, we can be great.", author: "Unknown" },
+        { text: "Your headlights only illuminate a few feet ahead, and yet that is enough to keep moving forward.", author: "E.L. Doctorow" },
+        { text: "All growth is a leap in the dark. If you're afraid of that, you'll never do anything worthwhile.", author: "Henry Miller" },
+        { text: "Why do you care what people think? How is that going to change your life?", author: "Unknown" },
+        { text: "Courage opens up opportunities.", author: "Unknown" },
+        { text: "Repeat people's name. It is their favorite thing in the world to hear.", author: "Dale Carnegie" },
+        { text: "If it was easy, everybody would do it. If everybody did it, how valuable would it be?", author: "Unknown" },
+        { text: "The worst thing in the world is the feeling of regret.", author: "Unknown" },
+        { text: "You only live once. Make sure you're not doing anything you regret.", author: "Unknown" },
+      ];
+
+      function renderQuote() {
+        const now   = new Date();
+        const start = new Date(now.getFullYear(), 0, 0);
+        const doy   = Math.floor((now - start) / 86400000);
+        const q     = QUOTES[doy % QUOTES.length];
+        const tEl   = document.getElementById('qodText');
+        const aEl   = document.getElementById('qodAuthor');
+        if (tEl) tEl.textContent = '“' + q.text + '”';
+        if (aEl) aEl.textContent = '— ' + q.author;
+      }
+
+      function init() {
+        renderBriefing();
+        renderQuote();
+        setInterval(renderBriefing, 5 * 60 * 1000);
+      }
+
+      if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init, { once: true });
+      else init();
     })();
   </script>
 
