@@ -2695,48 +2695,115 @@ main {
 .lib-add-btn:hover { opacity: 0.8; }
 
 /* ── GOALS GRID ─────────────────────────────────────── */
+/* ── GOALS V2 ────────────────────────────────────────── */
+:root {
+  --cat-business: oklch(65% 0.18 145);
+  --cat-personal: oklch(65% 0.16 300);
+  --cat-fitness:  oklch(70% 0.18 48);
+  --cat-social:   oklch(72% 0.14 200);
+  --cat-academic: oklch(65% 0.18 255);
+  --priority-high: oklch(65% 0.22 25);
+  --priority-med:  oklch(75% 0.18 80);
+  --priority-low:  oklch(72% 0.18 145);
+}
+.goals-summary {
+  font-size: 12px; color: var(--text-quaternary);
+  margin: -4px 0 10px; padding: 0;
+}
+.goal-filter-row {
+  display: flex; gap: 8px; overflow-x: auto;
+  scrollbar-width: none; margin-bottom: 14px;
+  -webkit-overflow-scrolling: touch;
+}
+.goal-filter-row::-webkit-scrollbar { display: none; }
+.goal-filter-pill {
+  flex-shrink: 0; font-size: 12px; font-weight: 600; letter-spacing: 0.02em;
+  padding: 5px 12px; border-radius: 20px; border: 1px solid var(--border);
+  background: rgba(255,255,255,0.04); color: var(--text-secondary);
+  cursor: pointer; transition: background 0.12s, border-color 0.12s, color 0.12s;
+  -webkit-tap-highlight-color: transparent;
+}
+.goal-filter-pill.active {
+  background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); color: var(--text-primary);
+}
+.goal-filter-pill[data-cat="business"].active { background: rgba(74,188,103,0.15);  border-color: var(--cat-business); color: var(--cat-business); }
+.goal-filter-pill[data-cat="personal"].active  { background: rgba(172,98,212,0.15);  border-color: var(--cat-personal); color: var(--cat-personal); }
+.goal-filter-pill[data-cat="fitness"].active   { background: rgba(234,148,52,0.15);  border-color: var(--cat-fitness);  color: var(--cat-fitness); }
+.goal-filter-pill[data-cat="social"].active    { background: rgba(64,190,210,0.15);  border-color: var(--cat-social);   color: var(--cat-social); }
+.goal-filter-pill[data-cat="academic"].active  { background: rgba(88,148,224,0.15);  border-color: var(--cat-academic); color: var(--cat-academic); }
 .goals-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;
 }
 @media (max-width: 480px) {
   .goals-grid { grid-template-columns: 1fr; }
 }
-.goal-card {
-  background: rgba(255,255,255,0.04);
-  border: 1px solid var(--border-strong);
-  border-left: 3px solid var(--lime);
-  border-radius: 14px;
-  overflow: hidden; cursor: pointer;
-  transition: background 0.14s;
-  -webkit-tap-highlight-color: transparent;
+.goal-card-v2 {
+  background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.09);
+  border-radius: 16px; padding: 14px;
+  display: flex; flex-direction: column; gap: 10px;
+  transition: background 0.14s; -webkit-tap-highlight-color: transparent;
 }
-.goal-card--red   { border-left-color: var(--soft-red); }
-.goal-card--amber { border-left-color: var(--amber); }
-.goal-card--lime  { border-left-color: var(--lime); }
-.goal-card:hover  { background: rgba(255,255,255,0.07); }
-.goal-card-body   { padding: 16px 16px 14px; }
-.goal-card-top {
-  display: flex; align-items: flex-start;
-  justify-content: space-between; gap: 8px;
-  margin-bottom: 8px;
+.goal-card-v2:hover { background: rgba(255,255,255,0.08); }
+.goal-card-v2[data-cat="business"] { border-left: 3px solid var(--cat-business); }
+.goal-card-v2[data-cat="personal"]  { border-left: 3px solid var(--cat-personal); }
+.goal-card-v2[data-cat="fitness"]   { border-left: 3px solid var(--cat-fitness); }
+.goal-card-v2[data-cat="social"]    { border-left: 3px solid var(--cat-social); }
+.goal-card-v2[data-cat="academic"]  { border-left: 3px solid var(--cat-academic); }
+.goal-card-header {
+  display: flex; align-items: center; gap: 6px;
 }
+.goal-cat-tag {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 10px; font-weight: 700; letter-spacing: 0.07em;
+  padding: 3px 8px; border-radius: 20px; white-space: nowrap;
+}
+.goal-priority-dot {
+  width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0;
+}
+.goal-card-header-space { flex: 1; }
+.goal-delete-btn {
+  width: 24px; height: 24px; border-radius: 50%;
+  border: none; background: rgba(255,255,255,0.06);
+  color: var(--text-quaternary); cursor: pointer;
+  font-size: 16px; line-height: 1; display: flex; align-items: center; justify-content: center;
+  transition: background 0.12s, color 0.12s; -webkit-tap-highlight-color: transparent; flex-shrink: 0;
+}
+.goal-delete-btn:hover { background: rgba(255,100,100,0.18); color: var(--soft-red); }
 .goal-card-title {
   font-size: 16px; font-weight: 700; color: var(--text-primary);
-  line-height: 1.3; margin: 0; flex: 1; min-width: 0;
-  word-break: break-word;
+  line-height: 1.3; margin: 0; word-break: break-word;
 }
-.goal-card-desc {
-  font-size: 12px; color: var(--text-tertiary);
-  line-height: 1.55; margin: 0 0 10px;
-  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
-  overflow: hidden;
+.goal-progress-wrap { display: flex; align-items: center; gap: 10px; }
+.goal-progress-track {
+  flex: 1; height: 6px; border-radius: 3px;
+  background: rgba(255,255,255,0.08); position: relative;
 }
-.goal-card-actions {
-  display: flex; gap: 8px; flex-wrap: wrap;
-  padding-top: 10px; border-top: 1px solid var(--border);
+.goal-progress-fill {
+  position: absolute; left: 0; top: 0; height: 100%;
+  border-radius: 3px; transition: width 0.1s;
 }
+.goal-progress-range {
+  position: absolute; top: 50%; left: -4px; right: -4px;
+  transform: translateY(-50%); height: 18px; width: calc(100% + 8px);
+  opacity: 0; cursor: pointer; z-index: 2; margin: 0;
+}
+.goal-progress-pct {
+  font-size: 12px; font-weight: 700; min-width: 34px; text-align: right; flex-shrink: 0;
+}
+.goal-daily-section { display: flex; flex-direction: column; gap: 4px; }
+.goal-daily-label {
+  font-size: 9px; font-weight: 700; letter-spacing: 0.1em;
+  color: var(--text-quaternary); text-transform: uppercase;
+}
+.goal-daily-input {
+  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 8px; padding: 7px 10px;
+  color: var(--text-secondary); font-size: 12px; font-family: var(--font);
+  line-height: 1.45; resize: none; width: 100%; box-sizing: border-box;
+  transition: border-color 0.12s;
+}
+.goal-daily-input:focus { outline: none; border-color: rgba(255,255,255,0.18); color: var(--text-primary); }
+.goal-daily-input::placeholder { color: var(--text-quaternary); }
 
 /* ── LIST ROWS ───────────────────────────────────────── */
 .lib-list {
@@ -2786,28 +2853,30 @@ main {
 .pill-red    { color: var(--soft-red); background: rgba(255,107,107,0.12); }
 .pill-muted  { color: var(--text-quaternary); background: rgba(255,255,255,0.06); }
 
-/* ── GOAL EXPAND ─────────────────────────────────────── */
-.goal-expand {
-  padding: 0 16px 14px;
-  border-top: 1px solid var(--border);
-  background: rgba(255,255,255,0.02);
+/* ── NOVA TOAST ──────────────────────────────────────── */
+.nova-toast {
+  position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(20px);
+  background: rgba(22,22,28,0.96); border: 1px solid rgba(255,255,255,0.12);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  color: var(--text-primary); font-size: 13px; font-weight: 500;
+  padding: 10px 16px; border-radius: 24px;
+  display: flex; align-items: center; gap: 12px;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  z-index: 9999; white-space: nowrap;
 }
-.goal-desc {
-  font-size: 13px; color: var(--text-secondary);
-  padding: 10px 0; white-space: pre-wrap; word-break: break-word;
+.nova-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); pointer-events: auto; }
+.nova-toast-undo {
+  background: none; border: none; color: var(--lime);
+  font-size: 13px; font-weight: 700; cursor: pointer; padding: 0; font-family: var(--font);
 }
-.goal-actions { display: flex; gap: 8px; flex-wrap: wrap; }
-.goal-action-btn {
-  background: none; border: 1px solid var(--border);
-  color: var(--text-secondary); font-size: 12px; font-weight: 500;
-  padding: 5px 12px; border-radius: 20px;
-  cursor: pointer; font-family: var(--font);
-  transition: border-color 0.12s, color 0.12s;
-  -webkit-tap-highlight-color: transparent;
+/* ── MODAL 2-COL ─────────────────────────────────────── */
+.lib-row-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.lib-select {
+  appearance: none; -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='rgba(255,255,255,0.4)' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px; cursor: pointer;
 }
-.goal-action-btn:hover { border-color: var(--border-strong); color: var(--text-primary); }
-.goal-action-delete { color: var(--soft-red); border-color: rgba(255,107,107,0.2); }
-.goal-action-delete:hover { border-color: rgba(255,107,107,0.5); color: var(--soft-red); }
 
 /* ── MODALS (bottom-sheet) ───────────────────────────── */
 .lib-modal-bg {
@@ -4097,6 +4166,8 @@ input[type="date"].lib-input { color-scheme: dark; }
       <span class="lib-eyebrow">Goals</span>
       <button class="lib-add-btn" id="addGoalBtn">+ Add goal</button>
     </div>
+    <p id="goalsSummary" class="goals-summary"></p>
+    <div id="goalFilters" class="goal-filter-row"></div>
     <div id="goalsList" class="goals-grid">
       <div class="lib-empty">Loading…</div>
     </div>
@@ -4120,16 +4191,42 @@ input[type="date"].lib-input { color-scheme: dark; }
   <div class="lib-modal">
     <div class="lib-modal-title" id="goalModalTitle">Add Goal</div>
     <div class="lib-field">
-      <label class="lib-label" for="goalTitleInput">Title</label>
+      <label class="lib-label" for="goalTitleInput">Goal</label>
       <input type="text" id="goalTitleInput" class="lib-input" placeholder="What do you want to achieve?" autocomplete="off">
     </div>
-    <div class="lib-field">
-      <label class="lib-label" for="goalDescInput">Description</label>
-      <textarea id="goalDescInput" class="lib-input lib-textarea" placeholder="Optional notes…" rows="3"></textarea>
+    <div class="lib-row-2col">
+      <div class="lib-field">
+        <label class="lib-label" for="goalCategoryInput">Category</label>
+        <select id="goalCategoryInput" class="lib-input lib-select">
+          <option value="business">💼 Business</option>
+          <option value="personal">✦ Personal</option>
+          <option value="fitness">⚡ Fitness</option>
+          <option value="social">◎ Social</option>
+          <option value="academic">◈ Academic</option>
+        </select>
+      </div>
+      <div class="lib-field">
+        <label class="lib-label" for="goalPriorityInput">Priority</label>
+        <select id="goalPriorityInput" class="lib-input lib-select">
+          <option value="high">High</option>
+          <option value="med" selected>Med</option>
+          <option value="low">Low</option>
+        </select>
+      </div>
+    </div>
+    <div class="lib-row-2col">
+      <div class="lib-field">
+        <label class="lib-label" for="goalDeadlineInput">Target Date</label>
+        <input type="date" id="goalDeadlineInput" class="lib-input">
+      </div>
+      <div class="lib-field">
+        <label class="lib-label" for="goalProgressInput">Starting Progress %</label>
+        <input type="number" id="goalProgressInput" class="lib-input" min="0" max="100" value="0" placeholder="0">
+      </div>
     </div>
     <div class="lib-field">
-      <label class="lib-label" for="goalDeadlineInput">Deadline</label>
-      <input type="date" id="goalDeadlineInput" class="lib-input">
+      <label class="lib-label" for="goalDailyInput">Daily Action</label>
+      <textarea id="goalDailyInput" class="lib-input lib-textarea" placeholder="What will you do today toward this goal?" rows="2"></textarea>
     </div>
     <div class="lib-modal-btns">
       <button class="lib-btn-cancel" id="goalModalCancel">Cancel</button>
@@ -8570,18 +8667,35 @@ TAB_INITS['library'] = (function() {
     _done = true;
     (function () {
       'use strict';
-    
+
       const SUPA_URL = 'https://gmmmrfldwjwbektgbifq.supabase.co';
       const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdtbW1yZmxkd2p3YmVrdGdiaWZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA1MDA5NTQsImV4cCI6MjA5NjA3Njk1NH0.sTUJrqcAwkl3lzbcGMU_0Gc5S_Vth0WxvfF6YU8rlJc';
       const sb = window.supabase ? window.supabase.createClient(SUPA_URL, SUPA_KEY) : null;
-    
+
+      // ── GOAL CONFIG ──────────────────────────────────────
+      const GOAL_CATS = {
+        business: { label: 'Business', icon: '💼', color: 'var(--cat-business)' },
+        personal:  { label: 'Personal', icon: '✦',  color: 'var(--cat-personal)' },
+        fitness:   { label: 'Fitness',  icon: '⚡', color: 'var(--cat-fitness)'  },
+        social:    { label: 'Social',   icon: '◎',  color: 'var(--cat-social)'   },
+        academic:  { label: 'Academic', icon: '◈',  color: 'var(--cat-academic)' },
+      };
+      const PRIORITY_COLORS = {
+        high: 'var(--priority-high)',
+        med:  'var(--priority-med)',
+        low:  'var(--priority-low)',
+      };
+
+      // ── STATE ────────────────────────────────────────────
       let goals = [];
       let nativeNotes = [];
       let editingGoalId = null;
+      let activeCategory = null;
       let currentNote = null;
       let saveTimer = null;
+      let toastTimer = null;
       let searchQuery = '';
-    
+
       // ── HELPERS ──────────────────────────────────────────
       function esc(s) {
         return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -8596,93 +8710,219 @@ TAB_INITS['library'] = (function() {
         const m = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
         return m[d.getMonth()] + ' ' + d.getDate();
       }
-      function deadlinePill(deadline) {
-        if (!deadline) return '';
-        const today = new Date(); today.setHours(0, 0, 0, 0);
-        const due = new Date(deadline + 'T00:00:00');
-        const days = Math.round((due - today) / 86400000);
-        const m = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-        const dateStr = m[due.getMonth()] + ' ' + due.getDate();
-        let cls, label;
-        if (days < 0)       { cls = 'pill-red';   label = Math.abs(days) + 'd overdue'; }
-        else if (days < 7)  { cls = 'pill-red';   label = days + 'd left'; }
-        else if (days < 30) { cls = 'pill-amber'; label = days + 'd left'; }
-        else                { cls = 'pill-lime';  label = days + 'd left'; }
-        return '<span class="deadline-pill ' + cls + '">' + dateStr + ' · ' + label + '</span>';
-      }
       function matchesQ(texts) {
         if (!searchQuery) return true;
         return texts.some(function (t) { return t && t.toLowerCase().indexOf(searchQuery) !== -1; });
       }
-    
-      // ── DATA LOAD ────────────────────────────────────────
+      function genId() {
+        return Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+      }
+
+      // ── GOAL STORAGE ─────────────────────────────────────
+      function saveGoals() {
+        localStorage.setItem('apex_goals', JSON.stringify(goals));
+        if (!sb) return;
+        goals.forEach(function(g) {
+          var ext = JSON.stringify({ category: g.category, priority: g.priority, progress: g.progress, daily_action: g.daily_action, _ext: true });
+          sb.from('goals').upsert({
+            id: g.id, title: g.title, description: ext,
+            deadline: g.deadline || null, status: g.status, created_at: g.created_at
+          }, { onConflict: 'id' });
+        });
+      }
+
       async function loadGoals() {
+        var stored = localStorage.getItem('apex_goals');
+        if (stored) {
+          try {
+            var parsed = JSON.parse(stored);
+            goals = parsed.filter(function(g) { return g.status === 'active'; });
+            return;
+          } catch(e) {}
+        }
         if (!sb) return;
         const r = await sb.from('goals').select('*').eq('status', 'active').order('created_at', { ascending: false });
-        goals = r.data || [];
+        goals = (r.data || []).map(function(g) {
+          var ext = {};
+          try { var d = JSON.parse(g.description || '{}'); if (d._ext) ext = d; } catch(e) {}
+          return {
+            id: g.id, title: g.title,
+            category: ext.category || 'personal',
+            priority: ext.priority || 'med',
+            progress: ext.progress != null ? ext.progress : 0,
+            daily_action: ext.daily_action || '',
+            deadline: g.deadline || '',
+            status: g.status || 'active',
+            created_at: g.created_at,
+          };
+        });
+        if (goals.length) localStorage.setItem('apex_goals', JSON.stringify(goals));
       }
-      async function loadNotes() {
-        if (!sb) return;
-        const r = await sb.from('library_notes').select('*').eq('source', 'native').order('updated_at', { ascending: false });
-        nativeNotes = r.data || [];
-      }
-    
+
       // ── RENDER GOALS ─────────────────────────────────────
-      function goalAccentClass(deadline) {
-        if (!deadline) return 'goal-card--lime';
-        var today = new Date(); today.setHours(0, 0, 0, 0);
-        var days = Math.round((new Date(deadline + 'T00:00:00') - today) / 86400000);
-        if (days < 7)  return 'goal-card--red';
-        if (days < 30) return 'goal-card--amber';
-        return 'goal-card--lime';
+      function renderFilterPills() {
+        var filtersEl = document.getElementById('goalFilters');
+        if (!filtersEl) return;
+        var catCounts = {};
+        goals.forEach(function(g) { catCounts[g.category] = (catCounts[g.category] || 0) + 1; });
+        var html = '<button class="goal-filter-pill' + (!activeCategory ? ' active' : '') + '" data-cat="all">All ' + goals.length + '</button>';
+        Object.keys(GOAL_CATS).forEach(function(cat) {
+          if (!catCounts[cat]) return;
+          html += '<button class="goal-filter-pill' + (activeCategory === cat ? ' active' : '') + '" data-cat="' + cat + '">' +
+            GOAL_CATS[cat].label + ' ' + catCounts[cat] + '</button>';
+        });
+        filtersEl.innerHTML = html;
+        filtersEl.querySelectorAll('.goal-filter-pill').forEach(function(btn) {
+          btn.addEventListener('click', function() {
+            activeCategory = btn.dataset.cat === 'all' ? null : btn.dataset.cat;
+            renderFilterPills();
+            renderGoals();
+          });
+        });
       }
-    
-      function renderGoals(filter) {
+
+      function renderSummary() {
+        var el = document.getElementById('goalsSummary');
+        if (!el) return;
+        if (!goals.length) { el.textContent = ''; return; }
+        var avg = Math.round(goals.reduce(function(s, g) { return s + (g.progress || 0); }, 0) / goals.length);
+        el.textContent = goals.length + ' goal' + (goals.length === 1 ? '' : 's') + ' · ' + avg + '% avg progress';
+      }
+
+      function renderGoals() {
         var list = document.getElementById('goalsList');
         var section = document.getElementById('goalsSection');
-        var filtered = goals.filter(function (g) { return matchesQ([g.title, g.description]); });
-        if (filter && filtered.length === 0) { section.style.display = 'none'; return; }
+        if (!list) return;
+        var filtered = goals.filter(function(g) {
+          return (!activeCategory || g.category === activeCategory) &&
+            matchesQ([g.title, g.daily_action]);
+        });
+        if (searchQuery && filtered.length === 0) { section.style.display = 'none'; return; }
         section.style.display = '';
         if (filtered.length === 0) {
           list.innerHTML = '<div class="lib-empty">No goals yet. Tap "+ Add goal" to create one.</div>';
           return;
         }
-        list.innerHTML = filtered.map(function (g) {
-          return '<div class="goal-card ' + goalAccentClass(g.deadline) + '" data-id="' + esc(g.id) + '">' +
-            '<div class="goal-card-body">' +
-              '<div class="goal-card-top">' +
-                '<h2 class="goal-card-title">' + esc(g.title) + '</h2>' +
-                deadlinePill(g.deadline) +
+        list.innerHTML = filtered.map(function(g) {
+          var cat = GOAL_CATS[g.category] || GOAL_CATS.personal;
+          var prog = Math.max(0, Math.min(100, g.progress || 0));
+          var dotColor = PRIORITY_COLORS[g.priority] || PRIORITY_COLORS.med;
+          return '<div class="goal-card-v2" data-id="' + esc(g.id) + '" data-cat="' + esc(g.category) + '">' +
+            '<div class="goal-card-header">' +
+              '<span class="goal-cat-tag" style="background:' + cat.color + '22;color:' + cat.color + '">' + cat.icon + ' ' + cat.label.toUpperCase() + '</span>' +
+              '<span class="goal-priority-dot" style="background:' + dotColor + '" title="' + esc(g.priority) + ' priority"></span>' +
+              '<div class="goal-card-header-space"></div>' +
+              '<button class="goal-delete-btn" data-id="' + esc(g.id) + '" aria-label="Delete goal">&times;</button>' +
+            '</div>' +
+            '<h2 class="goal-card-title">' + esc(g.title) + '</h2>' +
+            '<div class="goal-progress-wrap">' +
+              '<div class="goal-progress-track">' +
+                '<div class="goal-progress-fill" style="width:' + prog + '%;background:' + cat.color + '"></div>' +
+                '<input type="range" class="goal-progress-range" min="0" max="100" value="' + prog + '" data-id="' + esc(g.id) + '" aria-label="Progress">' +
               '</div>' +
-              (g.description ? '<p class="goal-card-desc">' + esc(g.description) + '</p>' : '') +
-              '<div class="goal-card-actions" style="display:none">' +
-                '<button class="goal-action-btn" data-action="edit" data-id="' + esc(g.id) + '">Edit</button>' +
-                '<button class="goal-action-btn" data-action="archive" data-id="' + esc(g.id) + '">Archive</button>' +
-                '<button class="goal-action-btn goal-action-delete" data-action="delete" data-id="' + esc(g.id) + '">Delete</button>' +
-              '</div>' +
+              '<span class="goal-progress-pct" style="color:' + cat.color + '">' + prog + '%</span>' +
+            '</div>' +
+            '<div class="goal-daily-section">' +
+              '<div class="goal-daily-label">Daily Action</div>' +
+              '<textarea class="goal-daily-input" data-id="' + esc(g.id) + '" placeholder="What will you do today?" rows="2">' + esc(g.daily_action || '') + '</textarea>' +
             '</div>' +
           '</div>';
         }).join('');
-        list.querySelectorAll('.goal-card').forEach(function (card) {
-          card.querySelector('.goal-card-body').addEventListener('click', function () {
-            var acts = card.querySelector('.goal-card-actions');
-            var isOpen = acts.style.display !== 'none';
-            list.querySelectorAll('.goal-card-actions').forEach(function (a) { a.style.display = 'none'; });
-            acts.style.display = isOpen ? 'none' : 'flex';
+
+        list.querySelectorAll('.goal-delete-btn').forEach(function(btn) {
+          btn.addEventListener('click', function(e) { e.stopPropagation(); deleteGoal(btn.dataset.id); });
+        });
+        list.querySelectorAll('.goal-progress-range').forEach(function(input) {
+          input.addEventListener('input', function() {
+            var card = input.closest('.goal-card-v2');
+            card.querySelector('.goal-progress-fill').style.width = input.value + '%';
+            card.querySelector('.goal-progress-pct').textContent = input.value + '%';
+          });
+          input.addEventListener('change', function() {
+            var idx = goals.findIndex(function(g) { return g.id === input.dataset.id; });
+            if (idx !== -1) { goals[idx].progress = parseInt(input.value, 10); saveGoals(); renderSummary(); }
           });
         });
-        list.querySelectorAll('[data-action]').forEach(function (btn) {
-          btn.addEventListener('click', function (e) {
-            e.stopPropagation();
-            var id = btn.dataset.id, action = btn.dataset.action;
-            if (action === 'edit') openGoalModal(id);
-            else if (action === 'archive') archiveGoal(id);
-            else if (action === 'delete') deleteGoal(id);
+        list.querySelectorAll('.goal-daily-input').forEach(function(ta) {
+          ta.addEventListener('blur', function() {
+            var idx = goals.findIndex(function(g) { return g.id === ta.dataset.id; });
+            if (idx !== -1 && goals[idx].daily_action !== ta.value) {
+              goals[idx].daily_action = ta.value;
+              saveGoals();
+            }
           });
         });
       }
-    
-      // ── RENDER NOTES ─────────────────────────────────────
+
+      // ── TOAST ────────────────────────────────────────────
+      function showToast(msg, undoFn) {
+        var toast = document.getElementById('nova-toast-lib');
+        if (!toast) {
+          toast = document.createElement('div');
+          toast.id = 'nova-toast-lib';
+          toast.className = 'nova-toast';
+          document.body.appendChild(toast);
+        }
+        clearTimeout(toastTimer);
+        toast.innerHTML = '<span>' + esc(msg) + '</span>' + (undoFn ? '<button class="nova-toast-undo">Undo</button>' : '');
+        toast.classList.add('show');
+        if (undoFn) {
+          toast.querySelector('.nova-toast-undo').addEventListener('click', function() {
+            clearTimeout(toastTimer);
+            toast.classList.remove('show');
+            undoFn();
+          });
+        }
+        toastTimer = setTimeout(function() { toast.classList.remove('show'); }, 4000);
+      }
+
+      // ── GOAL CRUD ────────────────────────────────────────
+      function addGoal(data) {
+        var g = Object.assign({ id: genId(), status: 'active', created_at: new Date().toISOString() }, data);
+        goals.unshift(g);
+        saveGoals();
+        renderFilterPills();
+        renderGoals();
+        renderSummary();
+      }
+
+      function updateGoal(id, patch) {
+        var idx = goals.findIndex(function(g) { return g.id === id; });
+        if (idx !== -1) {
+          goals[idx] = Object.assign({}, goals[idx], patch);
+          saveGoals();
+          renderFilterPills();
+          renderGoals();
+          renderSummary();
+        }
+      }
+
+      function deleteGoal(id) {
+        var idx = goals.findIndex(function(g) { return g.id === id; });
+        if (idx === -1) return;
+        var deleted = goals[idx];
+        goals.splice(idx, 1);
+        if (sb) sb.from('goals').delete().eq('id', id);
+        localStorage.setItem('apex_goals', JSON.stringify(goals));
+        renderFilterPills();
+        renderGoals();
+        renderSummary();
+        showToast('Goal deleted', function() {
+          goals.splice(idx, 0, deleted);
+          saveGoals();
+          renderFilterPills();
+          renderGoals();
+          renderSummary();
+        });
+      }
+
+      // ── NATIVE NOTES ─────────────────────────────────────
+      async function loadNotes() {
+        if (!sb) return;
+        const r = await sb.from('library_notes').select('*').eq('source', 'native').order('updated_at', { ascending: false });
+        nativeNotes = r.data || [];
+      }
+
       function renderNotes(filter) {
         const list = document.getElementById('notesList');
         const section = document.getElementById('notesSection');
@@ -8712,48 +8952,20 @@ TAB_INITS['library'] = (function() {
           });
         });
       }
-    
+
       function renderAll() {
         const filter = !!searchQuery;
-        renderGoals(filter);
+        renderGoals();
         renderNotes(filter);
       }
-    
-      // ── GOAL CRUD ────────────────────────────────────────
-      async function addGoal(title, description, deadline) {
-        if (!sb) return;
-        const r = await sb.from('goals').insert({ title, description: description || null, deadline: deadline || null }).select().single();
-        if (r.data) goals.unshift(r.data);
-        renderGoals(false);
-      }
-      async function updateGoal(id, patch) {
-        if (!sb) return;
-        await sb.from('goals').update(patch).eq('id', id);
-        const idx = goals.findIndex(function (g) { return g.id === id; });
-        if (idx !== -1) goals[idx] = Object.assign({}, goals[idx], patch);
-        renderGoals(false);
-      }
-      async function archiveGoal(id) {
-        if (!sb) return;
-        await sb.from('goals').update({ status: 'archived' }).eq('id', id);
-        goals = goals.filter(function (g) { return g.id !== id; });
-        renderGoals(false);
-      }
-      async function deleteGoal(id) {
-        if (!sb || !confirm('Delete this goal permanently?')) return;
-        await sb.from('goals').delete().eq('id', id);
-        goals = goals.filter(function (g) { return g.id !== id; });
-        renderGoals(false);
-      }
-    
-      // ── NATIVE NOTES ─────────────────────────────────────
+
       async function createNote() {
         if (!sb) return;
         const now = new Date().toISOString();
         const r = await sb.from('library_notes').insert({ source: 'native', title: '', body: '', updated_at: now }).select().single();
         if (r.data) { nativeNotes.unshift(r.data); openNoteEdit(r.data); }
       }
-    
+
       function openNoteEdit(note) {
         currentNote = Object.assign({}, note);
         document.getElementById('noteEditTitle').value = note.title || '';
@@ -8765,13 +8977,13 @@ TAB_INITS['library'] = (function() {
           if (!t.value) t.focus(); else document.getElementById('noteEditBody').focus();
         }, 60);
       }
-    
+
       function scheduleAutoSave() {
         document.getElementById('noteSaveStatus').textContent = '…';
         clearTimeout(saveTimer);
         saveTimer = setTimeout(saveCurrentNote, 1000);
       }
-    
+
       async function saveCurrentNote() {
         if (!currentNote || !sb) return;
         const now = new Date().toISOString();
@@ -8788,7 +9000,7 @@ TAB_INITS['library'] = (function() {
           setTimeout(function () { statusEl.textContent = ''; }, 1500);
         }
       }
-    
+
       async function deleteNote(id) {
         if (!confirm('Delete this note?') || !sb) return;
         await sb.from('library_notes').delete().eq('id', id);
@@ -8797,7 +9009,7 @@ TAB_INITS['library'] = (function() {
         currentNote = null;
         renderNotes(false);
       }
-    
+
       // ── MODALS ───────────────────────────────────────────
       function openModal(id) {
         document.getElementById(id).classList.add('show');
@@ -8809,44 +9021,56 @@ TAB_INITS['library'] = (function() {
           document.body.classList.remove('topbar-modal-open');
         }
       }
-    
+
       function openGoalModal(id) {
         editingGoalId = id || null;
-        const titleEl = document.getElementById('goalModalTitle');
-        const tIn = document.getElementById('goalTitleInput');
-        const dIn = document.getElementById('goalDescInput');
-        const dlIn = document.getElementById('goalDeadlineInput');
+        const titleEl  = document.getElementById('goalModalTitle');
+        const tIn      = document.getElementById('goalTitleInput');
+        const catIn    = document.getElementById('goalCategoryInput');
+        const priIn    = document.getElementById('goalPriorityInput');
+        const dlIn     = document.getElementById('goalDeadlineInput');
+        const progIn   = document.getElementById('goalProgressInput');
+        const dailyIn  = document.getElementById('goalDailyInput');
         if (id) {
           const g = goals.find(function (x) { return x.id === id; });
+          if (!g) return;
           titleEl.textContent = 'Edit Goal';
-          tIn.value = g.title || ''; dIn.value = g.description || ''; dlIn.value = g.deadline || '';
+          tIn.value = g.title || '';
+          catIn.value = g.category || 'personal';
+          priIn.value = g.priority || 'med';
+          dlIn.value = g.deadline || '';
+          progIn.value = g.progress != null ? g.progress : 0;
+          dailyIn.value = g.daily_action || '';
         } else {
           titleEl.textContent = 'Add Goal';
-          tIn.value = ''; dIn.value = ''; dlIn.value = '';
+          tIn.value = ''; catIn.value = 'personal'; priIn.value = 'med';
+          dlIn.value = ''; progIn.value = 0; dailyIn.value = '';
         }
         openModal('goalModalBg');
         setTimeout(function () { tIn.focus(); }, 60);
       }
-    
+
       // ── INIT ─────────────────────────────────────────────
       async function init() {
-        // Goal modal
         document.getElementById('addGoalBtn').addEventListener('click', function () { openGoalModal(null); });
         document.getElementById('goalModalCancel').addEventListener('click', function () { closeModal('goalModalBg'); });
-        document.getElementById('goalModalSave').addEventListener('click', async function () {
+        document.getElementById('goalModalSave').addEventListener('click', function () {
           const title = document.getElementById('goalTitleInput').value.trim();
           if (!title) { document.getElementById('goalTitleInput').focus(); return; }
-          const desc = document.getElementById('goalDescInput').value.trim();
+          const cat      = document.getElementById('goalCategoryInput').value;
+          const pri      = document.getElementById('goalPriorityInput').value;
           const deadline = document.getElementById('goalDeadlineInput').value;
+          const progress = Math.max(0, Math.min(100, parseInt(document.getElementById('goalProgressInput').value, 10) || 0));
+          const daily    = document.getElementById('goalDailyInput').value.trim();
           closeModal('goalModalBg');
-          if (editingGoalId) await updateGoal(editingGoalId, { title, description: desc || null, deadline: deadline || null });
-          else await addGoal(title, desc, deadline);
+          const data = { title: title, category: cat, priority: pri, deadline: deadline || '', progress: progress, daily_action: daily };
+          if (editingGoalId) updateGoal(editingGoalId, data);
+          else addGoal(data);
         });
         document.getElementById('goalModalBg').addEventListener('click', function (e) {
           if (e.target.id === 'goalModalBg') closeModal('goalModalBg');
         });
-    
-        // Note edit
+
         document.getElementById('addNoteBtn').addEventListener('click', createNote);
         document.getElementById('noteEditTitle').addEventListener('input', function (e) {
           if (currentNote) { currentNote.title = e.target.value; scheduleAutoSave(); }
@@ -8864,18 +9088,19 @@ TAB_INITS['library'] = (function() {
           currentNote = null;
           renderNotes(false);
         });
-    
-        // Search
+
         document.getElementById('libSearch').addEventListener('input', function (e) {
           searchQuery = e.target.value.toLowerCase();
           renderAll();
         });
-    
-        // Load
+
         await Promise.all([loadGoals(), loadNotes()]);
-        renderAll();
+        renderFilterPills();
+        renderGoals();
+        renderSummary();
+        renderNotes(false);
       }
-    
+
       init();
     })();
   };
