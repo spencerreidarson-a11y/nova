@@ -2994,6 +2994,138 @@ input[type="date"].lib-input { color-scheme: dark; }
   .lib-title { margin-bottom: 12px; }
 }
 
+
+/* ════ MAIN DASHBOARD — PREMIUM REDESIGN ════════════════════ */
+
+/* Stat block per-metric accent colors */
+.brf-stat[data-metric="sleep"]      { --brf-accent: oklch(60% 0.18 265); }
+.brf-stat[data-metric="battery"]    { --brf-accent: oklch(72% 0.18 55);  }
+.brf-stat[data-metric="habits"]     { --brf-accent: oklch(72% 0.18 145); }
+.brf-stat[data-metric="tasks"]      { --brf-accent: oklch(65% 0.22 25);  }
+.brf-stat[data-metric="screentime"] { --brf-accent: oklch(72% 0.14 195); }
+.brf-stat[data-metric="focus"]      { --brf-accent: oklch(68% 0.18 300); }
+.brf-stat[data-metric="streak"]     { --brf-accent: oklch(68% 0.18 48);  }
+.brf-stat[data-metric] {
+  border-top: 2px solid var(--brf-accent);
+  border-right: 1px solid rgba(255,255,255,0.06);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  border-left: 1px solid rgba(255,255,255,0.06);
+  background: linear-gradient(170deg, color-mix(in oklch, var(--brf-accent) 8%, transparent) 0%, rgba(255,255,255,0.03) 100%);
+}
+.brf-stat[data-metric="streak"] {
+  background: linear-gradient(90deg, oklch(45% 0.16 48 / 10%) 0%, rgba(255,255,255,0.03) 100%);
+}
+.brf-stat[data-metric="tasks"].brf-tasks-done { --brf-accent: oklch(72% 0.18 145); }
+.brf-val { font-size: 24px; }
+
+/* Mini ring SVGs inside brf-stats */
+.brf-mini-ring { width: 36px; height: 36px; transform: rotate(-90deg); overflow: visible; }
+.brf-ring-track { fill: none; stroke: rgba(255,255,255,0.08); stroke-width: 4; }
+.brf-ring-prog {
+  fill: none; stroke: var(--brf-accent, rgba(255,255,255,0.2)); stroke-width: 4;
+  stroke-linecap: round; stroke-dasharray: 100.53; stroke-dashoffset: 100.53;
+  transition: stroke-dashoffset 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.brf-stat[data-metric="sleep"] .brf-val,
+.brf-stat[data-metric="battery"] .brf-val,
+.brf-stat[data-metric="focus"] .brf-val { font-size: 17px; }
+
+/* Mini bar (habits done) */
+.brf-mini-bar {
+  width: 100%; height: 4px; border-radius: 2px; background: rgba(255,255,255,0.08);
+}
+.brf-mini-bar-fill {
+  height: 100%; border-radius: 2px; width: 0%;
+  background: var(--brf-accent, #4ade80);
+  transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Screentime sparkline */
+.brf-sparkline { width: 100%; height: 22px; display: block; overflow: visible; }
+
+/* Morning Briefing card hover */
+.brf-card { transition: background 0.2s; }
+.brf-card:hover { background: rgba(255,255,255,0.06); }
+.brf-stat { transition: transform 0.15s; }
+.brf-stat:active { transform: scale(0.97); }
+
+/* Weekly overview chart card */
+.week-chart-card {
+  background: var(--card-bg); border: 1px solid rgba(255,255,255,0.07);
+  border-radius: var(--card-radius); padding: 16px 16px 10px; margin-bottom: 16px;
+  transition: background 0.2s;
+}
+.week-chart-card:hover { background: rgba(255,255,255,0.06); }
+.week-chart-header {
+  display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;
+}
+.week-chart-eyebrow {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--text-tertiary); font-family: var(--font-mono);
+}
+.week-chart-legend { display: flex; gap: 14px; }
+.week-legend-item {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 10px; color: var(--text-tertiary); font-family: var(--font-mono);
+}
+.week-legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.week-chart-svg { width: 100%; height: auto; display: block; }
+
+/* Quote card — gradient left accent */
+.qod-card { position: relative; padding-left: 22px; }
+.qod-card::before {
+  content: ''; position: absolute; left: 0; top: 14px; bottom: 14px;
+  width: 2px; border-radius: 1px;
+  background: linear-gradient(180deg, var(--lime) 0%, #2dd4bf 100%);
+}
+.qod-text { font-size: 16px; }
+.qod-divider { border: none; border-top: 1px solid rgba(255,255,255,0.07); margin: 10px 0 8px; }
+
+/* Per-habit ring colors (5 slots) */
+html[data-active-tab="main"] .habit-tile:nth-child(1) { --hc: #4ade80; --hg: rgba(74,222,128,0.4); }
+html[data-active-tab="main"] .habit-tile:nth-child(2) { --hc: #22d3ee; --hg: rgba(34,211,238,0.4); }
+html[data-active-tab="main"] .habit-tile:nth-child(3) { --hc: #fb923c; --hg: rgba(251,146,60,0.4); }
+html[data-active-tab="main"] .habit-tile:nth-child(4) { --hc: #c084fc; --hg: rgba(192,132,252,0.4); }
+html[data-active-tab="main"] .habit-tile:nth-child(5) { --hc: #f472b6; --hg: rgba(244,114,182,0.4); }
+html[data-active-tab="main"] .habit-ring-fill { stroke: var(--hc, #c2ef4e); }
+html[data-active-tab="main"] .habit-ring-fill.is-active { filter: drop-shadow(0 0 6px var(--hg, rgba(194,239,78,0.45))); }
+
+/* 7-day habit history grid */
+.habits-history { margin-top: 14px; display: flex; flex-direction: column; gap: 5px; }
+.habit-history-row { display: flex; align-items: center; gap: 8px; }
+.habit-history-label {
+  font-size: 9px; color: var(--text-quaternary); font-family: var(--font-mono);
+  width: 52px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex-shrink: 0;
+  text-transform: uppercase; letter-spacing: 0.06em;
+}
+.habit-history-dots { display: flex; gap: 3px; }
+.habit-history-dot {
+  width: 10px; height: 10px; border-radius: 2px; background: rgba(255,255,255,0.06);
+}
+.habit-history-dot.done { background: var(--hc, #4ade80); opacity: 0.8; }
+
+/* Todo completion strip */
+.gm-card { position: relative; overflow: hidden; }
+.gm-completion-strip {
+  position: absolute; top: 0; left: 0; right: 0; height: 3px; pointer-events: none;
+  background: linear-gradient(to right, #ff6b6b 0%, #fbbf24 50%, #4ade80 100%);
+  transform-origin: left; transform: scaleX(0);
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Section title dots (main tab only) */
+html[data-active-tab="main"] .section-title::before {
+  content: '•'; color: var(--lime); font-size: 14px;
+  opacity: 1; width: auto; height: auto; background: none; line-height: 1;
+}
+html[data-active-tab="main"] .section-title::after { display: none; }
+
+/* Dashboard title */
+.dash-title { font-size: 30px; font-weight: 800; letter-spacing: -0.025em; }
+
+/* gm-card hover */
+html[data-active-tab="main"] .gm-card:hover { background: rgba(255,255,255,0.055); }
+
   </style>
   <script src="topbar.js" defer></script>
 </head>
@@ -3020,37 +3152,46 @@ input[type="date"].lib-input { color-scheme: dark; }
     <div class="brf-card" id="morningBriefing">
       <div class="brf-eyebrow">Morning Briefing</div>
       <div class="brf-grid">
-        <div class="brf-stat">
-          <span class="brf-icon">😴</span>
+        <div class="brf-stat" data-metric="sleep">
+          <svg class="brf-mini-ring" viewBox="0 0 44 44">
+            <circle class="brf-ring-track" cx="22" cy="22" r="16"/>
+            <circle class="brf-ring-prog" cx="22" cy="22" r="16" id="brfSleepRing"/>
+          </svg>
           <span class="brf-val" id="brfSleepVal">—</span>
           <span class="brf-lbl">sleep score</span>
         </div>
-        <div class="brf-stat">
-          <span class="brf-icon">⚡</span>
+        <div class="brf-stat" data-metric="battery">
+          <svg class="brf-mini-ring" viewBox="0 0 44 44">
+            <circle class="brf-ring-track" cx="22" cy="22" r="16"/>
+            <circle class="brf-ring-prog" cx="22" cy="22" r="16" id="brfBattRing"/>
+          </svg>
           <span class="brf-val" id="brfBattVal">—</span>
           <span class="brf-lbl">body battery</span>
         </div>
-        <div class="brf-stat">
-          <span class="brf-icon">✅</span>
+        <div class="brf-stat" data-metric="habits">
           <span class="brf-val" id="brfHabitsVal">—</span>
+          <div class="brf-mini-bar"><div class="brf-mini-bar-fill" id="brfHabitsBar"></div></div>
           <span class="brf-lbl">habits done</span>
         </div>
-        <div class="brf-stat">
+        <div class="brf-stat" data-metric="tasks">
           <span class="brf-icon">📝</span>
           <span class="brf-val" id="brfTodosVal">—</span>
           <span class="brf-lbl">tasks left</span>
         </div>
-        <div class="brf-stat">
-          <span class="brf-icon">📱</span>
+        <div class="brf-stat" data-metric="screentime">
           <span class="brf-val" id="brfScreentimeVal">—</span>
+          <svg class="brf-sparkline" id="brfScrtimeSpark" viewBox="0 0 62 22" preserveAspectRatio="none"></svg>
           <span class="brf-lbl">screentime</span>
         </div>
-        <div class="brf-stat">
-          <span class="brf-icon">🎯</span>
+        <div class="brf-stat" data-metric="focus">
+          <svg class="brf-mini-ring" viewBox="0 0 44 44">
+            <circle class="brf-ring-track" cx="22" cy="22" r="16"/>
+            <circle class="brf-ring-prog" cx="22" cy="22" r="16" id="brfFocusRing"/>
+          </svg>
           <span class="brf-val" id="brfFocusVal">—</span>
           <span class="brf-lbl">focus today</span>
         </div>
-        <div class="brf-stat brf-stat--full">
+        <div class="brf-stat brf-stat--full" data-metric="streak">
           <span class="brf-icon">🔥</span>
           <span class="brf-val" id="brfStreakVal">—</span>
           <span class="brf-lbl">best streak</span>
@@ -3058,8 +3199,20 @@ input[type="date"].lib-input { color-scheme: dark; }
       </div>
     </div>
 
+    <div class="week-chart-card" id="weekChartCard">
+      <div class="week-chart-header">
+        <span class="week-chart-eyebrow">This Week</span>
+        <div class="week-chart-legend">
+          <span class="week-legend-item"><span class="week-legend-dot" style="background:#a78bfa"></span>Focus</span>
+          <span class="week-legend-item"><span class="week-legend-dot" style="background:#2dd4bf"></span>Screentime</span>
+        </div>
+      </div>
+      <svg id="weekChartSvg" class="week-chart-svg" viewBox="0 0 300 110"></svg>
+    </div>
+
     <div class="qod-card" id="quoteCard">
       <p class="qod-text" id="qodText"></p>
+      <hr class="qod-divider">
       <p class="qod-author" id="qodAuthor"></p>
     </div>
 
@@ -3067,12 +3220,14 @@ input[type="date"].lib-input { color-scheme: dark; }
       <div class="section-title">Daily Habits</div>
       <div class="habits-row" id="habitsRow"></div>
       <div class="habits-streak" id="habitsStreak"></div>
+      <div class="habits-history" id="habitsHistory"></div>
     </div>
 
     <div class="section">
       <div class="section-title">To Do List</div>
 
       <div class="gm-card" id="todayCard">
+        <div class="gm-completion-strip" id="gmCompletionStrip"></div>
         <div class="gm-header">
           <div class="gm-header-left">
             <div class="gm-eyebrow" id="todayLabel">Today —</div>
@@ -4604,7 +4759,10 @@ TAB_INITS['main'] = (function() {
     
           if (total > 0 && done === total) card.classList.add('gm-all-done');
           else card.classList.remove('gm-all-done');
-    
+
+          const strip = document.getElementById('gmCompletionStrip');
+          if (strip) strip.style.transform = 'scaleX(' + (total > 0 ? done / total : 0) + ')';
+
           if (goals.some(function(g) { return !g.done; }))
             push.classList.add('gm-push-visible');
           else
@@ -5165,6 +5323,30 @@ TAB_INITS['main'] = (function() {
             el.textContent = best.count >= 2 ? `🔥 ${best.count} day streak — ${best.name}` : '';
           }
     
+          const HABIT_COLORS = ['#4ade80','#22d3ee','#fb923c','#c084fc','#f472b6'];
+
+          function renderHabitHistory() {
+            const el = document.getElementById('habitsHistory');
+            if (!el || !habits.length) return;
+            const dayKeys = [];
+            for (let i = 6; i >= 0; i--) {
+              const d = new Date(); d.setDate(d.getDate() - i);
+              dayKeys.push(d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'));
+            }
+            el.innerHTML = habits.map((h, idx) => {
+              const color = HABIT_COLORS[idx % HABIT_COLORS.length];
+              const dots = dayKeys.map(k => {
+                const log = lsGetLog(k);
+                const done = (log[h.id] || 0) > 0;
+                return '<div class="habit-history-dot' + (done ? ' done' : '') + '"></div>';
+              }).join('');
+              return '<div class="habit-history-row" style="--hc:' + color + '">' +
+                '<span class="habit-history-label">' + h.name + '</span>' +
+                '<div class="habit-history-dots">' + dots + '</div>' +
+                '</div>';
+            }).join('');
+          }
+
           function tapHabit(id) {
             const t = habitsToday();
             const done = (todayCounts[id] || 0) > 0;
@@ -5195,6 +5377,7 @@ TAB_INITS['main'] = (function() {
             if (sb) sb.from('habit_logs').upsert({ habit_id: id, date: t, count: cnt }, { onConflict: 'habit_id,date' })
               .then(r => { if (r.error) console.warn('Habit log upsert:', r.error.message); });
             renderStreak();
+            renderHabitHistory();
           }
     
           function openEdit(id) {
@@ -5245,8 +5428,9 @@ TAB_INITS['main'] = (function() {
             closeHabitModal();
             renderHabits();
             renderStreak();
+            renderHabitHistory();
           }
-    
+
           async function deleteHabit() {
             if (!editingId) return;
             const idx = habits.findIndex(x => x.id === editingId);
@@ -5261,8 +5445,9 @@ TAB_INITS['main'] = (function() {
             closeHabitModal();
             renderHabits();
             renderStreak();
+            renderHabitHistory();
           }
-    
+
           async function initHabits() {
             // Show skeleton tiles while data loads from Supabase
             const row = document.getElementById('habitsRow');
@@ -5279,6 +5464,7 @@ TAB_INITS['main'] = (function() {
             await loadLogs();
             renderHabits();
             renderStreak();
+            renderHabitHistory();
             setupHabitListeners(document.getElementById('habitsRow'));
             document.getElementById('habitModalSave').addEventListener('click', saveHabitModal);
             document.getElementById('habitModalDelete').addEventListener('click', deleteHabit);
@@ -5310,32 +5496,49 @@ TAB_INITS['main'] = (function() {
             el.className = 'brf-val' + (cls ? ' ' + cls : '');
           }
     
+          function animateRing(id, pct) {
+            const el = document.getElementById(id);
+            if (!el) return;
+            requestAnimationFrame(() => requestAnimationFrame(() => {
+              el.style.strokeDashoffset = (100.53 * (1 - Math.min(1, Math.max(0, pct)))).toFixed(2);
+            }));
+          }
+
           function renderBriefing() {
             const today = todayStr();
-    
-            // Sleep / Body Battery (from health.html's gc_v2 key)
+
+            // Sleep / Body Battery
             try {
               const gc = JSON.parse(localStorage.getItem('gc_v2')) || {};
               setVal('brfSleepVal', gc.sleepScore != null ? gc.sleepScore : null);
               setVal('brfBattVal',  gc.bodyBattery != null ? gc.bodyBattery : null);
+              if (gc.sleepScore != null) animateRing('brfSleepRing', gc.sleepScore / 100);
+              if (gc.bodyBattery != null) animateRing('brfBattRing', gc.bodyBattery / 100);
             } catch (e) { setVal('brfSleepVal', null); setVal('brfBattVal', null); }
-    
+
             // Habits done / total
             try {
               const config = JSON.parse(localStorage.getItem('habits_config')) || [];
               const log    = JSON.parse(localStorage.getItem('habits_log:' + today)) || {};
               const done   = config.filter(h => (log[h.id] || 0) > 0).length;
               setVal('brfHabitsVal', config.length ? done + '/' + config.length : null);
+              const bar = document.getElementById('brfHabitsBar');
+              if (bar && config.length) bar.style.width = Math.round(done / config.length * 100) + '%';
             } catch (e) { setVal('brfHabitsVal', null); }
-    
+
             // Tasks remaining
             try {
               const goals = JSON.parse(localStorage.getItem('goals:' + today)) || [];
               const left  = goals.filter(g => !g.done).length;
               setVal('brfTodosVal', goals.length ? String(left) : null);
+              const statEl = document.querySelector('.brf-stat[data-metric="tasks"]');
+              if (statEl && goals.length > 0) {
+                if (left === 0) statEl.classList.add('brf-tasks-done');
+                else statEl.classList.remove('brf-tasks-done');
+              }
             } catch (e) { setVal('brfTodosVal', null); }
-    
-            // Screentime (green if ≤30 min goal, red if over)
+
+            // Screentime — value + sparkline
             try {
               const st = localStorage.getItem('screentime:' + today);
               if (st != null) {
@@ -5344,20 +5547,36 @@ TAB_INITS['main'] = (function() {
               } else {
                 setVal('brfScreentimeVal', null);
               }
+              const spark = document.getElementById('brfScrtimeSpark');
+              if (spark) {
+                const vals = [];
+                for (let i = 6; i >= 0; i--) {
+                  const d = new Date(); d.setDate(d.getDate() - i);
+                  const k = 'screentime:' + d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+                  vals.push(parseInt(localStorage.getItem(k) || '0', 10));
+                }
+                const maxV = Math.max.apply(null, vals.concat([30]));
+                spark.innerHTML = vals.map((v, i) => {
+                  const bh = Math.max(1, Math.round(v / maxV * 22));
+                  return '<rect x="' + (i * 9) + '" y="' + (22 - bh) + '" width="6" height="' + bh + '" rx="1.5" fill="' + (v > 30 ? '#ff8a8a' : '#2dd4bf') + '"/>';
+                }).join('');
+              }
             } catch (e) { setVal('brfScreentimeVal', null); }
-    
-            // Focus minutes today (from productivity page's session cache)
+
+            // Focus minutes today + arc toward 120-min goal
             try {
               const sessions  = JSON.parse(localStorage.getItem('focus_sessions_cache')) || [];
               const todaySess = sessions.filter(s => s.date === today);
               if (todaySess.length) {
                 const secs = todaySess.reduce((sum, s) => sum + (s.durationSeconds || 0), 0);
-                setVal('brfFocusVal', Math.floor(secs / 60) + 'm');
+                const mins = Math.floor(secs / 60);
+                setVal('brfFocusVal', mins + 'm');
+                animateRing('brfFocusRing', mins / 120);
               } else {
                 setVal('brfFocusVal', null);
               }
             } catch (e) { setVal('brfFocusVal', null); }
-    
+
             // Best streak across all habits
             try {
               const config = JSON.parse(localStorage.getItem('habits_config')) || [];
@@ -5383,7 +5602,56 @@ TAB_INITS['main'] = (function() {
               setVal('brfStreakVal', best > 0 ? best + 'd' : null);
             } catch (e) { setVal('brfStreakVal', null); }
           }
-    
+
+          function renderWeekChart() {
+            const svg = document.getElementById('weekChartSvg');
+            if (!svg) return;
+            const days = [];
+            for (let i = 6; i >= 0; i--) {
+              const d = new Date(); d.setDate(d.getDate() - i);
+              const dateStr = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+              const label = ['Su','Mo','Tu','We','Th','Fr','Sa'][d.getDay()];
+              let focusMins = 0;
+              try {
+                const s = JSON.parse(localStorage.getItem('focus_sessions_cache')) || [];
+                focusMins = s.filter(x => x.date === dateStr).reduce((sum, x) => sum + Math.floor((x.durationSeconds || 0) / 60), 0);
+              } catch(e) {}
+              const screenMins = parseInt(localStorage.getItem('screentime:' + dateStr) || '0', 10);
+              days.push({ label, focus: focusMins, screen: screenMins });
+            }
+            const X0 = 20, X1 = 290, Y0 = 8, Y1 = 82, PW = X1 - X0, PH = Y1 - Y0;
+            const allVals = days.flatMap(d => [d.focus, d.screen]);
+            const maxV = Math.max.apply(null, allVals.concat([60]));
+            const toX = i => X0 + (i / 6) * PW;
+            const toY = v => Y1 - (v / maxV) * PH;
+            function smoothPath(pts) {
+              if (!pts.length) return '';
+              let d = 'M' + pts[0][0] + ',' + pts[0][1];
+              for (let i = 0; i < pts.length - 1; i++) {
+                const mx = (pts[i][0] + pts[i+1][0]) / 2;
+                const my = (pts[i][1] + pts[i+1][1]) / 2;
+                d += ' Q' + pts[i][0] + ',' + pts[i][1] + ' ' + mx + ',' + my;
+              }
+              const last = pts[pts.length - 1];
+              d += ' L' + last[0] + ',' + last[1];
+              return d;
+            }
+            const fPts = days.map((d, i) => [toX(i), toY(d.focus)]);
+            const sPts = days.map((d, i) => [toX(i), toY(d.screen)]);
+            const goalY = toY(30);
+            const gridLines = [0, 30, 60].filter(v => v <= maxV).map(v =>
+              '<line x1="' + X0 + '" y1="' + toY(v).toFixed(1) + '" x2="' + X1 + '" y2="' + toY(v).toFixed(1) + '" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>'
+            ).join('');
+            const goalLine = '<line x1="' + X0 + '" y1="' + goalY.toFixed(1) + '" x2="' + X1 + '" y2="' + goalY.toFixed(1) + '" stroke="rgba(45,212,191,0.2)" stroke-width="1" stroke-dasharray="4 3"/>';
+            const labels = days.map((d, i) =>
+              '<text x="' + toX(i).toFixed(1) + '" y="98" text-anchor="middle" font-size="8" fill="rgba(255,255,255,0.3)" font-family="monospace">' + d.label + '</text>'
+            ).join('');
+            svg.innerHTML = gridLines + goalLine +
+              '<path d="' + smoothPath(sPts) + '" fill="none" stroke="#2dd4bf" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>' +
+              '<path d="' + smoothPath(fPts) + '" fill="none" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>' +
+              labels;
+          }
+
           // ── Daily Quote ─────────────────────────────────────────────
           const QUOTES = [
             { text: "We suffer more in imagination than in reality.", author: "Seneca" },
@@ -5454,6 +5722,7 @@ TAB_INITS['main'] = (function() {
           function init() {
             renderBriefing();
             renderQuote();
+            renderWeekChart();
             setInterval(renderBriefing, 5 * 60 * 1000);
           }
     
