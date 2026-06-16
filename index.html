@@ -2328,10 +2328,11 @@ html[data-active-tab="focus"] .card {
   width: 100%; height: 100%;
   transform: rotate(-90deg); overflow: visible;
 }
-.focus-ring-track  { fill: none; stroke: rgba(255,255,255,0.07); stroke-width: 18; }
+.focus-ring-track  { fill: none; stroke: rgba(255,255,255,0.14); stroke-width: 18; }
 .focus-ring-glow-el {
-  fill: none; stroke: #38bdf8; stroke-width: 18; stroke-linecap: round;
+  fill: none; stroke: #a78bfa; stroke-width: 22; stroke-linecap: round;
   stroke-dasharray: 804.25; stroke-dashoffset: 804.25;
+  opacity: 0.35;
   transition: stroke-dashoffset 0.9s cubic-bezier(0.22,1,0.36,1);
 }
 .focus-ring-fill {
@@ -2361,17 +2362,17 @@ html[data-active-tab="focus"] .card {
 
 /* Buttons — pill style */
 .focus-start-btn {
-  width: 100%; height: 52px;
-  background: linear-gradient(180deg, #ffffff 0%, #e8e5dd 100%);
-  color: #0a0a0b; border: none; border-radius: 26px;
-  font-family: var(--font); font-size: 17px; font-weight: 700;
+  height: 48px; width: auto; padding: 0 40px;
+  background: rgba(255,255,255,0.04);
+  border: 1.5px solid var(--lime); color: var(--lime); border-radius: 24px;
+  font-family: var(--font); font-size: 15px; font-weight: 700;
   cursor: pointer; -webkit-tap-highlight-color: transparent;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.55), 0 4px 20px rgba(0,0,0,0.45);
-  transition: transform 0.10s, box-shadow 0.10s;
+  box-shadow: 0 0 16px rgba(194,239,78,0.12);
+  transition: background 0.15s, transform 0.1s, box-shadow 0.15s;
   letter-spacing: 0.01em;
 }
-.focus-start-btn:hover { transform: translateY(-1px); box-shadow: inset 0 1px 0 rgba(255,255,255,0.55), 0 6px 24px rgba(0,0,0,0.5); }
-.focus-start-btn:active { transform: scale(0.98); }
+.focus-start-btn:hover { background: rgba(194,239,78,0.08); box-shadow: 0 0 24px rgba(194,239,78,0.22); }
+.focus-start-btn:active { transform: scale(0.96); }
 
 .focus-btn-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
@@ -2615,6 +2616,163 @@ html[data-active-tab="focus"] .card {
   color: var(--text-tertiary); font-family: var(--font-mono);
 }
 .st-stat-divider { width: 1px; background: var(--border); flex-shrink: 0; }
+
+/* ── Focus premium additions ─────────────────────────── */
+
+/* Ambient glow on ring wrap */
+html[data-active-tab="focus"] .focus-ring-wrap {
+  filter: drop-shadow(0 0 20px rgba(167,139,250,0.1));
+}
+
+/* Dot at fill tip */
+.focus-ring-dot {
+  fill: #a78bfa;
+  filter: drop-shadow(0 0 5px rgba(167,139,250,0.8));
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.focus-ring-active .focus-ring-dot { opacity: 1; }
+
+/* Active: pulsing glow */
+.focus-ring-active .focus-ring-glow-el {
+  animation: focusRingPulse 2.5s ease-in-out infinite;
+}
+@keyframes focusRingPulse {
+  0%, 100% { opacity: 0.3; }
+  50%       { opacity: 0.7; }
+}
+
+/* Completed flash: ring briefly turns green */
+.focus-ring-complete .focus-ring-fill {
+  stroke: #4ade80;
+  animation: focusRingFlash 1.4s ease-out forwards;
+}
+@keyframes focusRingFlash {
+  0%   { filter: drop-shadow(0 0 28px rgba(74,222,128,0.95)); }
+  60%  { filter: drop-shadow(0 0 10px rgba(74,222,128,0.4)); }
+  100% { filter: none; }
+}
+
+/* Background dim overlay (active session) */
+.focus-dim-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0);
+  pointer-events: none; z-index: 1;
+  transition: background 0.5s;
+}
+.focus-dim-overlay.active { background: rgba(0,0,0,0.3); }
+
+/* Category pill row */
+.focus-cat-row {
+  display: flex; flex-wrap: wrap; gap: 7px;
+  justify-content: center; margin-bottom: 18px;
+}
+.focus-cat-pill {
+  padding: 5px 13px; border-radius: 20px; font-size: 12px; font-weight: 600;
+  border: 1px solid rgba(255,255,255,0.14); background: transparent;
+  color: var(--text-tertiary); cursor: pointer; font-family: var(--font);
+  transition: background 0.14s, border-color 0.14s, color 0.14s;
+  -webkit-tap-highlight-color: transparent;
+}
+.focus-cat-pill:active { transform: scale(0.94); }
+.focus-cat-pill.active {
+  background: color-mix(in oklch, var(--cat-color, #fff) 18%, transparent);
+  border-color: var(--cat-color, rgba(255,255,255,0.4));
+  color: var(--cat-color, #fff);
+}
+.focus-ring-cat-label {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.14em;
+  color: var(--text-tertiary); font-family: var(--font-mono);
+  text-transform: uppercase; margin-top: 1px;
+}
+
+/* Motivational nudge */
+.focus-nudge {
+  text-align: center; font-size: 12px; color: var(--text-tertiary);
+  padding: 0 20px 10px; letter-spacing: 0.01em; min-height: 20px;
+}
+.focus-nudge-streak { color: var(--lime); font-weight: 600; }
+.focus-nudge-done { color: #4ade80; font-weight: 600; }
+
+/* Daily goal arc */
+.focus-goal-arc-wrap {
+  position: relative; width: min(100%, 260px);
+  margin: 10px auto 6px;
+}
+.focus-goal-arc-svg { width: 100%; display: block; }
+.focus-goal-arc-track { fill: none; stroke: rgba(255,255,255,0.09); stroke-width: 10; }
+.focus-goal-arc-fill {
+  fill: none; stroke: #4ade80; stroke-width: 10;
+  transition: stroke-dashoffset 0.5s cubic-bezier(0.22,1,0.36,1);
+  filter: drop-shadow(0 0 6px rgba(74,222,128,0.3));
+}
+.focus-goal-arc-center {
+  position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+  text-align: center; pointer-events: none; white-space: nowrap;
+}
+.focus-goal-arc-text {
+  font-size: 18px; font-weight: 700; color: var(--text-primary);
+  letter-spacing: -0.02em; font-variant-numeric: tabular-nums;
+}
+.focus-goal-subtext {
+  text-align: center; font-size: 12px; color: var(--text-tertiary);
+  margin-top: 8px; letter-spacing: 0.02em;
+}
+.focus-goal-subtext.done { color: #4ade80; font-weight: 600; }
+
+/* 7-day chart: goal coloring + value labels */
+.focus-bar-col { align-items: center; }
+.focus-bar-val {
+  font-size: 9px; font-family: var(--font-mono); color: var(--text-tertiary);
+  margin-bottom: 3px; min-height: 11px; line-height: 11px; text-align: center;
+}
+.focus-bar.goal-met { background: rgba(74,222,128,0.75); }
+.focus-bar.today-bar { background: var(--lime) !important; box-shadow: 0 0 10px rgba(194,239,78,0.4); }
+.focus-bar.goal-met.today-bar { background: #4ade80 !important; box-shadow: 0 0 12px rgba(74,222,128,0.55); }
+
+/* Session cards */
+.focus-session-card {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 11px; border-radius: 10px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-left: 3px solid var(--sess-color, rgba(255,255,255,0.2));
+  margin-bottom: 6px;
+}
+.focus-sess-cat-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--sess-color, #666); flex-shrink: 0;
+}
+.focus-sess-cat-name { font-size: 12px; color: var(--text-secondary); flex: 1; }
+.focus-sess-dur {
+  font-size: 13px; font-weight: 700; color: var(--text-primary);
+  font-family: var(--font-mono); letter-spacing: -0.01em;
+}
+.focus-sess-when { font-size: 10px; color: var(--text-tertiary); font-family: var(--font-mono); }
+
+/* 30-day category bars */
+.focus-cat-total {
+  font-size: 13px; font-weight: 700; color: var(--text-primary);
+  margin-bottom: 14px; letter-spacing: -0.01em;
+}
+.focus-cat-bars { display: flex; flex-direction: column; gap: 10px; }
+.focus-cat-bar-row { display: flex; align-items: center; gap: 9px; }
+.focus-cat-bar-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.focus-cat-bar-name { font-size: 11px; color: var(--text-secondary); width: 64px; flex-shrink: 0; }
+.focus-cat-bar-track { flex: 1; height: 5px; border-radius: 3px; background: rgba(255,255,255,0.06); overflow: hidden; }
+.focus-cat-bar-fill { height: 100%; border-radius: 3px; transition: width 0.5s cubic-bezier(0.22,1,0.36,1); }
+.focus-cat-bar-time { font-size: 10px; font-family: var(--font-mono); color: var(--text-tertiary); width: 40px; text-align: right; flex-shrink: 0; }
+
+/* Screentime stats accent colors */
+.st-stat[data-metric="today"]  { --st-accent: oklch(72% 0.14 195); }
+.st-stat[data-metric="avg"]    { --st-accent: oklch(68% 0.18 300); }
+.st-stat[data-metric="under"]  { --st-accent: oklch(72% 0.18 145); }
+.st-stat[data-metric="under"].over-goal { --st-accent: oklch(65% 0.22 25); }
+.st-stat[data-metric] {
+  border-top: 2px solid var(--st-accent, rgba(255,255,255,0.07));
+  background: linear-gradient(180deg, color-mix(in oklch, var(--st-accent) 7%, transparent) 0%, transparent 100%);
+}
+.st-stat[data-metric] .st-stat-val { color: var(--st-accent, var(--text-primary)); }
 
 /* ═══ LIBRARY TAB ════════════════════════════════════════════════════ */
 
@@ -4167,31 +4325,37 @@ html[data-active-tab="main"] .gm-card:hover { background: rgba(255,255,255,0.055
 <main>
 
   <!-- ── Timer Card ──────────────────────────────────────── -->
+  <div id="focusDimOverlay" class="focus-dim-overlay"></div>
   <div class="card focus-timer-card">
     <div class="focus-ring-wrap">
       <svg class="focus-ring-svg" viewBox="0 0 300 300" overflow="visible" aria-hidden="true">
         <defs>
           <filter id="focusGlowFilter" x="-70%" y="-70%" width="240%" height="240%">
-            <feGaussianBlur stdDeviation="16" result="blurred"/>
+            <feGaussianBlur stdDeviation="18" result="blurred"/>
           </filter>
           <linearGradient id="focusArcGrad" x1="0" y1="0" x2="1" y2="0" gradientUnits="objectBoundingBox">
             <stop offset="0%" stop-color="#22d3ee"/>
-            <stop offset="100%" stop-color="#818cf8"/>
+            <stop offset="100%" stop-color="#a78bfa"/>
           </linearGradient>
         </defs>
         <circle class="focus-ring-track" cx="150" cy="150" r="128"/>
         <circle class="focus-ring-glow-el" cx="150" cy="150" r="128"
                 filter="url(#focusGlowFilter)" id="focusRingGlowEl"/>
         <circle class="focus-ring-fill" cx="150" cy="150" r="128" id="focusRingFill"/>
+        <circle id="focusRingDot" class="focus-ring-dot" r="9" cx="150" cy="22"/>
       </svg>
       <div class="focus-ring-center">
         <div class="focus-time" id="focusTime">00:00</div>
         <div class="focus-ring-label" id="focusRingLabel">Focus</div>
+        <div id="focusCatLabel" class="focus-ring-cat-label"></div>
       </div>
     </div>
+    <div id="focusCatRow" class="focus-cat-row"></div>
     <div id="focusControls"></div>
     <div class="focus-today" id="focusToday"></div>
   </div>
+
+  <div class="focus-nudge" id="focusNudge"></div>
 
   <!-- ── Daily Focus Goal ───────────────────────────────── -->
   <div class="card">
@@ -4199,23 +4363,19 @@ html[data-active-tab="main"] .gm-card:hover { background: rgba(255,255,255,0.055
       <div class="gc-section-eyebrow">DAILY FOCUS GOAL</div>
       <button class="focus-goal-gear" id="focusGoalGear" aria-label="Edit goal">⚙︎</button>
     </div>
-    <div class="focus-goal-row">
-      <span class="focus-goal-current" id="focusGoalCurrent">0m</span>
-      <span class="focus-goal-sep">/</span>
-      <span class="focus-goal-target" id="focusGoalTarget">4h</span>
-    </div>
-    <div class="water-bar-wrap">
-      <div class="water-bar-track">
-        <div class="water-bar-fill" id="focusBarFill" style="width:0%"></div>
-        <div class="water-bar-zone" id="focusZone1"></div>
-        <div class="water-bar-zone" id="focusZone2"></div>
-      </div>
-      <div class="water-bar-labels">
-        <span>0</span>
-        <span class="water-zone-name">healthy zone</span>
-        <span id="focusGoalMax">4h+</span>
+    <div class="focus-goal-arc-wrap">
+      <svg id="focusGoalArcSvg" class="focus-goal-arc-svg" viewBox="0 0 200 110" aria-hidden="true">
+        <circle class="focus-goal-arc-track" cx="100" cy="100" r="80"
+          stroke-dasharray="251.33 9999" transform="rotate(180 100 100)" stroke-linecap="round"/>
+        <circle id="focusGoalArcFill" class="focus-goal-arc-fill" cx="100" cy="100" r="80"
+          stroke-dasharray="251.33 9999" stroke-dashoffset="251.33"
+          transform="rotate(180 100 100)" stroke-linecap="round"/>
+      </svg>
+      <div class="focus-goal-arc-center">
+        <div class="focus-goal-arc-text" id="focusGoalArcText">0m / 2h</div>
       </div>
     </div>
+    <div class="focus-goal-subtext" id="focusGoalSubtext"></div>
   </div>
 
   <!-- ── Last 7 Days Chart ──────────────────────────────── -->
@@ -4239,17 +4399,17 @@ html[data-active-tab="main"] .gm-card:hover { background: rgba(255,255,255,0.055
       <svg id="stSvg" viewBox="0 0 320 130" width="100%"></svg>
     </div>
     <div class="st-stats-row">
-      <div class="st-stat">
+      <div class="st-stat" data-metric="today">
         <span class="st-stat-val" id="stToday">—</span>
         <span class="st-stat-label">today</span>
       </div>
       <div class="st-stat-divider"></div>
-      <div class="st-stat">
+      <div class="st-stat" data-metric="avg">
         <span class="st-stat-val" id="stAvg">—</span>
         <span class="st-stat-label">7-day avg</span>
       </div>
       <div class="st-stat-divider"></div>
-      <div class="st-stat">
+      <div class="st-stat" data-metric="under">
         <span class="st-stat-val" id="stUnder">—</span>
         <span class="st-stat-label">days under goal</span>
       </div>
@@ -4267,14 +4427,9 @@ html[data-active-tab="main"] .gm-card:hover { background: rgba(255,255,255,0.055
 
   <!-- ── Category Breakdown ────────────────────────────── -->
   <div class="card">
-    <div class="gc-section-eyebrow" style="margin-bottom:18px">LAST 30 DAYS</div>
-    <div class="focus-donut-wrap">
-      <div class="focus-donut-stage">
-        <svg class="focus-donut-svg" id="focusDonutSvg" viewBox="0 0 140 140" aria-hidden="true"></svg>
-        <div class="focus-donut-center" id="focusDonutCenter">—</div>
-      </div>
-      <div class="focus-donut-legend" id="focusDonutLegend"></div>
-    </div>
+    <div class="gc-section-eyebrow" style="margin-bottom:14px">LAST 30 DAYS</div>
+    <div class="focus-cat-total" id="focusCatTotal"></div>
+    <div id="focusCatBars" class="focus-cat-bars"></div>
   </div>
 
 </main>
@@ -4286,7 +4441,8 @@ html[data-active-tab="main"] .gm-card:hover { background: rgba(255,255,255,0.055
     <div class="focus-modal-cats">
       <button class="focus-cat-btn" data-cat="Coding">💻 Coding</button>
       <button class="focus-cat-btn" data-cat="Reading">📚 Reading</button>
-      <button class="focus-cat-btn" data-cat="School">🎓 School</button>
+      <button class="focus-cat-btn" data-cat="Learning">🎓 Learning</button>
+      <button class="focus-cat-btn" data-cat="Work">💼 Work</button>
       <button class="focus-cat-btn" data-cat="Other">✦ Other</button>
     </div>
   </div>
@@ -8258,6 +8414,42 @@ TAB_INITS['focus'] = (function() {
         return h + 'h ' + m + 'm';
       }
     
+      // ── Category state ───────────────────────────────────────
+      const CAT_COLORS = { Coding: '#4ade80', Reading: '#60a5fa', Learning: '#c084fc', Work: '#fb923c', Other: '#6b7280', School: '#c084fc' };
+      let selectedCat = (function() { try { return localStorage.getItem('focus_last_cat') || 'Coding'; } catch(e) { return 'Coding'; } }());
+      function setSelectedCat(cat) {
+        selectedCat = cat;
+        try { localStorage.setItem('focus_last_cat', cat); } catch(e) {}
+      }
+
+      function renderCatPills() {
+        const row = document.getElementById('focusCatRow');
+        if (!row) return;
+        const cats = [
+          { id: 'Coding' }, { id: 'Reading' }, { id: 'Learning' }, { id: 'Work' }, { id: 'Other' }
+        ];
+        row.innerHTML = cats.map(function(c) {
+          return '<button class="focus-cat-pill' + (selectedCat === c.id ? ' active' : '') + '" '
+            + 'data-cat="' + c.id + '" style="--cat-color:' + (CAT_COLORS[c.id] || '#fff') + '">'
+            + c.id + '</button>';
+        }).join('');
+        row.querySelectorAll('.focus-cat-pill').forEach(function(btn) {
+          btn.addEventListener('click', function() {
+            setSelectedCat(btn.dataset.cat);
+            renderCatPills();
+            const lbl = document.getElementById('focusCatLabel');
+            if (lbl) lbl.textContent = selectedCat;
+          });
+        });
+      }
+
+      function flashRingComplete() {
+        const wrap = document.querySelector('.focus-ring-wrap');
+        if (!wrap) return;
+        wrap.classList.add('focus-ring-complete');
+        setTimeout(function() { wrap.classList.remove('focus-ring-complete'); }, 1500);
+      }
+
       // ── Timer state ──────────────────────────────────────────
       let timerState = 'idle'; // 'idle' | 'running' | 'paused'
       let timerInterval = null;
@@ -8333,17 +8525,24 @@ TAB_INITS['focus'] = (function() {
           timerAccumulatedMs += Date.now() - timerStartTime;
           timerStartTime = null;
         }
-        showCategoryModal();
+        saveSession(selectedCat);
       }
       function updateFocusRing() {
         const CIRC = 2 * Math.PI * 128;
         const goalSec = getGoalMinutes() * 60;
         const todaySec = getTodaySeconds() + getCurrentMs() / 1000;
-        const offset = CIRC * (1 - Math.min(1, todaySec / goalSec));
+        const fillFrac = Math.min(1, todaySec / goalSec);
+        const offset = CIRC * (1 - fillFrac);
         const fill = document.getElementById('focusRingFill');
         const glow = document.getElementById('focusRingGlowEl');
         if (fill) fill.style.strokeDashoffset = offset;
         if (glow) glow.style.strokeDashoffset = offset;
+        const dot = document.getElementById('focusRingDot');
+        if (dot) {
+          const angle = -Math.PI / 2 + fillFrac * 2 * Math.PI;
+          dot.setAttribute('cx', (150 + 128 * Math.cos(angle)).toFixed(1));
+          dot.setAttribute('cy', (150 + 128 * Math.sin(angle)).toFixed(1));
+        }
       }
     
       function tick() {
@@ -8357,11 +8556,20 @@ TAB_INITS['focus'] = (function() {
         const ctrlEl = document.getElementById('focusControls');
         const todayEl = document.getElementById('focusToday');
         const labelEl = document.getElementById('focusRingLabel');
+        const catLbl  = document.getElementById('focusCatLabel');
+        const catRow  = document.getElementById('focusCatRow');
+        const overlay = document.getElementById('focusDimOverlay');
+        const wrap    = document.querySelector('.focus-ring-wrap');
         if (!ctrlEl) return;
         if (timeEl) timeEl.textContent = formatTimerDisplay(getCurrentMs());
         if (labelEl) labelEl.textContent = timerState === 'running' ? 'Deep Focus' : timerState === 'paused' ? 'Paused' : 'Focus';
+        if (catLbl) catLbl.textContent = timerState === 'idle' ? selectedCat : '';
+        if (catRow) catRow.style.display = timerState === 'idle' ? '' : 'none';
+        if (overlay) overlay.classList.toggle('active', timerState === 'running');
+        if (wrap) wrap.classList.toggle('focus-ring-active', timerState === 'running');
+        renderCatPills();
         updateFocusRing();
-    
+
         if (timerState === 'idle') {
           ctrlEl.innerHTML = '<button class="focus-start-btn" id="focusStartBtn">Start Focus</button>';
           const btn = document.getElementById('focusStartBtn');
@@ -8372,10 +8580,10 @@ TAB_INITS['focus'] = (function() {
           }
         } else {
           const isPaused = timerState === 'paused';
-          ctrlEl.innerHTML = `<div class="focus-btn-row">
-            <button class="focus-pause-btn" id="focusPauseBtn">${isPaused ? 'Resume' : 'Pause'}</button>
-            <button class="focus-stop-btn" id="focusStopBtn">Stop</button>
-          </div>`;
+          ctrlEl.innerHTML = '<div class="focus-btn-row">'
+            + '<button class="focus-pause-btn" id="focusPauseBtn">' + (isPaused ? 'Resume' : 'Pause') + '</button>'
+            + '<button class="focus-stop-btn" id="focusStopBtn">End Session</button>'
+            + '</div>';
           const pb = document.getElementById('focusPauseBtn');
           const sb2 = document.getElementById('focusStopBtn');
           if (pb) pb.addEventListener('click', isPaused ? resumeTimer : pauseTimer);
@@ -8409,7 +8617,8 @@ TAB_INITS['focus'] = (function() {
         const startTime = sessionStartEpoch || (endTime - durationMs);
     
         if (durationSeconds < 10) { clearTimerState(); renderTimerUI(); renderAll(); return; }
-    
+
+        flashRingComplete();
         const session = {
           startTime: new Date(startTime).toISOString(),
           endTime: new Date(endTime).toISOString(),
@@ -8532,57 +8741,64 @@ TAB_INITS['focus'] = (function() {
       function renderGoal() {
         const goalSec = getGoalMinutes() * 60;
         const todaySec = getTodaySeconds();
-        const pct = Math.min(100, (todaySec / goalSec) * 100);
-        const fillEl = document.getElementById('focusBarFill');
-        const curEl = document.getElementById('focusGoalCurrent');
-        const tgtEl = document.getElementById('focusGoalTarget');
-        const maxEl = document.getElementById('focusGoalMax');
-        const z1 = document.getElementById('focusZone1');
-        const z2 = document.getElementById('focusZone2');
-        if (fillEl) fillEl.style.width = pct + '%';
-        if (curEl) curEl.textContent = formatHM(todaySec);
-        if (tgtEl) tgtEl.textContent = formatHM(goalSec);
-        if (maxEl) maxEl.textContent = formatHM(goalSec) + '+';
-        if (z1) z1.style.left = '50%';
-        if (z2) z2.style.left = '87.5%';
+        const pct = Math.min(1, todaySec / goalSec);
+        const HALF_CIRC = 251.33;
+        const arcFill = document.getElementById('focusGoalArcFill');
+        if (arcFill) arcFill.style.strokeDashoffset = (HALF_CIRC * (1 - pct)).toFixed(2);
+        const arcText = document.getElementById('focusGoalArcText');
+        if (arcText) arcText.textContent = formatHM(todaySec) + ' / ' + formatHM(goalSec);
+        const sub = document.getElementById('focusGoalSubtext');
+        if (sub) {
+          if (pct >= 1) { sub.textContent = 'Goal reached! 🔥'; sub.className = 'focus-goal-subtext done'; }
+          else { sub.textContent = formatHM(goalSec - todaySec) + ' to go'; sub.className = 'focus-goal-subtext'; }
+        }
       }
-    
+
+      function renderNudge() {
+        const el = document.getElementById('focusNudge');
+        if (!el) return;
+        const todaySec = getTodaySeconds();
+        const goalSec = getGoalMinutes() * 60;
+        const streak = getStreak();
+        const streakHtml = streak >= 2
+          ? ' &middot; <span class="focus-nudge-streak">' + streak + ' day streak 🔥</span>'
+          : (streak === 0 ? ' &middot; <span style="opacity:0.5">start a streak today</span>' : '');
+        if (todaySec === 0 && sessions.length === 0) {
+          el.innerHTML = 'Start your first session' + streakHtml;
+        } else if (todaySec >= goalSec) {
+          el.innerHTML = '<span class="focus-nudge-done">Goal crushed! 🔥</span>' + streakHtml;
+        } else {
+          el.innerHTML = formatHM(goalSec - todaySec) + ' to go — keep pushing' + streakHtml;
+        }
+      }
+
       function renderChart() {
         const el = document.getElementById('focusBars');
         const totEl = document.getElementById('focusWeekTotal');
         if (!el) return;
         const week = getWeekTotals();
-        const max = Math.max.apply(null, week.map(function (d) { return d.seconds; }).concat([1]));
+        const goalSec = getGoalMinutes() * 60;
+        const max = Math.max.apply(null, week.map(function (d) { return d.seconds; }).concat([goalSec]));
         const total = week.reduce(function (s, d) { return s + d.seconds; }, 0);
         const t = todayStr();
         if (totEl) totEl.textContent = total > 0 ? formatHM(total) + ' this week' : '';
         el.innerHTML = week.map(function (d) {
-          const h = Math.max(4, Math.round((d.seconds / max) * 80));
           const isT = d.date === t;
+          const isGoalMet = d.seconds > 0 && d.seconds >= goalSec;
+          const h = d.seconds > 0 ? Math.max(8, Math.round((d.seconds / max) * 80)) : 4;
+          const cls = isT ? 'today-bar' : (isGoalMet ? 'goal-met' : '');
+          const inlineStyle = (!isT && !isGoalMet) ? 'background:rgba(255,255,255,0.12)' : '';
+          const valLabel = d.seconds >= 60 ? formatHM(d.seconds) : (d.seconds > 0 ? d.seconds + 's' : '');
           return '<div class="focus-bar-col">'
+            + '<div class="focus-bar-val">' + valLabel + '</div>'
             + '<div class="focus-bar-fill-wrap">'
-            + '<div class="focus-bar" style="height:' + h + 'px;background:' + (isT ? '#c2ef4e' : 'rgba(255,255,255,0.15)') + ';' + (isT ? 'box-shadow:0 0 10px rgba(194,239,78,0.3)' : '') + '"></div>'
+            + '<div class="focus-bar ' + cls + '" style="height:' + h + 'px;' + inlineStyle + '"></div>'
             + '</div>'
             + '<div class="focus-bar-label' + (isT ? ' today' : '') + '">' + (isT ? 'Today' : d.label) + '</div>'
-            + (d.seconds > 0 ? '<div class="focus-bar-val">' + formatHM(d.seconds) + '</div>' : '')
             + '</div>';
         }).join('');
       }
-    
-      function renderStreak() {
-        const card = document.getElementById('focusStreakCard');
-        if (!card) return;
-        const s = getStreak();
-        if (s < 1) { card.style.display = 'none'; return; }
-        card.style.display = '';
-        card.innerHTML = '<div class="focus-streak-inner">'
-          + '<span class="focus-streak-fire">🔥</span>'
-          + '<div>'
-          + '<div class="focus-streak-num">' + s + ' day streak</div>'
-          + '<div class="focus-streak-sub">Keep focusing at least 30 min / day to continue</div>'
-          + '</div></div>';
-      }
-    
+
       function renderSessionsList() {
         const el = document.getElementById('focusSessionsList');
         if (!el) return;
@@ -8591,79 +8807,57 @@ TAB_INITS['focus'] = (function() {
           el.innerHTML = '<div class="focus-sessions-empty">No sessions yet — start your first focus block above</div>';
           return;
         }
-        el.innerHTML = recent.map(function (s, i) {
-          let label = '—';
+        el.innerHTML = recent.map(function (s) {
+          const color = CAT_COLORS[s.category] || '#6b7280';
+          let when = '—';
           try {
             const d = new Date(s.startTime);
-            label = d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+            when = d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })
+              + ' · ' + d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
           } catch (e) {}
-          return '<div class="focus-session-row' + (i > 0 ? ' focus-session-divider' : '') + '">'
-            + '<span class="focus-session-date">' + label + '</span>'
-            + '<span class="focus-session-dur">' + formatHM(s.durationSeconds) + '</span>'
-            + '<span class="focus-session-cat">' + (s.category || '—') + '</span>'
+          return '<div class="focus-session-card" style="--sess-color:' + color + '">'
+            + '<div class="focus-sess-cat-dot"></div>'
+            + '<span class="focus-sess-cat-name">' + (s.category || 'Focus') + '</span>'
+            + '<span class="focus-sess-dur">' + formatHM(s.durationSeconds) + '</span>'
+            + '<span class="focus-sess-when">' + when + '</span>'
             + '</div>';
         }).join('');
       }
-    
-      function donutArcPath(cx, cy, rO, rI, a1, a2) {
-        var x1o = cx + rO * Math.cos(a1), y1o = cy + rO * Math.sin(a1);
-        var x2o = cx + rO * Math.cos(a2), y2o = cy + rO * Math.sin(a2);
-        var x1i = cx + rI * Math.cos(a2), y1i = cy + rI * Math.sin(a2);
-        var x2i = cx + rI * Math.cos(a1), y2i = cy + rI * Math.sin(a1);
-        var large = (a2 - a1) > Math.PI ? 1 : 0;
-        return 'M ' + x1o.toFixed(2) + ' ' + y1o.toFixed(2)
-          + ' A ' + rO + ' ' + rO + ' 0 ' + large + ' 1 ' + x2o.toFixed(2) + ' ' + y2o.toFixed(2)
-          + ' L ' + x1i.toFixed(2) + ' ' + y1i.toFixed(2)
-          + ' A ' + rI + ' ' + rI + ' 0 ' + large + ' 0 ' + x2i.toFixed(2) + ' ' + y2i.toFixed(2) + ' Z';
-      }
-    
-      const CAT_COLORS = { Coding: '#6BE3A4', Reading: '#6BA3E3', School: '#C2A3FF', Other: '#FF8A8A' };
-    
-      function renderDonut() {
-        const svg = document.getElementById('focusDonutSvg');
-        const center = document.getElementById('focusDonutCenter');
-        const legend = document.getElementById('focusDonutLegend');
-        if (!svg) return;
-        const breakdown = getCategoryBreakdown(30);
-        const slices = Object.keys(breakdown)
-          .filter(function (cat) { return breakdown[cat] > 0; })
-          .map(function (cat) { return { cat: cat, sec: breakdown[cat], color: CAT_COLORS[cat] || '#FF8A8A' }; })
-          .sort(function (a, b) { return b.sec - a.sec; });
-        if (!slices.length) {
-          svg.innerHTML = '<circle cx="70" cy="70" r="60" fill="rgba(255,255,255,0.025)"/><circle cx="70" cy="70" r="44" fill="#050506"/>';
-          if (center) center.textContent = '—';
-          if (legend) legend.innerHTML = '';
+
+      function renderCategoryBars() {
+        const totalEl = document.getElementById('focusCatTotal');
+        const barsEl = document.getElementById('focusCatBars');
+        if (!barsEl) return;
+        const bd = getCategoryBreakdown(30);
+        const entries = Object.keys(CAT_COLORS)
+          .filter(function(cat) { return cat !== 'School'; })
+          .concat(['School'])
+          .map(function(cat) { return { cat: cat, sec: bd[cat] || 0, color: CAT_COLORS[cat] || '#6b7280' }; })
+          .filter(function(x) { return x.sec > 0; })
+          .sort(function(a, b) { return b.sec - a.sec; });
+        const total = entries.reduce(function(s, x) { return s + x.sec; }, 0);
+        if (totalEl) totalEl.textContent = total > 0 ? formatHM(total) + ' total this month' : '';
+        if (!entries.length) {
+          barsEl.innerHTML = '<div style="font-size:13px;color:var(--text-tertiary);padding:4px 0">No sessions this month yet</div>';
           return;
         }
-        const total = slices.reduce(function (s, x) { return s + x.sec; }, 0);
-        if (center) center.textContent = formatHM(total);
-        let angle = -Math.PI / 2, html = '';
-        slices.forEach(function (s) {
-          const sa = (s.sec / total) * Math.PI * 2;
-          const pad = slices.length > 1 ? 0.015 : 0;
-          const a1 = angle + pad, a2 = angle + sa - pad;
-          if (a2 > a1) html += '<path d="' + donutArcPath(70, 70, 60, 44, a1, a2) + '" fill="' + s.color + '"></path>';
-          angle += sa;
-        });
-        svg.innerHTML = html;
-        if (legend) {
-          legend.innerHTML = slices.map(function (s) {
-            const pct = ((s.sec / total) * 100).toFixed(0);
-            return '<div class="focus-leg">'
-              + '<span class="focus-leg-dot" style="background:' + s.color + '"></span>'
-              + '<span class="focus-leg-name">' + s.cat + '</span>'
-              + '<span class="focus-leg-pct">' + pct + '%</span>'
-              + '</div>';
-          }).join('');
-        }
+        const maxSec = entries[0].sec;
+        barsEl.innerHTML = entries.map(function(x) {
+          return '<div class="focus-cat-bar-row">'
+            + '<div class="focus-cat-bar-dot" style="background:' + x.color + '"></div>'
+            + '<div class="focus-cat-bar-name">' + x.cat + '</div>'
+            + '<div class="focus-cat-bar-track"><div class="focus-cat-bar-fill" style="width:' + Math.round(x.sec / maxSec * 100) + '%;background:' + x.color + '"></div></div>'
+            + '<div class="focus-cat-bar-time">' + formatHM(x.sec) + '</div>'
+            + '</div>';
+        }).join('');
       }
-    
+
       function renderAll() {
         renderGoal();
+        renderNudge();
         renderChart();
-        renderStreak();
         renderSessionsList();
-        renderDonut();
+        renderCategoryBars();
         updateFocusRing();
         if (timerState === 'idle') {
           const todayEl = document.getElementById('focusToday');
@@ -8693,6 +8887,7 @@ TAB_INITS['focus'] = (function() {
     
       // ── Init ─────────────────────────────────────────────────
       loadTimerState();
+      renderCatPills();
       renderTimerUI();
       updateFocusRing();
       if (timerState === 'running') {
@@ -8854,15 +9049,21 @@ TAB_INITS['focus'] = (function() {
                  ' stroke-linecap="round" stroke-linejoin="round"/>';
         });
     
-        // Dots at each data point
-        pts.forEach(function (pt) {
-          if (!pt) return;
-          out += '<circle cx="' + pt.x.toFixed(2) + '" cy="' + pt.y.toFixed(2) + '" r="2.5" fill="#c2ef4e"/>';
+        // Dots at defined data points; hollow circle stubs at baseline for missing days
+        var baselineY = PT + PY;
+        data.forEach(function (d, i) {
+          var pt = pts[i];
+          if (pt) {
+            out += '<circle cx="' + pt.x.toFixed(2) + '" cy="' + pt.y.toFixed(2) + '" r="2.5" fill="#c2ef4e"/>';
+          } else {
+            out += '<circle cx="' + xFor(i).toFixed(2) + '" cy="' + baselineY.toFixed(2) + '" r="2.5"'
+              + ' fill="none" stroke="rgba(255,255,255,0.14)" stroke-width="1"/>';
+          }
         });
-    
+
         svg.innerHTML = out;
       }
-    
+
       function renderStats() {
         var data   = getLast14();
         var today  = todayKey();
@@ -8870,16 +9071,18 @@ TAB_INITS['focus'] = (function() {
         var last7  = data.slice(-7).map(function (d) { return d.mins; }).filter(function (v) { return v !== null; });
         var logged = data.filter(function (d) { return d.mins !== null; });
         var under  = logged.filter(function (d) { return d.mins < GOAL; }).length;
-    
+        var avg7   = last7.length ? Math.round(last7.reduce(function (a, b) { return a + b; }, 0) / last7.length) : null;
+
         var todayEl = document.getElementById('stToday');
         var avgEl   = document.getElementById('stAvg');
         var underEl = document.getElementById('stUnder');
-    
+
         if (todayEl) todayEl.textContent = te && te.mins !== null ? te.mins + 'm' : '—';
-        if (avgEl)   avgEl.textContent   = last7.length
-          ? Math.round(last7.reduce(function (a, b) { return a + b; }, 0) / last7.length) + 'm'
-          : '—';
+        if (avgEl)   avgEl.textContent   = avg7 !== null ? avg7 + 'm' : '—';
         if (underEl) underEl.textContent = logged.length ? under + '/' + logged.length : '—';
+
+        var underStatEl = document.querySelector('.st-stat[data-metric="under"]');
+        if (underStatEl) underStatEl.classList.toggle('over-goal', logged.length > 0 && under < logged.length / 2);
       }
     
       async function syncFromSupabase() {
