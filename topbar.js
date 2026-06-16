@@ -1,11 +1,10 @@
 // =============================================================
-// Persistent dashboard top bar + bottom tab bar.
+// Persistent dashboard top bar + bottom tab bar — SPA edition.
 // Drop this on any page with:
 //     <script src="topbar.js" defer></script>
-// It self-injects HTML + CSS, reads progress from localStorage,
-// and renders the water +1 button in the top bar plus the
-// Main/Health/Fitness bottom tabs. Skips chrome on finance.html
-// and inside iframes (so the water tracker can embed cleanly).
+// Injects HTML + CSS, reads water progress from localStorage,
+// exposes window.novaTopbar.updatePill() for the SPA router,
+// and intercepts bottom-nav clicks to call window.novaRouter.
 // =============================================================
 (function () {
   'use strict';
@@ -192,16 +191,17 @@ button:active:not(:disabled) { transform: scale(0.97); transition: transform 0.0
 
   const topbarHtml = `
 <header class="topbar" id="topbar" role="navigation" aria-label="Quick actions">
+  <span id="topbarGreeting" style="flex:1;font-size:13px;font-weight:500;color:rgba(250,250,250,0.55);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"></span>
   <div class="topbar-water-wrap">
-    <a href="health.html#water" class="topbar-water-pill" id="topbarWater" aria-label="Water progress">
+    <button class="topbar-water-pill" id="topbarWater" aria-label="Water progress" type="button" style="cursor:pointer;border:none;">
       <span class="topbar-pill-dot"></span>
       <span class="topbar-pill-count" id="topbarWaterCount">0/0</span>
-    </a>
+    </button>
     <button class="topbar-water-add" id="topbarWaterAdd" aria-label="Log one drink" type="button">+</button>
   </div>
-  <a href="finance.html" class="topbar-finance-btn" id="topbarFinance" aria-label="Finance">
+  <button class="topbar-finance-btn" id="topbarFinance" aria-label="Finance" type="button" style="cursor:pointer;border:none;">
     <span class="topbar-finance-icon">📊</span>
-  </a>
+  </button>
 </header>`;
 
   const bottombarHtml = `
@@ -211,27 +211,22 @@ button:active:not(:disabled) { transform: scale(0.97); transition: transform 0.0
     <a href="health.html" class="tab" data-page="health"><span class="tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></span>Health</a>
     <a href="po-coach.html" class="tab" data-page="fitness"><span class="tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="10" width="4" height="4" rx="1"/><rect x="19" y="10" width="4" height="4" rx="1"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span>Fitness</a>
     <a href="finance.html" class="tab" data-page="finance"><span class="tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></span>Finance</a>
-    <a href="productivity.html" class="tab" data-page="productivity"><span class="tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></span>Focus</a>
+    <a href="/focus" class="tab" data-page="focus"><span class="tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></span>Focus</a>
     <a href="library.html" class="tab" data-page="library"><span class="tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span>Library</a>
   </div>
 </nav>`;
 
-  function isFinancePage() {
-    const p = (window.location.pathname || '').toLowerCase();
-    return p.endsWith('/finance.html') || p.endsWith('finance.html');
-  }
   function isEmbedded() {
     try { return window.self !== window.top; } catch (e) { return true; }
   }
-  function shouldShowChrome() { return !isFinancePage() && !isEmbedded(); }
   function currentPageKey() {
-    const p = (window.location.pathname || '').toLowerCase();
-    if (p.endsWith('health.html')) return 'health';
-    if (p.endsWith('po-coach.html')) return 'fitness';
-    if (p.endsWith('finance.html')) return 'finance';
-    if (p.endsWith('productivity.html')) return 'productivity';
-    if (p.endsWith('library.html')) return 'library';
-    return 'main';
+    return document.documentElement.dataset.activeTab || 'main';
+  }
+  function getGreeting() {
+    const h = new Date().getHours();
+    if (h < 12) return 'Good morning';
+    if (h < 17) return 'Good afternoon';
+    return 'Good evening';
   }
 
   function injectStyleAndHTML() {
@@ -251,10 +246,12 @@ button:active:not(:disabled) { transform: scale(0.97); transition: transform 0.0
       });
       document.body.classList.add('has-bottombar');
     }
-    if (!document.getElementById('topbar') && !isFinancePage() && !isEmbedded()) {
+    if (!document.getElementById('topbar') && !isEmbedded()) {
       const topWrap = document.createElement('div');
       topWrap.innerHTML = topbarHtml.trim();
       document.body.insertBefore(topWrap.firstChild, document.body.firstChild);
+      const greetEl = document.getElementById('topbarGreeting');
+      if (greetEl) greetEl.textContent = getGreeting();
     }
   }
 
@@ -410,18 +407,29 @@ button:active:not(:disabled) { transform: scale(0.97); transition: transform 0.0
     return { pill, moveTo };
   }
 
-  // ── Native-feel: intercept nav clicks ─────────────────────────
+  // ── SPA-aware nav clicks ───────────────────────────────────────
   function setupNavTransitions(overlay, pillObj) {
     document.querySelectorAll('.tab[data-page]').forEach(tab => {
       tab.addEventListener('click', e => {
-        const href = tab.getAttribute('href');
-        if (!href || e.metaKey || e.ctrlKey || e.shiftKey) return;
-        if (tab.getAttribute('aria-current') === 'page') { e.preventDefault(); return; }
         e.preventDefault();
-        if (pillObj) pillObj.moveTo(tab, false);
-        overlay.classList.add('active');
-        setTimeout(() => { window.location.href = href; }, 220);
+        const tabId = tab.dataset.page;
+        if (tab.getAttribute('aria-current') === 'page') return;
+        if (window.novaRouter && window.novaRouter.showTab) {
+          window.novaRouter.showTab(tabId);
+        }
       });
+    });
+    // Water pill navigates to health tab
+    const waterBtn = document.getElementById('topbarWater');
+    if (waterBtn) waterBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (window.novaRouter) window.novaRouter.showTab('health');
+    });
+    // Finance btn navigates to finance tab
+    const finBtn = document.getElementById('topbarFinance');
+    if (finBtn) finBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (window.novaRouter) window.novaRouter.showTab('finance');
     });
   }
 
@@ -441,12 +449,24 @@ button:active:not(:disabled) { transform: scale(0.97); transition: transform 0.0
   function boot() {
     injectStyleAndHTML();
 
-    // Native-feel enhancements (skip on finance/embedded)
-    if (!isFinancePage() && !isEmbedded()) {
-      const overlay = createNavOverlay();
-      const pillObj = setupTabPill();
-      setupNavTransitions(overlay, pillObj);
-    }
+    const overlay = createNavOverlay();
+    const pillObj = setupTabPill();
+    setupNavTransitions(overlay, pillObj);
+
+    // Expose pill updater so the SPA router can move the pill on tab switches
+    window.novaTopbar = {
+      updatePill: function(tabId) {
+        if (!pillObj) return;
+        const target = document.querySelector('.tab[data-page="' + tabId + '"]');
+        if (target) {
+          pillObj.moveTo(target, false);
+          document.querySelectorAll('.tab[data-page]').forEach(t => {
+            t.setAttribute('aria-current', t.dataset.page === tabId ? 'page' : 'false');
+          });
+        }
+      }
+    };
+
     animatePageEntrance();
 
     const btn = document.getElementById('topbarWaterAdd');

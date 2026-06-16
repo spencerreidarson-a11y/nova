@@ -1,6 +1,6 @@
-const CACHE = 'nova-v13';
+const CACHE = 'nova-v14';
 const ASSETS = [
-  '/topbar.js', '/manifest.json',
+  '/', '/topbar.js', '/manifest.json',
   '/nova_icon.png', '/icon-192.png', '/icon-256.png', '/icon-384.png', '/icon-512.png',
 ];
 
@@ -21,20 +21,24 @@ self.addEventListener('activate', e => {
 self.addEventListener('fetch', e => {
   if (!e.request.url.startsWith(self.location.origin)) return;
 
-  // HTML pages: network-first so deployments are always visible immediately.
-  // Fall back to cache only when offline.
+  // Navigation: network-first, fall back to index.html (SPA shell) for 404s
   if (e.request.mode === 'navigate') {
     e.respondWith(
-      fetch(e.request).then(res => {
-        const copy = res.clone();
-        caches.open(CACHE).then(c => c.put(e.request, copy));
-        return res;
-      }).catch(() => caches.match(e.request))
+      fetch(e.request)
+        .then(res => {
+          if (!res.ok && res.status === 404) {
+            return caches.match('/index.html') || fetch('/index.html');
+          }
+          const copy = res.clone();
+          caches.open(CACHE).then(c => c.put('/index.html', copy));
+          return res;
+        })
+        .catch(() => caches.match('/index.html') || caches.match(e.request))
     );
     return;
   }
 
-  // Static assets: cache-first for performance.
+  // Static assets: cache-first for performance
   e.respondWith(
     caches.match(e.request).then(cached => cached || fetch(e.request).then(res => {
       const copy = res.clone();
