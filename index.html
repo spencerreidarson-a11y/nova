@@ -3155,68 +3155,140 @@ input[type="date"].lib-input { color-scheme: dark; }
 
 /* ════ MAIN DASHBOARD — PREMIUM REDESIGN ════════════════════ */
 
-/* Stat block per-metric accent colors — muted palette */
-.brf-stat[data-metric="sleep"]      { --brf-accent: oklch(52% 0.10 245); } /* muted blue   */
-.brf-stat[data-metric="battery"]    { --brf-accent: oklch(58% 0.10 72);  } /* muted amber  */
-.brf-stat[data-metric="habits"]     { --brf-accent: oklch(72% 0.18 145); } /* lime         */
-.brf-stat[data-metric="tasks"]      { --brf-accent: oklch(48% 0.02 0);   } /* neutral gray */
-.brf-stat[data-metric="screentime"] { --brf-accent: oklch(55% 0.09 195); } /* muted teal   */
-.brf-stat[data-metric="focus"]      { --brf-accent: oklch(55% 0.11 285); } /* muted purple */
-.brf-stat[data-metric="streak"]     { --brf-accent: oklch(72% 0.18 145); } /* lime         */
-.brf-stat[data-metric] {
-  border: none;
-  border-top: 1px solid color-mix(in oklch, var(--brf-accent) 30%, transparent);
-  background: linear-gradient(170deg, color-mix(in oklch, var(--brf-accent) 4%, transparent) 0%, transparent 100%);
-}
-.brf-stat[data-metric="streak"] {
-  background: linear-gradient(170deg, color-mix(in oklch, var(--brf-accent) 4%, transparent) 0%, transparent 100%);
-}
-.brf-stat[data-metric="streak"] .brf-val { color: var(--lime); }
-.brf-stat[data-metric="tasks"].brf-tasks-done { --brf-accent: oklch(72% 0.18 145); }
-.brf-val { font-size: 24px; }
+/* ── Finance P/L Dashboard ────────────────────── */
 
-/* Mini ring wrap — value overlays ring center */
-.brf-ring-wrap {
-  position: relative; width: 48px; height: 48px;
+/* Row 1: side-by-side P/L cards */
+.pl-row1 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+.pl-card {
+  border-radius: 12px; padding: 18px 14px; text-align: center;
+  background: rgba(255,255,255,0.03);
+  transition: background 0.15s, transform 0.1s;
 }
-.brf-mini-ring {
-  position: absolute; inset: 0; width: 100%; height: 100%;
-  transform: rotate(-90deg); overflow: visible;
+.pl-card--yesterday { cursor: pointer; }
+.pl-card--yesterday:active { transform: scale(0.97); }
+.pl-card.positive { background: rgba(74,222,128,0.07); }
+.pl-card.negative { background: rgba(248,113,113,0.07); }
+.pl-val {
+  font-size: 26px; font-weight: 800; font-family: var(--font-mono);
+  letter-spacing: -0.03em; line-height: 1; color: var(--text-primary);
 }
-.brf-ring-wrap .brf-val {
+.pl-val.positive { color: #4ade80; }
+.pl-val.negative { color: #f87171; }
+.pl-val.dim { font-size: 14px; color: var(--text-tertiary); font-weight: 600; }
+.pl-lbl {
+  font-size: 9px; font-weight: 700; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--text-tertiary);
+  font-family: var(--font-mono); margin-top: 7px;
+}
+
+/* Row 2: Goal ring */
+.pl-goal-wrap {
+  position: relative; display: flex; flex-direction: column;
+  align-items: center; margin-bottom: 20px;
+}
+.pl-goal-gear {
+  position: absolute; top: 0; right: 0;
+  background: none; border: none; color: var(--text-quaternary);
+  font-size: 16px; cursor: pointer; padding: 2px 4px; line-height: 1;
+  transition: color 0.15s;
+}
+.pl-goal-gear:hover { color: var(--text-secondary); }
+.pl-goal-ring-container { position: relative; width: 160px; height: 160px; }
+.pl-goal-svg {
+  width: 100%; height: 100%; transform: rotate(-90deg); overflow: visible;
+}
+.pl-goal-track { fill: none; stroke: rgba(255,255,255,0.07); stroke-width: 14; }
+.pl-goal-fill {
+  fill: none; stroke: #4ade80; stroke-width: 14; stroke-linecap: round;
+  stroke-dasharray: 502.65; stroke-dashoffset: 502.65;
+  transition: stroke-dashoffset 0.9s cubic-bezier(0.22,1,0.36,1);
+  filter: drop-shadow(0 0 8px rgba(74,222,128,0.3));
+}
+.pl-goal-fill.negative { stroke: #f87171; filter: drop-shadow(0 0 6px rgba(248,113,113,0.2)); }
+.pl-goal-center {
   position: absolute; inset: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+}
+.pl-goal-amount {
+  font-size: 26px; font-weight: 800; font-family: var(--font-mono);
+  letter-spacing: -0.03em; color: var(--text-primary); line-height: 1;
+}
+.pl-goal-target {
+  font-size: 11px; color: var(--text-tertiary); font-family: var(--font-mono); margin-top: 5px;
+}
+.pl-goal-meta { display: flex; align-items: center; gap: 10px; margin-top: 12px; }
+.pl-goal-pct {
+  font-size: 15px; font-weight: 700; font-family: var(--font-mono);
+  color: #4ade80; letter-spacing: -0.02em;
+}
+.pl-goal-remaining { font-size: 12px; color: var(--text-tertiary); font-family: var(--font-mono); }
+
+/* Row 3: 30-day history chart */
+.pl-chart-wrap { margin-bottom: 4px; }
+.pl-chart-svg { width: 100%; height: auto; display: block; margin-bottom: 12px; }
+.pl-chart-stats { display: flex; justify-content: space-around; }
+.pl-stat-item { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+.pl-stat-lbl {
+  font-size: 8px; font-weight: 700; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--text-quaternary); font-family: var(--font-mono);
+}
+.pl-stat-val {
+  font-size: 13px; font-weight: 700; font-family: var(--font-mono);
+  color: var(--text-primary); letter-spacing: -0.02em;
+}
+.pl-stat-val.positive { color: #4ade80; }
+.pl-stat-val.negative { color: #f87171; }
+
+/* P/L modals */
+.pl-modal-bg {
+  display: none; position: fixed; inset: 0; z-index: 300;
+  background: rgba(0,0,0,0.72); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  align-items: center; justify-content: center;
+  padding: max(20px, env(safe-area-inset-top)) 16px max(20px, env(safe-area-inset-bottom));
+}
+.pl-modal-bg.show { display: flex; }
+.pl-modal {
+  width: 100%; max-width: 320px;
+  background: rgba(14,14,16,0.97); border: 1px solid rgba(255,255,255,0.09);
+  border-radius: 20px; padding: 24px 20px 20px;
+}
+.pl-modal-title { font-size: 17px; font-weight: 700; color: var(--text-primary); margin-bottom: 18px; letter-spacing: -0.02em; }
+.pl-modal-field { margin-bottom: 14px; }
+.pl-modal-label { display: block; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-tertiary); margin-bottom: 6px; }
+.pl-modal-input {
+  width: 100%; box-sizing: border-box; padding: 10px 12px;
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 10px; color: var(--text-primary); font-family: var(--font-mono);
+  font-size: 15px; outline: none; color-scheme: dark;
+}
+.pl-modal-input:focus { border-color: rgba(255,255,255,0.3); }
+.pl-modal-amount-row { display: flex; gap: 8px; }
+.pl-modal-input--amount { flex: 1; }
+.pl-sign-btn {
+  width: 44px; height: 44px; border-radius: 10px; font-size: 20px; font-weight: 700;
+  border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.06);
+  color: #4ade80; cursor: pointer; flex-shrink: 0;
   display: flex; align-items: center; justify-content: center;
-  font-size: 13px; font-weight: 800; letter-spacing: -0.02em;
-  pointer-events: none;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
 }
-.brf-ring-track { fill: none; stroke: rgba(255,255,255,0.06); stroke-width: 8; }
-.brf-ring-prog {
-  fill: none; stroke: var(--brf-accent, rgba(255,255,255,0.2)); stroke-width: 8;
-  stroke-linecap: round; stroke-dasharray: 94.25; stroke-dashoffset: 94.25;
-  transition: stroke-dashoffset 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+.pl-sign-btn.negative { color: #f87171; border-color: rgba(248,113,113,0.3); background: rgba(248,113,113,0.08); }
+.pl-modal-actions { margin-top: 20px; }
+.pl-modal-save {
+  width: 100%; padding: 13px; border: none; border-radius: 11px;
+  background: linear-gradient(180deg, #fff 0%, #e8e5dd 100%);
+  color: #0a0a0b; font-family: var(--font-body); font-size: 14px; font-weight: 700;
+  cursor: pointer; box-shadow: inset 0 1px 0 rgba(255,255,255,0.55), 0 4px 14px rgba(0,0,0,0.3);
 }
-.brf-stat[data-metric="sleep"] .brf-val,
-.brf-stat[data-metric="battery"] .brf-val,
-.brf-stat[data-metric="focus"] .brf-val { font-size: 13px; }
-
-/* Mini bar (habits done) */
-.brf-mini-bar {
-  width: 100%; height: 4px; border-radius: 2px; background: rgba(255,255,255,0.08);
+.pl-modal-cancel {
+  display: block; width: 100%; margin-top: 10px; padding: 12px;
+  border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.04);
+  color: var(--text-secondary); border-radius: 11px;
+  font-family: var(--font-body); font-size: 14px; font-weight: 600; cursor: pointer; text-align: center;
 }
-.brf-mini-bar-fill {
-  height: 100%; border-radius: 2px; width: 0%;
-  background: var(--brf-accent, #4ade80);
-  transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-/* Screentime sparkline */
-.brf-sparkline { width: 100%; height: 22px; display: block; overflow: visible; }
 
 /* Morning Briefing card hover */
 .brf-card { transition: background 0.2s; }
 .brf-card:hover { background: rgba(255,255,255,0.06); }
-.brf-stat { transition: transform 0.15s; }
-.brf-stat:active { transform: scale(0.97); }
 
 /* Weekly overview chart card */
 .week-chart-card {
@@ -3327,57 +3399,55 @@ html[data-active-tab="main"] .gm-card:hover { background: rgba(255,255,255,0.055
     </div>
 
     <div class="brf-card" id="morningBriefing">
-      <div class="brf-eyebrow">Morning Briefing</div>
-      <div class="brf-grid">
-        <div class="brf-stat" data-metric="sleep">
-          <div class="brf-ring-wrap">
-            <svg class="brf-mini-ring" viewBox="0 0 44 44">
-              <circle class="brf-ring-track" cx="22" cy="22" r="15"/>
-              <circle class="brf-ring-prog" cx="22" cy="22" r="15" id="brfSleepRing"/>
-            </svg>
-            <span class="brf-val" id="brfSleepVal">—</span>
+      <div class="brf-eyebrow">P/L Dashboard</div>
+
+      <!-- Row 1: Yesterday + Total P/L -->
+      <div class="pl-row1">
+        <div class="pl-card pl-card--yesterday" id="plYesterdayCard">
+          <div class="pl-val" id="plYesterdayVal">Tap to log</div>
+          <div class="pl-lbl">Yesterday</div>
+        </div>
+        <div class="pl-card pl-card--total" id="plTotalCard">
+          <div class="pl-val" id="plTotalVal">—</div>
+          <div class="pl-lbl">All Time</div>
+        </div>
+      </div>
+
+      <!-- Row 2: Goal ring -->
+      <div class="pl-goal-wrap">
+        <button class="pl-goal-gear" id="plGoalGear" aria-label="Edit goal">⚙︎</button>
+        <div class="pl-goal-ring-container">
+          <svg class="pl-goal-svg" viewBox="0 0 200 200" overflow="visible" aria-hidden="true">
+            <circle class="pl-goal-track" cx="100" cy="100" r="80"/>
+            <circle class="pl-goal-fill" cx="100" cy="100" r="80" id="plGoalFill"/>
+          </svg>
+          <div class="pl-goal-center">
+            <div class="pl-goal-amount" id="plGoalAmount">$0</div>
+            <div class="pl-goal-target" id="plGoalTarget">/ $4,000</div>
           </div>
-          <span class="brf-lbl">sleep score</span>
         </div>
-        <div class="brf-stat" data-metric="battery">
-          <div class="brf-ring-wrap">
-            <svg class="brf-mini-ring" viewBox="0 0 44 44">
-              <circle class="brf-ring-track" cx="22" cy="22" r="15"/>
-              <circle class="brf-ring-prog" cx="22" cy="22" r="15" id="brfBattRing"/>
-            </svg>
-            <span class="brf-val" id="brfBattVal">—</span>
+        <div class="pl-goal-meta">
+          <span class="pl-goal-pct" id="plGoalPct">0%</span>
+          <span class="pl-goal-remaining" id="plGoalRemaining">$4,000 to go</span>
+        </div>
+      </div>
+
+      <!-- Row 3: 30-day history chart -->
+      <div class="pl-chart-wrap">
+        <svg class="pl-chart-svg" id="plChartSvg" viewBox="0 0 300 80" preserveAspectRatio="xMidYMid meet"></svg>
+        <div class="pl-chart-stats">
+          <div class="pl-stat-item">
+            <span class="pl-stat-lbl">Best Day</span>
+            <span class="pl-stat-val" id="plBestDay">—</span>
           </div>
-          <span class="brf-lbl">body battery</span>
-        </div>
-        <div class="brf-stat" data-metric="habits">
-          <span class="brf-val" id="brfHabitsVal">—</span>
-          <div class="brf-mini-bar"><div class="brf-mini-bar-fill" id="brfHabitsBar"></div></div>
-          <span class="brf-lbl">habits done</span>
-        </div>
-        <div class="brf-stat" data-metric="tasks">
-          <span class="brf-val" id="brfTodosVal">—</span>
-          <div class="brf-mini-bar"><div class="brf-mini-bar-fill" id="brfTasksBar"></div></div>
-          <span class="brf-lbl">tasks left</span>
-        </div>
-        <div class="brf-stat" data-metric="screentime">
-          <span class="brf-val" id="brfScreentimeVal">—</span>
-          <svg class="brf-sparkline" id="brfScrtimeSpark" viewBox="0 0 62 22" preserveAspectRatio="none"></svg>
-          <span class="brf-lbl">screentime</span>
-        </div>
-        <div class="brf-stat" data-metric="focus">
-          <div class="brf-ring-wrap">
-            <svg class="brf-mini-ring" viewBox="0 0 44 44">
-              <circle class="brf-ring-track" cx="22" cy="22" r="15"/>
-              <circle class="brf-ring-prog" cx="22" cy="22" r="15" id="brfFocusRing"/>
-            </svg>
-            <span class="brf-val" id="brfFocusVal">—</span>
+          <div class="pl-stat-item">
+            <span class="pl-stat-lbl">Worst Day</span>
+            <span class="pl-stat-val" id="plWorstDay">—</span>
           </div>
-          <span class="brf-lbl">focus today</span>
-        </div>
-        <div class="brf-stat brf-stat--full" data-metric="streak">
-          <span class="brf-icon">🔥</span>
-          <span class="brf-val" id="brfStreakVal">—</span>
-          <span class="brf-lbl">best streak</span>
+          <div class="pl-stat-item">
+            <span class="pl-stat-lbl">Win Rate</span>
+            <span class="pl-stat-val" id="plWinRate">—</span>
+          </div>
         </div>
       </div>
     </div>
@@ -3480,6 +3550,43 @@ html[data-active-tab="main"] .gm-card:hover { background: rgba(255,255,255,0.055
       <button class="habit-modal-delete" id="habitModalDelete">Remove</button>
     </div>
     <button class="habit-modal-cancel" id="habitModalCancel">Cancel</button>
+  </div>
+</div>
+
+<!-- P/L Log Modal -->
+<div class="pl-modal-bg" id="plModalBg">
+  <div class="pl-modal">
+    <div class="pl-modal-title">Log P/L</div>
+    <div class="pl-modal-field">
+      <label class="pl-modal-label" for="plModalDate">Date</label>
+      <input type="date" class="pl-modal-input" id="plModalDate" autocomplete="off">
+    </div>
+    <div class="pl-modal-field">
+      <label class="pl-modal-label" for="plModalAmount">Amount</label>
+      <div class="pl-modal-amount-row">
+        <button class="pl-sign-btn" id="plSignBtn" type="button">+</button>
+        <input type="number" class="pl-modal-input pl-modal-input--amount" id="plModalAmount" placeholder="0" min="0" step="1" autocomplete="off">
+      </div>
+    </div>
+    <div class="pl-modal-actions">
+      <button class="pl-modal-save" id="plModalSave">Log</button>
+    </div>
+    <button class="pl-modal-cancel" id="plModalCancel">Cancel</button>
+  </div>
+</div>
+
+<!-- Goal Edit Modal -->
+<div class="pl-modal-bg" id="plGoalModalBg">
+  <div class="pl-modal">
+    <div class="pl-modal-title">Edit Goal</div>
+    <div class="pl-modal-field">
+      <label class="pl-modal-label" for="plGoalModalInput">Target ($)</label>
+      <input type="number" class="pl-modal-input" id="plGoalModalInput" placeholder="4000" min="1" step="1" autocomplete="off">
+    </div>
+    <div class="pl-modal-actions">
+      <button class="pl-modal-save" id="plGoalModalSave">Save</button>
+    </div>
+    <button class="pl-modal-cancel" id="plGoalModalCancel">Cancel</button>
   </div>
 </div>
   </section>
@@ -5670,141 +5777,210 @@ TAB_INITS['main'] = (function() {
                 })();
           }
     
-          function setVal(id, text, cls) {
-            const el = document.getElementById(id);
-            if (!el) return;
-            el.textContent = (text != null) ? text : '—';
-            el.className = 'brf-val' + (cls ? ' ' + cls : '');
+          // ── Finance P/L helpers ──────────────────────────────────────────
+
+          function yesterdayStr() {
+            var d = new Date(); d.setDate(d.getDate() - 1);
+            return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
           }
-    
-          function animateRing(id, pct) {
-            const el = document.getElementById(id);
-            if (!el) return;
-            requestAnimationFrame(() => requestAnimationFrame(() => {
-              el.style.strokeDashoffset = (94.25 * (1 - Math.min(1, Math.max(0, pct)))).toFixed(2);
-            }));
+
+          function fmtPL(amount) {
+            var abs = Math.abs(amount);
+            var str = (abs % 1 === 0) ? String(Math.round(abs)) : abs.toFixed(2);
+            return (amount >= 0 ? '+$' : '-$') + str;
+          }
+
+          function getAllPL() {
+            var entries = [];
+            for (var i = 0; i < localStorage.length; i++) {
+              var k = localStorage.key(i);
+              if (!k || !k.startsWith('pl:')) continue;
+              var val = storeGet(k);
+              if (val !== null && typeof val === 'number') {
+                entries.push({ date: k.slice(3), amount: val });
+              }
+            }
+            entries.sort(function(a, b) { return a.date.localeCompare(b.date); });
+            return entries;
+          }
+
+          function renderPLChart(entries) {
+            var svg = document.getElementById('plChartSvg');
+            if (!svg) return;
+
+            var days = [];
+            for (var i = 29; i >= 0; i--) {
+              var d = new Date(); d.setDate(d.getDate() - i);
+              var ds = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+              var found = null;
+              for (var j = 0; j < entries.length; j++) {
+                if (entries[j].date === ds) { found = entries[j].amount; break; }
+              }
+              days.push({ idx: 29 - i, amount: found });
+            }
+
+            var logged = days.filter(function(d) { return d.amount !== null; });
+            var best = null, worst = null, wins = 0;
+            logged.forEach(function(d) {
+              if (best === null || d.amount > best) best = d.amount;
+              if (worst === null || d.amount < worst) worst = d.amount;
+              if (d.amount > 0) wins++;
+            });
+
+            var bestEl = document.getElementById('plBestDay');
+            var worstEl = document.getElementById('plWorstDay');
+            var wrEl = document.getElementById('plWinRate');
+            if (bestEl) { bestEl.textContent = best !== null ? fmtPL(best) : '—'; bestEl.className = 'pl-stat-val' + (best > 0 ? ' positive' : best < 0 ? ' negative' : ''); }
+            if (worstEl) { worstEl.textContent = worst !== null ? fmtPL(worst) : '—'; worstEl.className = 'pl-stat-val' + (worst < 0 ? ' negative' : worst > 0 ? ' positive' : ''); }
+            if (wrEl) wrEl.textContent = logged.length ? Math.round(wins / logged.length * 100) + '%' : '—';
+
+            if (!logged.length) { svg.innerHTML = ''; return; }
+
+            var W = 300, H = 80, PAD_H = 10, PAD_V = 8;
+            var CW = W - PAD_H * 2, CH = H - PAD_V * 2;
+            var maxAbs = Math.max.apply(null, logged.map(function(d) { return Math.abs(d.amount); }).concat([1]));
+            var toX = function(i) { return PAD_H + (i / 29) * CW; };
+            var toY = function(v) { return PAD_V + CH / 2 - (v / maxAbs) * (CH / 2 * 0.9); };
+            var zeroY = toY(0).toFixed(1);
+
+            var out = '<line x1="' + PAD_H + '" y1="' + zeroY + '" x2="' + (W - PAD_H) + '" y2="' + zeroY + '" stroke="rgba(255,255,255,0.12)" stroke-width="1" stroke-dasharray="3 3"/>';
+
+            for (var k = 0; k < days.length - 1; k++) {
+              var p1 = days[k], p2 = days[k + 1];
+              if (p1.amount === null || p2.amount === null) continue;
+              if (p2.idx - p1.idx > 1) continue;
+              var avg = (p1.amount + p2.amount) / 2;
+              var color = avg >= 0 ? 'rgba(74,222,128,0.6)' : 'rgba(248,113,113,0.6)';
+              out += '<line x1="' + toX(p1.idx).toFixed(1) + '" y1="' + toY(p1.amount).toFixed(1) + '"'
+                + ' x2="' + toX(p2.idx).toFixed(1) + '" y2="' + toY(p2.amount).toFixed(1) + '"'
+                + ' stroke="' + color + '" stroke-width="1.5" stroke-linecap="round"/>';
+            }
+
+            days.forEach(function(d) {
+              if (d.amount === null) return;
+              var dotColor = d.amount >= 0 ? '#4ade80' : '#f87171';
+              out += '<circle cx="' + toX(d.idx).toFixed(1) + '" cy="' + toY(d.amount).toFixed(1) + '" r="2.5" fill="' + dotColor + '"/>';
+            });
+
+            svg.innerHTML = out;
           }
 
           function renderBriefing() {
-            const today = todayStr();
+            var entries = getAllPL();
+            var ystDate = yesterdayStr();
+            var ystAmt = storeGet('pl:' + ystDate);
+            var total = entries.reduce(function(s, e) { return s + e.amount; }, 0);
+            var goal = storeGet('pl_goal') || 4000;
 
-            // Sleep / Body Battery
-            try {
-              const gc = JSON.parse(localStorage.getItem('gc_v2')) || {};
-              setVal('brfSleepVal', gc.sleepScore != null ? gc.sleepScore : null);
-              setVal('brfBattVal',  gc.bodyBattery != null ? gc.bodyBattery : null);
-              if (gc.sleepScore != null) animateRing('brfSleepRing', gc.sleepScore / 100);
-              if (gc.bodyBattery != null) animateRing('brfBattRing', gc.bodyBattery / 100);
-            } catch (e) { setVal('brfSleepVal', null); setVal('brfBattVal', null); }
-
-            // Habits done / total
-            try {
-              const config = JSON.parse(localStorage.getItem('habits_config')) || [];
-              const log    = JSON.parse(localStorage.getItem('habits_log:' + today)) || {};
-              const done   = config.filter(h => (log[h.id] || 0) > 0).length;
-              setVal('brfHabitsVal', config.length ? done + '/' + config.length : null);
-              const bar = document.getElementById('brfHabitsBar');
-              if (bar && config.length) bar.style.width = Math.round(done / config.length * 100) + '%';
-            } catch (e) { setVal('brfHabitsVal', null); }
-
-            // Tasks remaining
-            try {
-              const goals = JSON.parse(localStorage.getItem('goals:' + today)) || [];
-              const left  = goals.filter(g => !g.done).length;
-              setVal('brfTodosVal', goals.length ? String(left) : null);
-              const statEl = document.querySelector('.brf-stat[data-metric="tasks"]');
-              if (statEl && goals.length > 0) {
-                if (left === 0) statEl.classList.add('brf-tasks-done');
-                else statEl.classList.remove('brf-tasks-done');
-              }
-              const taskBar = document.getElementById('brfTasksBar');
-              if (taskBar && goals.length > 0) {
-                taskBar.style.width = Math.round((goals.length - left) / goals.length * 100) + '%';
-              }
-            } catch (e) { setVal('brfTodosVal', null); }
-
-            // Screentime — value + sparkline
-            try {
-              const st = localStorage.getItem('screentime:' + today);
-              if (st != null) {
-                const mins = parseInt(st, 10);
-                setVal('brfScreentimeVal', mins + 'm', mins <= 30 ? 'good' : 'bad');
+            var ystCard = document.getElementById('plYesterdayCard');
+            var ystEl = document.getElementById('plYesterdayVal');
+            if (ystEl) {
+              if (ystAmt !== null) {
+                ystEl.textContent = fmtPL(ystAmt);
+                ystEl.className = 'pl-val ' + (ystAmt >= 0 ? 'positive' : 'negative');
               } else {
-                setVal('brfScreentimeVal', null);
+                ystEl.textContent = 'Tap to log';
+                ystEl.className = 'pl-val dim';
               }
-              const spark = document.getElementById('brfScrtimeSpark');
-              if (spark) {
-                const vals = [];
-                for (let i = 6; i >= 0; i--) {
-                  const d = new Date(); d.setDate(d.getDate() - i);
-                  const k = 'screentime:' + d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
-                  const raw = localStorage.getItem(k);
-                  vals.push(raw !== null ? parseInt(raw, 10) : null);
-                }
-                const defined = vals.filter(function(v) { return v !== null; });
-                const maxV = Math.max.apply(null, defined.concat([30]));
-                const W = 62, H = 22;
-                const toX = function(i) { return (i / 6) * W; };
-                const toY = function(v) { return H - (v / maxV) * H; };
-                const goalY = toY(30).toFixed(1);
-                let out = '<line x1="0" y1="' + goalY + '" x2="' + W + '" y2="' + goalY + '" stroke="rgba(255,255,255,0.1)" stroke-width="0.5" stroke-dasharray="2 2"/>';
-                var seg = [];
-                vals.forEach(function(v, i) {
-                  if (v !== null) {
-                    seg.push(toX(i).toFixed(1) + ',' + toY(v).toFixed(1));
-                  } else {
-                    if (seg.length >= 2) out += '<polyline points="' + seg.join(' ') + '" fill="none" stroke="rgba(45,212,191,0.55)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>';
-                    seg = [];
-                  }
-                });
-                if (seg.length >= 2) out += '<polyline points="' + seg.join(' ') + '" fill="none" stroke="rgba(45,212,191,0.55)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>';
-                vals.forEach(function(v, i) {
-                  if (v === null) return;
-                  out += '<circle cx="' + toX(i).toFixed(1) + '" cy="' + toY(v).toFixed(1) + '" r="1.8" fill="' + (v > 30 ? '#ff8a8a' : '#2dd4bf') + '"/>';
-                });
-                spark.innerHTML = out;
-              }
-            } catch (e) { setVal('brfScreentimeVal', null); }
+              if (ystCard) ystCard.className = 'pl-card pl-card--yesterday' + (ystAmt !== null ? ' ' + (ystAmt >= 0 ? 'positive' : 'negative') : '');
+            }
 
-            // Focus minutes today + arc toward 120-min goal
-            try {
-              const sessions  = JSON.parse(localStorage.getItem('focus_sessions_cache')) || [];
-              const todaySess = sessions.filter(s => s.date === today);
-              if (todaySess.length) {
-                const secs = todaySess.reduce((sum, s) => sum + (s.durationSeconds || 0), 0);
-                const mins = Math.floor(secs / 60);
-                setVal('brfFocusVal', mins + 'm');
-                animateRing('brfFocusRing', mins / 120);
+            var totCard = document.getElementById('plTotalCard');
+            var totEl = document.getElementById('plTotalVal');
+            if (totEl) {
+              if (entries.length) {
+                totEl.textContent = fmtPL(total);
+                totEl.className = 'pl-val ' + (total >= 0 ? 'positive' : 'negative');
+                if (totCard) totCard.className = 'pl-card pl-card--total ' + (total >= 0 ? 'positive' : 'negative');
               } else {
-                setVal('brfFocusVal', null);
+                totEl.textContent = '—';
+                totEl.className = 'pl-val';
+                if (totCard) totCard.className = 'pl-card pl-card--total';
               }
-            } catch (e) { setVal('brfFocusVal', null); }
+            }
 
-            // Best streak across all habits
-            try {
-              const config = JSON.parse(localStorage.getItem('habits_config')) || [];
-              const history = {};
-              for (let i = 0; i < localStorage.length; i++) {
-                const k = localStorage.key(i);
-                if (!k || !k.startsWith('habits_log:')) continue;
-                const dateKey = k.slice('habits_log:'.length);
-                const log = JSON.parse(localStorage.getItem(k)) || {};
-                Object.entries(log).forEach(([id, cnt]) => {
-                  if (cnt > 0) { if (!history[id]) history[id] = new Set(); history[id].add(dateKey); }
-                });
-              }
-              const ds = d => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
-              let best = 0;
-              config.forEach(h => {
-                const set = history[h.id] || new Set();
-                let n = 0, d = new Date();
-                if (!set.has(ds(d))) d.setDate(d.getDate() - 1);
-                while (set.has(ds(d))) { n++; d.setDate(d.getDate() - 1); }
-                if (n > best) best = n;
-              });
-              setVal('brfStreakVal', best > 0 ? best + 'd' : null);
-            } catch (e) { setVal('brfStreakVal', null); }
+            var pct = goal > 0 ? Math.max(0, Math.min(1, total / goal)) : 0;
+            var CIRC = 502.65;
+            var goalFill = document.getElementById('plGoalFill');
+            if (goalFill) {
+              requestAnimationFrame(function() { requestAnimationFrame(function() {
+                goalFill.style.strokeDashoffset = (CIRC * (1 - pct)).toFixed(2);
+                goalFill.className = 'pl-goal-fill' + (total < 0 ? ' negative' : '');
+              }); });
+            }
+            var goalAmtEl = document.getElementById('plGoalAmount');
+            if (goalAmtEl) {
+              goalAmtEl.textContent = entries.length
+                ? (total >= 0 ? '+$' : '-$') + Math.abs(total).toFixed(Math.abs(total) % 1 === 0 ? 0 : 2)
+                : '$0';
+            }
+            var goalTgtEl = document.getElementById('plGoalTarget');
+            if (goalTgtEl) goalTgtEl.textContent = '/ $' + Number(goal).toLocaleString();
+            var goalPctEl = document.getElementById('plGoalPct');
+            if (goalPctEl) goalPctEl.textContent = (pct * 100).toFixed(1) + '%';
+            var goalRemEl = document.getElementById('plGoalRemaining');
+            if (goalRemEl) {
+              var rem = goal - total;
+              goalRemEl.textContent = rem > 0 ? '$' + Math.round(rem).toLocaleString() + ' to go' : 'Goal reached!';
+            }
+
+            renderPLChart(entries);
           }
+
+          // ── P/L Log Modal ────────────────────────────────────────────────
+          var plModalSign = 1;
+
+          function openPLModal(dateStr) {
+            document.getElementById('plModalDate').value = dateStr || yesterdayStr();
+            document.getElementById('plModalAmount').value = '';
+            plModalSign = 1;
+            updatePLSignBtn();
+            document.getElementById('plModalBg').classList.add('show');
+            setTimeout(function() { document.getElementById('plModalAmount').focus(); }, 80);
+          }
+          function closePLModal() { document.getElementById('plModalBg').classList.remove('show'); }
+          function updatePLSignBtn() {
+            var btn = document.getElementById('plSignBtn');
+            if (!btn) return;
+            btn.textContent = plModalSign > 0 ? '+' : '−';
+            btn.className = 'pl-sign-btn' + (plModalSign < 0 ? ' negative' : '');
+          }
+          function savePL() {
+            var dateVal = document.getElementById('plModalDate').value;
+            var rawAmt = parseFloat(document.getElementById('plModalAmount').value);
+            if (!dateVal || isNaN(rawAmt) || rawAmt < 0) return;
+            storeSet('pl:' + dateVal, plModalSign * rawAmt);
+            closePLModal();
+            renderBriefing();
+          }
+
+          document.getElementById('plYesterdayCard').addEventListener('click', function() { openPLModal(yesterdayStr()); });
+          document.getElementById('plSignBtn').addEventListener('click', function() { plModalSign *= -1; updatePLSignBtn(); });
+          document.getElementById('plModalSave').addEventListener('click', savePL);
+          document.getElementById('plModalCancel').addEventListener('click', closePLModal);
+          document.getElementById('plModalBg').addEventListener('click', function(e) { if (e.target === this) closePLModal(); });
+          document.getElementById('plModalAmount').addEventListener('keydown', function(e) { if (e.key === 'Enter') savePL(); });
+
+          // ── Goal Edit Modal ──────────────────────────────────────────────
+          function openGoalModal() {
+            document.getElementById('plGoalModalInput').value = storeGet('pl_goal') || 4000;
+            document.getElementById('plGoalModalBg').classList.add('show');
+            setTimeout(function() { document.getElementById('plGoalModalInput').focus(); }, 80);
+          }
+          function closeGoalModal() { document.getElementById('plGoalModalBg').classList.remove('show'); }
+          function saveGoal() {
+            var val = parseFloat(document.getElementById('plGoalModalInput').value);
+            if (isNaN(val) || val <= 0) return;
+            storeSet('pl_goal', val);
+            closeGoalModal();
+            renderBriefing();
+          }
+
+          document.getElementById('plGoalGear').addEventListener('click', openGoalModal);
+          document.getElementById('plGoalModalSave').addEventListener('click', saveGoal);
+          document.getElementById('plGoalModalCancel').addEventListener('click', closeGoalModal);
+          document.getElementById('plGoalModalBg').addEventListener('click', function(e) { if (e.target === this) closeGoalModal(); });
+          document.getElementById('plGoalModalInput').addEventListener('keydown', function(e) { if (e.key === 'Enter') saveGoal(); });
 
           function renderWeekChart() {
             const svg = document.getElementById('weekChartSvg');
