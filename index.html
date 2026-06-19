@@ -3158,7 +3158,7 @@ input[type="date"].lib-input { color-scheme: dark; }
 /* ── Finance P/L Dashboard ────────────────────── */
 
 /* Row 1: side-by-side P/L cards */
-.pl-row1 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+.pl-row1 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 20px; }
 .pl-card {
   border-radius: 12px; padding: 18px 14px; text-align: center;
   background: rgba(255,255,255,0.03);
@@ -3169,7 +3169,7 @@ input[type="date"].lib-input { color-scheme: dark; }
 .pl-card.positive { background: rgba(74,222,128,0.07); }
 .pl-card.negative { background: rgba(248,113,113,0.07); }
 .pl-val {
-  font-size: 26px; font-weight: 800; font-family: var(--font-mono);
+  font-size: 20px; font-weight: 800; font-family: var(--font-mono);
   letter-spacing: -0.03em; line-height: 1; color: var(--text-primary);
 }
 .pl-val.positive { color: #4ade80; }
@@ -3183,57 +3183,63 @@ input[type="date"].lib-input { color-scheme: dark; }
 
 /* Row 2: Goal ring */
 .pl-goal-wrap {
-  position: relative; display: flex; flex-direction: column;
+  display: flex; flex-direction: column;
   align-items: center; margin-bottom: 20px;
 }
-.pl-goal-gear {
-  position: absolute; top: 0; right: 0;
-  background: none; border: none; color: var(--text-quaternary);
-  font-size: 16px; cursor: pointer; padding: 2px 4px; line-height: 1;
-  transition: color 0.15s;
-}
-.pl-goal-gear:hover { color: var(--text-secondary); }
-.pl-goal-ring-container { position: relative; width: 160px; height: 160px; }
-.pl-goal-svg {
-  width: 100%; height: 100%; transform: rotate(-90deg); overflow: visible;
-}
-.pl-goal-track { fill: none; stroke: rgba(255,255,255,0.07); stroke-width: 14; }
+.pl-goal-ring-row { display: flex; align-items: center; gap: 10px; }
+.pl-goal-ring-container { position: relative; width: 140px; height: 140px; }
+.pl-goal-svg { width: 100%; height: 100%; transform: rotate(-90deg); overflow: visible; }
+.pl-goal-track { fill: none; stroke: rgba(255,255,255,0.13); stroke-width: 14; }
 .pl-goal-fill {
-  fill: none; stroke: #4ade80; stroke-width: 14; stroke-linecap: round;
-  stroke-dasharray: 502.65; stroke-dashoffset: 502.65;
-  transition: stroke-dashoffset 0.9s cubic-bezier(0.22,1,0.36,1);
-  filter: drop-shadow(0 0 8px rgba(74,222,128,0.3));
+  fill: none; stroke: url(#plRingGrad); stroke-width: 14; stroke-linecap: round;
+  stroke-dasharray: 439.82; stroke-dashoffset: 439.82;
+  transition: stroke-dashoffset 0.5s cubic-bezier(0.22,1,0.36,1);
+  filter: drop-shadow(0 0 10px rgba(74,222,128,0.5));
 }
-.pl-goal-fill.negative { stroke: #f87171; filter: drop-shadow(0 0 6px rgba(248,113,113,0.2)); }
+.pl-goal-fill.negative { stroke: url(#plRingGradNeg); filter: drop-shadow(0 0 8px rgba(248,113,113,0.4)); }
+.pl-goal-dot {
+  fill: #4ade80;
+  filter: drop-shadow(0 0 5px #4ade80) drop-shadow(0 0 10px rgba(74,222,128,0.6));
+}
+.pl-goal-dot.negative { fill: #f87171; filter: drop-shadow(0 0 5px #f87171); }
 .pl-goal-center {
   position: absolute; inset: 0;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
 }
 .pl-goal-amount {
-  font-size: 26px; font-weight: 800; font-family: var(--font-mono);
+  font-size: 24px; font-weight: 800; font-family: var(--font-mono);
   letter-spacing: -0.03em; color: var(--text-primary); line-height: 1;
 }
 .pl-goal-target {
-  font-size: 11px; color: var(--text-tertiary); font-family: var(--font-mono); margin-top: 5px;
+  font-size: 10px; color: var(--text-tertiary); font-family: var(--font-mono); margin-top: 5px;
 }
-.pl-goal-meta { display: flex; align-items: center; gap: 10px; margin-top: 12px; }
+.pl-goal-gear {
+  background: none; border: none; color: var(--text-quaternary);
+  font-size: 15px; cursor: pointer; padding: 4px; line-height: 1;
+  transition: color 0.15s; flex-shrink: 0;
+}
+.pl-goal-gear:hover { color: var(--text-secondary); }
+.pl-goal-meta { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
 .pl-goal-pct {
-  font-size: 15px; font-weight: 700; font-family: var(--font-mono);
+  font-size: 14px; font-weight: 700; font-family: var(--font-mono);
   color: #4ade80; letter-spacing: -0.02em;
 }
-.pl-goal-remaining { font-size: 12px; color: var(--text-tertiary); font-family: var(--font-mono); }
+.pl-goal-remaining { font-size: 11px; color: var(--text-tertiary); font-family: var(--font-mono); }
 
 /* Row 3: 30-day history chart */
 .pl-chart-wrap { margin-bottom: 4px; }
-.pl-chart-svg { width: 100%; height: auto; display: block; margin-bottom: 12px; }
-.pl-chart-stats { display: flex; justify-content: space-around; }
-.pl-stat-item { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+.pl-chart-svg { width: 100%; height: auto; max-height: 60px; display: block; margin-bottom: 8px; }
+.pl-chart-stats {
+  display: flex; justify-content: space-around;
+  border-top: 1px solid rgba(255,255,255,0.06); padding-top: 10px; margin-top: 2px;
+}
+.pl-stat-item { display: flex; flex-direction: column; align-items: center; gap: 2px; }
 .pl-stat-lbl {
-  font-size: 8px; font-weight: 700; letter-spacing: 0.12em;
+  font-size: 7px; font-weight: 700; letter-spacing: 0.12em;
   text-transform: uppercase; color: var(--text-quaternary); font-family: var(--font-mono);
 }
 .pl-stat-val {
-  font-size: 13px; font-weight: 700; font-family: var(--font-mono);
+  font-size: 11px; font-weight: 700; font-family: var(--font-mono);
   color: var(--text-primary); letter-spacing: -0.02em;
 }
 .pl-stat-val.positive { color: #4ade80; }
@@ -3289,28 +3295,6 @@ input[type="date"].lib-input { color-scheme: dark; }
 /* Morning Briefing card hover */
 .brf-card { transition: background 0.2s; }
 .brf-card:hover { background: rgba(255,255,255,0.06); }
-
-/* Weekly overview chart card */
-.week-chart-card {
-  background: var(--card-bg); border: none;
-  border-radius: var(--card-radius); padding: 16px 16px 10px; margin-bottom: 16px;
-  transition: background 0.2s;
-}
-.week-chart-card:hover { background: rgba(255,255,255,0.06); }
-.week-chart-header {
-  display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;
-}
-.week-chart-eyebrow {
-  font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase;
-  color: var(--text-tertiary); font-family: var(--font-mono);
-}
-.week-chart-legend { display: flex; gap: 14px; }
-.week-legend-item {
-  display: flex; align-items: center; gap: 5px;
-  font-size: 10px; color: var(--text-tertiary); font-family: var(--font-mono);
-}
-.week-legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-.week-chart-svg { width: 100%; height: auto; display: block; }
 
 /* Quote card — watermark quotation mark, no left border */
 .qod-card { position: relative; overflow: hidden; padding: 20px 18px 18px; }
@@ -3401,11 +3385,15 @@ html[data-active-tab="main"] .gm-card:hover { background: rgba(255,255,255,0.055
     <div class="brf-card" id="morningBriefing">
       <div class="brf-eyebrow">P/L Dashboard</div>
 
-      <!-- Row 1: Yesterday + Total P/L -->
+      <!-- Row 1: Yesterday + This Week + All Time -->
       <div class="pl-row1">
         <div class="pl-card pl-card--yesterday" id="plYesterdayCard">
           <div class="pl-val" id="plYesterdayVal">Tap to log</div>
           <div class="pl-lbl">Yesterday</div>
+        </div>
+        <div class="pl-card pl-card--week" id="plWeekCard">
+          <div class="pl-val" id="plWeekVal">—</div>
+          <div class="pl-lbl">This Week</div>
         </div>
         <div class="pl-card pl-card--total" id="plTotalCard">
           <div class="pl-val" id="plTotalVal">—</div>
@@ -3415,16 +3403,29 @@ html[data-active-tab="main"] .gm-card:hover { background: rgba(255,255,255,0.055
 
       <!-- Row 2: Goal ring -->
       <div class="pl-goal-wrap">
-        <button class="pl-goal-gear" id="plGoalGear" aria-label="Edit goal">⚙︎</button>
-        <div class="pl-goal-ring-container">
-          <svg class="pl-goal-svg" viewBox="0 0 200 200" overflow="visible" aria-hidden="true">
-            <circle class="pl-goal-track" cx="100" cy="100" r="80"/>
-            <circle class="pl-goal-fill" cx="100" cy="100" r="80" id="plGoalFill"/>
-          </svg>
-          <div class="pl-goal-center">
-            <div class="pl-goal-amount" id="plGoalAmount">$0</div>
-            <div class="pl-goal-target" id="plGoalTarget">/ $4,000</div>
+        <div class="pl-goal-ring-row">
+          <div class="pl-goal-ring-container">
+            <svg class="pl-goal-svg" viewBox="0 0 200 200" overflow="visible" aria-hidden="true">
+              <defs>
+                <linearGradient id="plRingGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#22c55e"/>
+                  <stop offset="100%" stop-color="#4ade80"/>
+                </linearGradient>
+                <linearGradient id="plRingGradNeg" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#dc2626"/>
+                  <stop offset="100%" stop-color="#f87171"/>
+                </linearGradient>
+              </defs>
+              <circle class="pl-goal-track" cx="100" cy="100" r="70"/>
+              <circle class="pl-goal-fill" cx="100" cy="100" r="70" id="plGoalFill"/>
+              <circle class="pl-goal-dot" cx="170" cy="100" r="6" id="plGoalDot" style="display:none"/>
+            </svg>
+            <div class="pl-goal-center">
+              <div class="pl-goal-amount" id="plGoalAmount">$0</div>
+              <div class="pl-goal-target" id="plGoalTarget">/ $4,000</div>
+            </div>
           </div>
+          <button class="pl-goal-gear" id="plGoalGear" aria-label="Edit goal">⚙︎</button>
         </div>
         <div class="pl-goal-meta">
           <span class="pl-goal-pct" id="plGoalPct">0%</span>
@@ -3434,7 +3435,7 @@ html[data-active-tab="main"] .gm-card:hover { background: rgba(255,255,255,0.055
 
       <!-- Row 3: 30-day history chart -->
       <div class="pl-chart-wrap">
-        <svg class="pl-chart-svg" id="plChartSvg" viewBox="0 0 300 80" preserveAspectRatio="xMidYMid meet"></svg>
+        <svg class="pl-chart-svg" id="plChartSvg" viewBox="0 0 300 60" preserveAspectRatio="xMidYMid meet"></svg>
         <div class="pl-chart-stats">
           <div class="pl-stat-item">
             <span class="pl-stat-lbl">Best Day</span>
@@ -3450,17 +3451,6 @@ html[data-active-tab="main"] .gm-card:hover { background: rgba(255,255,255,0.055
           </div>
         </div>
       </div>
-    </div>
-
-    <div class="week-chart-card" id="weekChartCard">
-      <div class="week-chart-header">
-        <span class="week-chart-eyebrow">This Week</span>
-        <div class="week-chart-legend">
-          <span class="week-legend-item"><span class="week-legend-dot" style="background:#a78bfa"></span>Focus</span>
-          <span class="week-legend-item"><span class="week-legend-dot" style="background:#2dd4bf"></span>Screentime</span>
-        </div>
-      </div>
-      <svg id="weekChartSvg" class="week-chart-svg" viewBox="0 0 300 110"></svg>
     </div>
 
     <div class="qod-card" id="quoteCard">
@@ -5816,7 +5806,7 @@ TAB_INITS['main'] = (function() {
               for (var j = 0; j < entries.length; j++) {
                 if (entries[j].date === ds) { found = entries[j].amount; break; }
               }
-              days.push({ idx: 29 - i, amount: found });
+              days.push({ idx: 29 - i, amount: found, ds: ds });
             }
 
             var logged = days.filter(function(d) { return d.amount !== null; });
@@ -5836,30 +5826,41 @@ TAB_INITS['main'] = (function() {
 
             if (!logged.length) { svg.innerHTML = ''; return; }
 
-            var W = 300, H = 80, PAD_H = 10, PAD_V = 8;
-            var CW = W - PAD_H * 2, CH = H - PAD_V * 2;
-            var maxAbs = Math.max.apply(null, logged.map(function(d) { return Math.abs(d.amount); }).concat([1]));
+            var W = 300, H = 60, PAD_H = 8, PAD_V = 5, LBL_H = 12;
+            var CW = W - PAD_H * 2, CH = H - PAD_V * 2 - LBL_H;
+            var minVal = Math.min.apply(null, logged.map(function(d) { return d.amount; }).concat([0]));
+            var maxVal = Math.max.apply(null, logged.map(function(d) { return d.amount; }).concat([0]));
+            var span = Math.max(maxVal - minVal, 1);
             var toX = function(i) { return PAD_H + (i / 29) * CW; };
-            var toY = function(v) { return PAD_V + CH / 2 - (v / maxAbs) * (CH / 2 * 0.9); };
+            var toY = function(v) { return PAD_V + CH - ((v - minVal) / span) * CH; };
             var zeroY = toY(0).toFixed(1);
 
-            var out = '<line x1="' + PAD_H + '" y1="' + zeroY + '" x2="' + (W - PAD_H) + '" y2="' + zeroY + '" stroke="rgba(255,255,255,0.12)" stroke-width="1" stroke-dasharray="3 3"/>';
+            var out = '<line x1="' + PAD_H + '" y1="' + zeroY + '" x2="' + (W - PAD_H) + '" y2="' + zeroY + '" stroke="rgba(255,255,255,0.1)" stroke-width="0.75" stroke-dasharray="3 3"/>';
 
             for (var k = 0; k < days.length - 1; k++) {
               var p1 = days[k], p2 = days[k + 1];
               if (p1.amount === null || p2.amount === null) continue;
               if (p2.idx - p1.idx > 1) continue;
               var avg = (p1.amount + p2.amount) / 2;
-              var color = avg >= 0 ? 'rgba(74,222,128,0.6)' : 'rgba(248,113,113,0.6)';
+              var color = avg >= 0 ? 'rgba(74,222,128,0.65)' : 'rgba(248,113,113,0.65)';
               out += '<line x1="' + toX(p1.idx).toFixed(1) + '" y1="' + toY(p1.amount).toFixed(1) + '"'
                 + ' x2="' + toX(p2.idx).toFixed(1) + '" y2="' + toY(p2.amount).toFixed(1) + '"'
                 + ' stroke="' + color + '" stroke-width="1.5" stroke-linecap="round"/>';
             }
 
             days.forEach(function(d) {
-              if (d.amount === null) return;
-              var dotColor = d.amount >= 0 ? '#4ade80' : '#f87171';
-              out += '<circle cx="' + toX(d.idx).toFixed(1) + '" cy="' + toY(d.amount).toFixed(1) + '" r="2.5" fill="' + dotColor + '"/>';
+              if (d.amount !== null) {
+                var dotColor = d.amount >= 0 ? '#4ade80' : '#f87171';
+                out += '<circle cx="' + toX(d.idx).toFixed(1) + '" cy="' + toY(d.amount).toFixed(1) + '" r="2.5" fill="' + dotColor + '"/>';
+              } else {
+                out += '<circle cx="' + toX(d.idx).toFixed(1) + '" cy="' + zeroY + '" r="2" fill="none" stroke="rgba(255,255,255,0.14)" stroke-width="1"/>';
+              }
+            });
+
+            days.forEach(function(d) {
+              if (d.idx % 5 !== 0 && d.idx !== 29) return;
+              var parts = d.ds.split('-');
+              out += '<text x="' + toX(d.idx).toFixed(1) + '" y="' + (H - 1) + '" text-anchor="middle" font-size="6.5" fill="rgba(255,255,255,0.22)" font-family="monospace">' + parts[1] + '/' + parts[2] + '</text>';
             });
 
             svg.innerHTML = out;
@@ -5872,6 +5873,7 @@ TAB_INITS['main'] = (function() {
             var total = entries.reduce(function(s, e) { return s + e.amount; }, 0);
             var goal = storeGet('pl_goal') || 4000;
 
+            // Yesterday card
             var ystCard = document.getElementById('plYesterdayCard');
             var ystEl = document.getElementById('plYesterdayVal');
             if (ystEl) {
@@ -5885,6 +5887,23 @@ TAB_INITS['main'] = (function() {
               if (ystCard) ystCard.className = 'pl-card pl-card--yesterday' + (ystAmt !== null ? ' ' + (ystAmt >= 0 ? 'positive' : 'negative') : '');
             }
 
+            // This Week card
+            var weekTotal = 0, weekHasData = false;
+            for (var w = 6; w >= 0; w--) {
+              var wd = new Date(); wd.setDate(wd.getDate() - w);
+              var wk = 'pl:' + wd.getFullYear() + '-' + String(wd.getMonth()+1).padStart(2,'0') + '-' + String(wd.getDate()).padStart(2,'0');
+              var wv = storeGet(wk);
+              if (wv !== null) { weekTotal += wv; weekHasData = true; }
+            }
+            var weekEl = document.getElementById('plWeekVal');
+            var weekCard = document.getElementById('plWeekCard');
+            if (weekEl) {
+              weekEl.textContent = weekHasData ? fmtPL(weekTotal) : '—';
+              weekEl.className = 'pl-val' + (weekHasData ? ' ' + (weekTotal >= 0 ? 'positive' : 'negative') : '');
+              if (weekCard) weekCard.className = 'pl-card pl-card--week' + (weekHasData ? ' ' + (weekTotal >= 0 ? 'positive' : 'negative') : '');
+            }
+
+            // All Time card
             var totCard = document.getElementById('plTotalCard');
             var totEl = document.getElementById('plTotalVal');
             if (totEl) {
@@ -5899,13 +5918,26 @@ TAB_INITS['main'] = (function() {
               }
             }
 
+            // Goal ring
             var pct = goal > 0 ? Math.max(0, Math.min(1, total / goal)) : 0;
-            var CIRC = 502.65;
+            var CIRC = 439.82;
             var goalFill = document.getElementById('plGoalFill');
+            var dot = document.getElementById('plGoalDot');
             if (goalFill) {
               requestAnimationFrame(function() { requestAnimationFrame(function() {
                 goalFill.style.strokeDashoffset = (CIRC * (1 - pct)).toFixed(2);
                 goalFill.className = 'pl-goal-fill' + (total < 0 ? ' negative' : '');
+                if (dot) {
+                  if (pct < 0.005) {
+                    dot.style.display = 'none';
+                  } else {
+                    dot.style.display = '';
+                    var angle = pct * 2 * Math.PI;
+                    dot.setAttribute('cx', (100 + 70 * Math.cos(angle)).toFixed(1));
+                    dot.setAttribute('cy', (100 + 70 * Math.sin(angle)).toFixed(1));
+                    dot.className = 'pl-goal-dot' + (total < 0 ? ' negative' : '');
+                  }
+                }
               }); });
             }
             var goalAmtEl = document.getElementById('plGoalAmount');
@@ -5982,56 +6014,6 @@ TAB_INITS['main'] = (function() {
           document.getElementById('plGoalModalBg').addEventListener('click', function(e) { if (e.target === this) closeGoalModal(); });
           document.getElementById('plGoalModalInput').addEventListener('keydown', function(e) { if (e.key === 'Enter') saveGoal(); });
 
-          function renderWeekChart() {
-            const svg = document.getElementById('weekChartSvg');
-            if (!svg) return;
-            const days = [];
-            for (let i = 6; i >= 0; i--) {
-              const d = new Date(); d.setDate(d.getDate() - i);
-              const dateStr = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
-              const label = ['Su','Mo','Tu','We','Th','Fr','Sa'][d.getDay()];
-              let focusMins = 0;
-              try {
-                const s = JSON.parse(localStorage.getItem('focus_sessions_cache')) || [];
-                focusMins = s.filter(x => x.date === dateStr).reduce((sum, x) => sum + Math.floor((x.durationSeconds || 0) / 60), 0);
-              } catch(e) {}
-              const screenMins = parseInt(localStorage.getItem('screentime:' + dateStr) || '0', 10);
-              days.push({ label, focus: focusMins, screen: screenMins });
-            }
-            const X0 = 20, X1 = 290, Y0 = 6, Y1 = 66, PW = X1 - X0, PH = Y1 - Y0;
-            const allVals = days.flatMap(d => [d.focus, d.screen]);
-            const maxV = Math.max.apply(null, allVals.concat([60]));
-            const toX = i => X0 + (i / 6) * PW;
-            const toY = v => Y1 - (v / maxV) * PH;
-            function smoothPath(pts) {
-              if (!pts.length) return '';
-              let d = 'M' + pts[0][0] + ',' + pts[0][1];
-              for (let i = 0; i < pts.length - 1; i++) {
-                const mx = (pts[i][0] + pts[i+1][0]) / 2;
-                const my = (pts[i][1] + pts[i+1][1]) / 2;
-                d += ' Q' + pts[i][0] + ',' + pts[i][1] + ' ' + mx + ',' + my;
-              }
-              const last = pts[pts.length - 1];
-              d += ' L' + last[0] + ',' + last[1];
-              return d;
-            }
-            const fPts = days.map((d, i) => [toX(i), toY(d.focus)]);
-            const sPts = days.map((d, i) => [toX(i), toY(d.screen)]);
-            const goalY = toY(30);
-            const gridLines = [0, 30, 60].filter(v => v <= maxV).map(v =>
-              '<line x1="' + X0 + '" y1="' + toY(v).toFixed(1) + '" x2="' + X1 + '" y2="' + toY(v).toFixed(1) + '" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>'
-            ).join('');
-            const goalLine = '<line x1="' + X0 + '" y1="' + goalY.toFixed(1) + '" x2="' + X1 + '" y2="' + goalY.toFixed(1) + '" stroke="rgba(45,212,191,0.2)" stroke-width="1" stroke-dasharray="4 3"/>';
-            const goalLabel = '<text x="' + X1 + '" y="' + (goalY - 3).toFixed(1) + '" text-anchor="end" font-size="7" fill="rgba(45,212,191,0.35)" font-family="monospace">goal</text>';
-            const labels = days.map((d, i) =>
-              '<text x="' + toX(i).toFixed(1) + '" y="80" text-anchor="middle" font-size="8" fill="rgba(255,255,255,0.3)" font-family="monospace">' + d.label + '</text>'
-            ).join('');
-            svg.innerHTML = gridLines + goalLine + goalLabel +
-              '<path d="' + smoothPath(sPts) + '" fill="none" stroke="#2dd4bf" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>' +
-              '<path d="' + smoothPath(fPts) + '" fill="none" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>' +
-              labels;
-          }
-
           // ── Daily Quote ─────────────────────────────────────────────
           const QUOTES = [
             { text: "We suffer more in imagination than in reality.", author: "Seneca" },
@@ -6102,7 +6084,6 @@ TAB_INITS['main'] = (function() {
           function init() {
             renderBriefing();
             renderQuote();
-            renderWeekChart();
             setInterval(renderBriefing, 5 * 60 * 1000);
           }
     
