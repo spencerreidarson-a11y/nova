@@ -10,6 +10,9 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>Nova</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Geist+Mono:wght@400;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <style>
 /* ═══ RESET ═══════════════════════════════════════════════════════ */
@@ -2810,290 +2813,140 @@ main {
   padding: 16px 20px 32px;
 }
 
-/* ── HEADER ─────────────────────────────────────────── */
-.lib-header { margin-bottom: 24px; }
-.lib-title {
-  font-family: 'Bodoni Moda', serif;
-  font-size: clamp(32px, 10vw, 48px);
-  font-weight: 400; color: var(--text-primary);
-  margin: 0 0 14px; letter-spacing: -0.01em; line-height: 1.1;
-}
-.lib-search {
-  width: 100%;
-  background: var(--bg-input);
-  border: 1px solid var(--border);
-  border-radius: 24px;
-  padding: 11px 18px;
-  color: var(--text-primary); font-family: var(--font); font-size: 15px;
-  outline: none;
-  transition: border-color 0.15s, background 0.15s;
-  -webkit-appearance: none;
-}
-.lib-search:focus { border-color: var(--border-strong); background: var(--bg-input-focus); }
-.lib-search::placeholder { color: var(--text-quaternary); }
+/* ══ Library V6 ════════════════════════════════════════════ */
 
-/* ── SECTION ─────────────────────────────────────────── */
-.lib-section { margin-bottom: 32px; }
-.lib-section-head {
-  display: flex; align-items: center; gap: 10px;
-  margin-bottom: 12px;
+.tab-section[data-tab="library"] {
+  --lib-sans: 'Space Grotesk', -apple-system, sans-serif;
+  --lib-mono: 'Geist Mono', ui-monospace, monospace;
+  background: #0a0a0a; min-height: 100vh;
 }
-.lib-eyebrow {
-  font-size: 10px; font-weight: 700; letter-spacing: 0.18em;
-  text-transform: uppercase; color: var(--text-tertiary);
-  font-family: var(--font-mono); flex: 1;
-}
-.lib-add-btn {
-  background: none; border: none;
-  color: var(--lime); font-size: 12px; font-weight: 600;
-  cursor: pointer; padding: 4px 0;
-  font-family: var(--font); letter-spacing: 0.01em;
-  -webkit-tap-highlight-color: transparent; white-space: nowrap;
-}
-.lib-add-btn:hover { opacity: 0.8; }
+.lib-v6-main { max-width: 640px; margin: 0 auto; padding-bottom: 100px; }
 
-/* ── GOALS GRID ─────────────────────────────────────── */
-/* ── GOALS V2 ────────────────────────────────────────── */
-:root {
-  --cat-business: oklch(65% 0.18 145);
-  --cat-personal: oklch(65% 0.16 300);
-  --cat-fitness:  oklch(70% 0.18 48);
-  --cat-social:   oklch(72% 0.14 200);
-  --cat-academic: oklch(65% 0.18 255);
-  --priority-high: oklch(65% 0.22 25);
-  --priority-med:  oklch(75% 0.18 80);
-  --priority-low:  oklch(72% 0.18 145);
-}
-.goals-summary {
-  font-size: 12px; color: var(--text-quaternary);
-  margin: -4px 0 10px; padding: 0;
-}
-.goal-filter-row {
-  display: flex; gap: 8px; overflow-x: auto;
-  scrollbar-width: none; margin-bottom: 14px;
-  -webkit-overflow-scrolling: touch;
-}
-.goal-filter-row::-webkit-scrollbar { display: none; }
-.goal-filter-pill {
-  flex-shrink: 0; font-size: 12px; font-weight: 600; letter-spacing: 0.02em;
-  padding: 5px 12px; border-radius: 20px; border: 1px solid var(--border);
-  background: rgba(255,255,255,0.04); color: var(--text-secondary);
-  cursor: pointer; transition: background 0.12s, border-color 0.12s, color 0.12s;
-  -webkit-tap-highlight-color: transparent;
-}
-.goal-filter-pill.active {
-  background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); color: var(--text-primary);
-}
-.goal-filter-pill[data-cat="business"].active { background: rgba(74,188,103,0.15);  border-color: var(--cat-business); color: var(--cat-business); }
-.goal-filter-pill[data-cat="personal"].active  { background: rgba(172,98,212,0.15);  border-color: var(--cat-personal); color: var(--cat-personal); }
-.goal-filter-pill[data-cat="fitness"].active   { background: rgba(234,148,52,0.15);  border-color: var(--cat-fitness);  color: var(--cat-fitness); }
-.goal-filter-pill[data-cat="social"].active    { background: rgba(64,190,210,0.15);  border-color: var(--cat-social);   color: var(--cat-social); }
-.goal-filter-pill[data-cat="academic"].active  { background: rgba(88,148,224,0.15);  border-color: var(--cat-academic); color: var(--cat-academic); }
-.goals-grid {
-  display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;
-}
-@media (max-width: 480px) {
-  .goals-grid { grid-template-columns: 1fr; }
-}
-.goal-card-v2 {
-  background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.09);
-  border-radius: 16px; padding: 14px;
-  display: flex; flex-direction: column; gap: 10px;
-  transition: background 0.14s; -webkit-tap-highlight-color: transparent;
-}
-.goal-card-v2:hover { background: rgba(255,255,255,0.08); }
-.goal-card-v2[data-cat="business"] { border-left: 3px solid var(--cat-business); }
-.goal-card-v2[data-cat="personal"]  { border-left: 3px solid var(--cat-personal); }
-.goal-card-v2[data-cat="fitness"]   { border-left: 3px solid var(--cat-fitness); }
-.goal-card-v2[data-cat="social"]    { border-left: 3px solid var(--cat-social); }
-.goal-card-v2[data-cat="academic"]  { border-left: 3px solid var(--cat-academic); }
-.goal-card-header {
-  display: flex; align-items: center; gap: 6px;
-}
-.goal-cat-tag {
-  display: inline-flex; align-items: center; gap: 4px;
-  font-size: 10px; font-weight: 700; letter-spacing: 0.07em;
-  padding: 3px 8px; border-radius: 20px; white-space: nowrap;
-}
-.goal-priority-dot {
-  width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0;
-}
-.goal-card-header-space { flex: 1; }
-.goal-delete-btn {
-  width: 24px; height: 24px; border-radius: 50%;
-  border: none; background: rgba(255,255,255,0.06);
-  color: var(--text-quaternary); cursor: pointer;
-  font-size: 16px; line-height: 1; display: flex; align-items: center; justify-content: center;
-  transition: background 0.12s, color 0.12s; -webkit-tap-highlight-color: transparent; flex-shrink: 0;
-}
-.goal-delete-btn:hover { background: rgba(255,100,100,0.18); color: var(--soft-red); }
-.goal-card-title {
-  font-size: 16px; font-weight: 700; color: var(--text-primary);
-  line-height: 1.3; margin: 0; word-break: break-word;
-}
-.goal-progress-wrap { display: flex; align-items: center; gap: 10px; }
-.goal-progress-track {
-  flex: 1; height: 6px; border-radius: 3px;
-  background: rgba(255,255,255,0.08); position: relative;
-}
-.goal-progress-fill {
-  position: absolute; left: 0; top: 0; height: 100%;
-  border-radius: 3px; transition: width 0.1s;
-}
-.goal-progress-range {
-  position: absolute; top: 50%; left: -4px; right: -4px;
-  transform: translateY(-50%); height: 18px; width: calc(100% + 8px);
-  opacity: 0; cursor: pointer; z-index: 2; margin: 0;
-}
-.goal-progress-pct {
-  font-size: 12px; font-weight: 700; min-width: 34px; text-align: right; flex-shrink: 0;
-}
-.goal-daily-section { display: flex; flex-direction: column; gap: 4px; }
-.goal-daily-label {
-  font-size: 9px; font-weight: 700; letter-spacing: 0.1em;
-  color: var(--text-quaternary); text-transform: uppercase;
-}
-.goal-daily-input {
-  background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07);
-  border-radius: 8px; padding: 7px 10px;
-  color: var(--text-secondary); font-size: 12px; font-family: var(--font);
-  line-height: 1.45; resize: none; width: 100%; box-sizing: border-box;
-  transition: border-color 0.12s;
-}
-.goal-daily-input:focus { outline: none; border-color: rgba(255,255,255,0.18); color: var(--text-primary); }
-.goal-daily-input::placeholder { color: var(--text-quaternary); }
+/* Header */
+.lib-v6-header { display: flex; justify-content: space-between; align-items: center; padding: 18px 20px 0; }
+.lib-v6-header-left { display: flex; align-items: center; gap: 10px; }
+.lib-n-icon { width: 28px; height: 28px; background: #111; border: 1px solid #222; border-radius: 6px; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 14px; font-family: var(--lib-sans); flex-shrink: 0; }
+.lib-nova-label { font-family: var(--lib-mono); font-size: 15px; font-weight: 600; letter-spacing: 2px; color: #e8e8e8; }
+.lib-v6-header-right { display: flex; align-items: center; gap: 10px; }
+.lib-date-label { font-family: var(--lib-mono); font-size: 12px; color: #555; }
+.lib-avatar { width: 28px; height: 28px; border-radius: 50%; background: #1D9E75; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 13px; font-weight: 600; font-family: var(--lib-sans); flex-shrink: 0; }
 
-/* ── LIST ROWS ───────────────────────────────────────── */
-.lib-list {
-  display: flex; flex-direction: column;
-  border: 1px solid var(--border);
-  border-radius: 16px; overflow: hidden;
-  background: var(--bg-card);
-}
-.lib-row {
-  border-bottom: 1px solid var(--border);
-  cursor: pointer; transition: background 0.12s;
-  -webkit-tap-highlight-color: transparent;
-}
-.lib-row:last-child { border-bottom: none; }
-.lib-row:hover { background: rgba(255,255,255,0.03); }
-.lib-row-main {
-  display: flex; align-items: center; gap: 10px;
-  padding: 13px 16px;
-}
-.lib-row-text-col { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
-.lib-row-title {
-  font-size: 14px; font-weight: 500; color: var(--text-primary);
-  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-}
-.lib-row-snippet {
-  font-size: 12px; color: var(--text-tertiary);
-  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-}
-.lib-row-meta {
-  font-size: 11px; color: var(--text-quaternary);
-  font-family: var(--font-mono); white-space: nowrap; flex-shrink: 0;
-}
-.lib-empty {
-  padding: 20px 16px;
-  font-size: 13px; color: var(--text-quaternary);
-  text-align: center; line-height: 1.5;
-}
+/* Page title */
+.lib-v6-page-title { padding: 22px 20px 6px; }
+.lib-v6-eyebrow { font-family: var(--lib-mono); font-size: 10px; letter-spacing: 2.5px; color: #555; text-transform: uppercase; margin-bottom: 6px; }
+.lib-v6-heading { font-family: var(--lib-sans); font-size: 28px; font-weight: 600; color: #fff; letter-spacing: -0.5px; margin: 0 0 16px; line-height: 1.1; }
+.lib-v6-search-wrap { position: relative; }
+.lib-v6-search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #444; pointer-events: none; }
+.lib-v6-search { width: 100%; box-sizing: border-box; background: #111; border: 1px solid #1a1a1a; border-radius: 10px; padding: 12px 16px 12px 40px; color: #e8e8e8; font-family: var(--lib-sans); font-size: 14px; outline: none; color-scheme: dark; transition: border-color 0.15s; }
+.lib-v6-search::placeholder { color: #444; }
+.lib-v6-search:focus { border-color: #333; }
 
-/* ── DEADLINE PILLS ──────────────────────────────────── */
-.deadline-pill {
-  display: inline-flex; align-items: center;
-  font-size: 11px; font-weight: 600; font-family: var(--font-mono);
-  padding: 3px 8px; border-radius: 20px; white-space: nowrap; flex-shrink: 0;
-}
-.pill-lime   { color: var(--lime);     background: rgba(194,239,78,0.12);  }
-.pill-amber  { color: var(--amber);    background: rgba(245,166,35,0.12);  }
-.pill-red    { color: var(--soft-red); background: rgba(255,107,107,0.12); }
-.pill-muted  { color: var(--text-quaternary); background: rgba(255,255,255,0.06); }
+/* Section */
+.lib-v6-section { padding: 28px 20px 0; }
+.lib-v6-section-head { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
+.lib-v6-section-label { font-family: var(--lib-mono); font-size: 11px; letter-spacing: 2px; color: #666; font-weight: 600; text-transform: uppercase; }
+.lib-v6-count-badge { font-family: var(--lib-mono); font-size: 10px; background: #1a1a1a; color: #888; border-radius: 8px; padding: 2px 7px; }
+.lib-v6-add-btn { margin-left: auto; font-family: var(--lib-sans); font-size: 12px; color: #e8e8e8; background: none; border: 1px solid #333; border-radius: 8px; padding: 6px 14px; cursor: pointer; transition: background 0.15s, border-color 0.15s; white-space: nowrap; }
+.lib-v6-add-btn:hover { background: #1a1a1a; border-color: #444; }
 
-/* ── NOVA TOAST ──────────────────────────────────────── */
-.nova-toast {
-  position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(20px);
-  background: rgba(22,22,28,0.96); border: 1px solid rgba(255,255,255,0.12);
-  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-  color: var(--text-primary); font-size: 13px; font-weight: 500;
-  padding: 10px 16px; border-radius: 24px;
-  display: flex; align-items: center; gap: 12px;
-  opacity: 0; pointer-events: none;
-  transition: opacity 0.2s ease, transform 0.2s ease;
-  z-index: 9999; white-space: nowrap;
-}
-.nova-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); pointer-events: auto; }
-.nova-toast-undo {
-  background: none; border: none; color: var(--lime);
-  font-size: 13px; font-weight: 700; cursor: pointer; padding: 0; font-family: var(--font);
-}
-/* ── MODAL 2-COL ─────────────────────────────────────── */
-.lib-row-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.lib-select {
-  appearance: none; -webkit-appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='rgba(255,255,255,0.4)' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-  background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px; cursor: pointer;
-}
+/* Summary bar */
+.lib-v6-summary-bar { background: #111; border: 1px solid #1a1a1a; border-radius: 8px; padding: 8px 14px; margin-bottom: 12px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; min-height: 36px; font-family: var(--lib-mono); font-size: 11px; }
+.lib-v6-sum-item { display: flex; align-items: center; gap: 5px; color: #888; }
+.lib-v6-sum-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.lib-v6-sum-avg { margin-left: auto; color: #555; font-size: 11px; }
 
-/* ── MODALS (bottom-sheet) ───────────────────────────── */
-.lib-modal-bg {
-  display: none; position: fixed; inset: 0; z-index: 100;
-  background: rgba(0,0,0,0.72);
-  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
-  align-items: flex-end; justify-content: center;
-}
-.lib-modal-bg.show { display: flex; }
-.lib-modal {
-  background: #15151a;
-  border: 1px solid var(--border-strong);
-  border-radius: 22px 22px 0 0;
-  padding: 24px 20px;
-  padding-bottom: max(24px, env(safe-area-inset-bottom));
-  width: 100%; max-width: 560px;
-  max-height: 92vh; overflow-y: auto; overscroll-behavior: contain;
-}
-.lib-modal-title {
-  font-size: 17px; font-weight: 700; color: var(--text-primary);
-  margin-bottom: 20px;
-}
-.lib-field { margin-bottom: 16px; }
-.lib-label {
-  display: block;
-  font-size: 11px; font-weight: 600; letter-spacing: 0.10em;
-  text-transform: uppercase; color: var(--text-tertiary);
-  font-family: var(--font-mono); margin-bottom: 6px;
-}
-.lib-input {
-  width: 100%;
-  background: var(--bg-input); border: 1px solid var(--border); border-radius: 10px;
-  padding: 10px 12px;
-  color: var(--text-primary); font-family: var(--font); font-size: 15px;
-  outline: none; transition: border-color 0.15s; -webkit-appearance: none;
-}
-.lib-input:focus { border-color: var(--border-strong); }
-.lib-textarea { resize: vertical; min-height: 72px; line-height: 1.5; }
-input[type="date"].lib-input { color-scheme: dark; }
-.lib-modal-btns { display: flex; gap: 10px; margin-top: 20px; }
-.lib-btn-cancel {
-  flex: 1; height: 46px;
-  background: rgba(255,255,255,0.06); border: 1px solid var(--border);
-  color: var(--text-secondary); font-size: 15px; font-weight: 600;
-  border-radius: 12px; cursor: pointer; font-family: var(--font);
-  transition: background 0.12s; -webkit-tap-highlight-color: transparent;
-}
-.lib-btn-cancel:hover { background: rgba(255,255,255,0.10); }
-.lib-btn-save {
-  flex: 2; height: 46px;
-  background: linear-gradient(180deg, #ffffff 0%, #e8e5dd 100%);
-  border: none; color: #0a0a0b;
-  font-size: 15px; font-weight: 700;
-  border-radius: 12px; cursor: pointer; font-family: var(--font);
-  transition: opacity 0.12s; -webkit-tap-highlight-color: transparent;
-}
-.lib-btn-save:hover { opacity: 0.92; }
+/* Filter pills */
+.lib-v6-filter-pills { display: flex; gap: 6px; flex-wrap: nowrap; overflow-x: auto; margin-bottom: 16px; padding-bottom: 2px; scrollbar-width: none; }
+.lib-v6-filter-pills::-webkit-scrollbar { display: none; }
+.lib-v6-pill { display: flex; align-items: center; gap: 5px; padding: 6px 14px; border-radius: 20px; font-family: var(--lib-sans); font-size: 12px; border: 1px solid #1a1a1a; background: transparent; color: #555; cursor: pointer; white-space: nowrap; transition: all 0.15s; -webkit-tap-highlight-color: transparent; }
+.lib-v6-pill.active { background: #1a1a1a; border-color: #333; color: #fff; }
+.lib-v6-pill-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
 
-/* ── NOTE EDIT FULL-SCREEN ───────────────────────────── */
+/* Goal cards */
+.lib-v6-goals-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 8px; }
+.lib-v6-goal-card { background: #111; border: 1px solid #1a1a1a; border-radius: 12px; padding: 20px 20px 16px; }
+.lib-v6-goal-inner { display: flex; gap: 16px; align-items: flex-start; }
+.lib-v6-goal-left { flex: 1; min-width: 0; }
+.lib-v6-goal-right { display: flex; flex-direction: column; align-items: center; gap: 8px; flex-shrink: 0; }
+
+/* Goal left content */
+.lib-v6-goal-cat-row { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
+.lib-v6-goal-cat-name { font-family: var(--lib-mono); font-size: 10px; letter-spacing: 1.8px; font-weight: 600; text-transform: uppercase; }
+.lib-v6-goal-cat-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+.lib-v6-goal-title { font-family: var(--lib-sans); font-size: 20px; font-weight: 600; color: #fff; margin: 0 0 14px; line-height: 1.2; word-break: break-word; }
+
+/* Current / Target values */
+.lib-v6-goal-values { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+.lib-v6-goal-val-lbl { font-family: var(--lib-mono); font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: #555; margin-bottom: 3px; }
+.lib-v6-goal-val-num { font-family: var(--lib-sans); font-size: 22px; font-weight: 600; line-height: 1; }
+
+/* Progress bar */
+.lib-v6-goal-bar-wrap { margin-bottom: 12px; }
+.lib-v6-goal-bar-track { position: relative; height: 4px; background: #1a1a1a; border-radius: 2px; margin-bottom: 4px; overflow: visible; }
+.lib-v6-goal-bar-fill { height: 100%; border-radius: 2px; transition: width 0.3s; }
+.lib-v6-goal-bar-ticks { position: absolute; inset: 0; pointer-events: none; }
+.lib-v6-goal-bar-tick { position: absolute; width: 1px; height: 10px; background: #333; top: -3px; }
+.lib-v6-goal-bar-labels { position: relative; height: 14px; }
+.lib-v6-goal-bar-label { position: absolute; transform: translateX(-50%); font-family: var(--lib-mono); font-size: 9px; color: #444; line-height: 1; }
+.lib-v6-goal-bar-range { position: absolute; inset: -8px 0; opacity: 0; cursor: pointer; width: 100%; height: calc(100% + 16px); margin: 0; }
+
+/* Streak */
+.lib-v6-goal-streak { font-family: var(--lib-mono); font-size: 11px; color: #555; display: flex; align-items: center; gap: 5px; flex-wrap: wrap; line-height: 1.4; }
+.lib-v6-goal-streak-sep { color: #2a2a2a; }
+
+/* Ring */
+.lib-v6-goal-ring-wrap { position: relative; width: 72px; height: 72px; }
+.lib-v6-goal-ring-svg { width: 100%; height: 100%; transform: rotate(-90deg); overflow: visible; }
+.lib-v6-goal-ring-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.lib-v6-goal-ring-pct { font-family: var(--lib-sans); font-size: 15px; font-weight: 600; color: #fff; line-height: 1; }
+.lib-v6-goal-ring-lbl { font-family: var(--lib-mono); font-size: 6px; letter-spacing: 1.2px; color: #666; text-transform: uppercase; margin-top: 3px; }
+.lib-v6-goal-menu-btn { background: none; border: none; color: #333; font-size: 16px; cursor: pointer; padding: 2px; line-height: 1; letter-spacing: 2px; transition: color 0.15s; }
+.lib-v6-goal-menu-btn:hover { color: #888; }
+
+/* Daily action */
+.lib-v6-goal-daily { background: #0d0d0d; border: 1px solid #1a1a1a; border-radius: 8px; padding: 12px 14px; margin-top: 14px; }
+.lib-v6-goal-daily-lbl { font-family: var(--lib-mono); font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: #555; margin-bottom: 6px; }
+.lib-v6-goal-daily-input { width: 100%; background: none; border: none; outline: none; font-family: var(--lib-sans); font-size: 13px; color: #666; resize: none; color-scheme: dark; padding: 0; line-height: 1.5; }
+.lib-v6-goal-daily-input::placeholder { color: #333; }
+.lib-v6-goal-daily-input:focus { color: #888; }
+
+/* Notes grid */
+.lib-v6-notes-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 8px; }
+.lib-v6-note-card { background: #111; border: 1px solid #1a1a1a; border-radius: 10px; padding: 14px; cursor: pointer; transition: transform 0.15s, border-color 0.15s; -webkit-tap-highlight-color: transparent; }
+.lib-v6-note-card:hover { transform: translateY(-2px); border-color: #333; }
+.lib-v6-note-top { display: flex; align-items: flex-start; gap: 6px; margin-bottom: 7px; }
+.lib-v6-note-icon { color: #444; flex-shrink: 0; margin-top: 1px; }
+.lib-v6-note-title { font-family: var(--lib-sans); font-size: 13px; font-weight: 500; color: #e8e8e8; flex: 1; line-height: 1.3; min-width: 0; word-break: break-word; }
+.lib-v6-note-pin { color: #888; font-size: 11px; flex-shrink: 0; }
+.lib-v6-note-time { font-family: var(--lib-mono); font-size: 10px; color: #555; flex-shrink: 0; }
+.lib-v6-note-preview { font-size: 11px; color: #555; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 9px; font-family: var(--lib-sans); }
+.lib-v6-note-tags { display: flex; gap: 4px; flex-wrap: wrap; }
+.lib-v6-note-tag { font-family: var(--lib-mono); font-size: 9px; letter-spacing: 1px; font-weight: 600; padding: 2px 7px; border-radius: 4px; }
+.lib-v6-note-ghost { border: 1px dashed #222; border-radius: 10px; padding: 16px 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; cursor: pointer; min-height: 80px; transition: border-color 0.15s; -webkit-tap-highlight-color: transparent; }
+.lib-v6-note-ghost:hover { border-color: #444; }
+.lib-v6-note-ghost-icon { font-size: 20px; color: #333; line-height: 1; }
+.lib-v6-note-ghost-label { font-family: var(--lib-sans); font-size: 12px; color: #444; }
+
+/* Goal modal */
+.lib-v6-modal-bg { display: none; position: fixed; inset: 0; z-index: 300; background: rgba(0,0,0,0.75); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); align-items: center; justify-content: center; padding: max(20px, env(safe-area-inset-top)) 16px max(20px, env(safe-area-inset-bottom)); }
+.lib-v6-modal-bg.show { display: flex; }
+.lib-v6-modal { width: 100%; max-width: 360px; background: #111; border: 1px solid #1a1a1a; border-radius: 20px; padding: 24px 20px 20px; max-height: 90vh; overflow-y: auto; }
+.lib-v6-modal-title { font-family: var(--lib-sans); font-size: 17px; font-weight: 600; color: #fff; margin-bottom: 18px; letter-spacing: -0.02em; }
+.lib-v6-field { margin-bottom: 14px; }
+.lib-v6-label { display: block; font-family: var(--lib-mono); font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: #555; margin-bottom: 6px; }
+.lib-v6-input { width: 100%; box-sizing: border-box; padding: 10px 12px; background: #0d0d0d; border: 1px solid #1a1a1a; border-radius: 8px; color: #e8e8e8; font-family: var(--lib-sans); font-size: 14px; outline: none; color-scheme: dark; transition: border-color 0.15s; }
+.lib-v6-input:focus { border-color: #333; }
+.lib-v6-textarea { resize: none; line-height: 1.5; }
+.lib-v6-select { appearance: none; -webkit-appearance: none; }
+.lib-v6-row-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.lib-v6-modal-btns { display: flex; gap: 8px; margin-top: 20px; }
+.lib-v6-btn-cancel { flex: 1; padding: 12px; border: 1px solid #1a1a1a; background: none; color: #666; border-radius: 10px; font-family: var(--lib-sans); font-size: 14px; cursor: pointer; }
+.lib-v6-btn-save { flex: 1; padding: 12px; border: none; background: #fff; color: #0a0a0a; border-radius: 10px; font-family: var(--lib-sans); font-size: 14px; font-weight: 700; cursor: pointer; }
+
+/* Empty state */
+.lib-v6-empty { font-family: var(--lib-sans); font-size: 14px; color: #444; padding: 32px 20px; text-align: center; }
+
+/* Note fullscreen editor — unchanged */
 .lib-fullview-bg {
   display: none; position: fixed; inset: 0; z-index: 200;
   background: #050506; flex-direction: column;
@@ -3108,48 +2961,61 @@ input[type="date"].lib-input { color-scheme: dark; }
 .lib-fullview-header {
   display: flex; align-items: center; gap: 10px;
   padding: 0 14px 14px;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid rgba(255,255,255,0.07);
   flex-shrink: 0;
 }
 .lib-fullview-close {
   background: none; border: none;
-  color: var(--text-tertiary); font-size: 22px; line-height: 1;
+  color: #555; font-size: 22px; line-height: 1;
   cursor: pointer; padding: 2px 6px; flex-shrink: 0;
-  -webkit-tap-highlight-color: transparent;
 }
-.lib-fullview-close:hover { color: var(--text-primary); }
+.lib-fullview-close:hover { color: #e8e8e8; }
 .note-title-input {
   flex: 1; background: none; border: none; outline: none;
-  font-size: 16px; font-weight: 600; color: var(--text-primary);
-  font-family: var(--font); padding: 0; min-width: 0;
-  -webkit-appearance: none;
+  font-size: 16px; font-weight: 600; color: #e8e8e8;
+  font-family: var(--lib-sans); padding: 0; min-width: 0;
 }
-.note-title-input::placeholder { color: var(--text-quaternary); }
+.note-title-input::placeholder { color: #333; }
 .note-save-status {
-  font-size: 11px; color: var(--text-quaternary);
-  font-family: var(--font-mono); flex-shrink: 0; min-width: 40px;
-  text-align: right;
+  font-size: 11px; color: #444;
+  font-family: var(--lib-mono); flex-shrink: 0; min-width: 40px; text-align: right;
 }
 .note-delete-btn {
   background: none; border: none;
-  color: var(--soft-red); font-size: 13px; font-weight: 600;
+  color: #f87171; font-size: 13px; font-weight: 600;
   cursor: pointer; padding: 4px 8px; flex-shrink: 0;
-  font-family: var(--font); -webkit-tap-highlight-color: transparent;
+  font-family: var(--lib-sans);
 }
-.note-delete-btn:hover { opacity: 0.8; }
 .note-body-textarea {
   flex: 1; overflow-y: auto; overscroll-behavior: contain;
   padding: 18px 20px;
   padding-bottom: max(24px, env(safe-area-inset-bottom));
   resize: none; border: none; outline: none; background: none;
-  color: var(--text-secondary); font-family: var(--font);
+  color: #888; font-family: var(--lib-sans);
   font-size: 15px; line-height: 1.75;
   width: 100%; max-width: 680px; margin: 0 auto; display: block;
 }
 
+/* Nova toast */
+.nova-toast {
+  position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(20px);
+  background: rgba(22,22,28,0.96); border: 1px solid rgba(255,255,255,0.12);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  color: #e8e8e8; font-size: 13px; font-weight: 500;
+  padding: 10px 16px; border-radius: 24px;
+  display: flex; align-items: center; gap: 12px;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  z-index: 9999; white-space: nowrap;
+}
+.nova-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); pointer-events: auto; }
+.nova-toast-undo {
+  background: none; border: none; color: #4ade80;
+  font-size: 13px; font-weight: 700; cursor: pointer; padding: 0; font-family: var(--lib-sans);
+}
+
 @media (max-width: 480px) {
-  main { padding: 12px 14px 28px; }
-  .lib-title { margin-bottom: 12px; }
+  .lib-v6-notes-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
 
@@ -4586,84 +4452,103 @@ html[data-active-tab="main"] .gm-card:hover { background: rgba(255,255,255,0.055
   </section>
 
   <section class="tab-section" data-tab="library">
-<main>
+<div class="lib-v6-main">
 
-  <div class="lib-header">
-    <h1 class="lib-title">Library</h1>
-    <input type="search" id="libSearch" class="lib-search" placeholder="search anything..." autocomplete="off" autocorrect="off">
+  <!-- Header -->
+  <div class="lib-v6-header">
+    <div class="lib-v6-header-left">
+      <div class="lib-n-icon">N</div>
+      <span class="lib-nova-label">NOVA</span>
+    </div>
+    <div class="lib-v6-header-right">
+      <span class="lib-date-label" id="libDateLabel"></span>
+      <div class="lib-avatar" id="libAvatar">S</div>
+    </div>
+  </div>
+
+  <!-- Page title + search -->
+  <div class="lib-v6-page-title">
+    <div class="lib-v6-eyebrow">LIBRARY</div>
+    <h1 class="lib-v6-heading">Goals &amp; Notes</h1>
+    <div class="lib-v6-search-wrap">
+      <svg class="lib-v6-search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="search" id="libSearch" class="lib-v6-search" placeholder="Search anything..." autocomplete="off" autocorrect="off">
+    </div>
   </div>
 
   <!-- GOALS -->
-  <div class="lib-section" id="goalsSection">
-    <div class="lib-section-head">
-      <span class="lib-eyebrow">Goals</span>
-      <button class="lib-add-btn" id="addGoalBtn">+ Add goal</button>
+  <div class="lib-v6-section" id="goalsSection">
+    <div class="lib-v6-section-head">
+      <span class="lib-v6-section-label">GOALS</span>
+      <span class="lib-v6-count-badge" id="goalsCountBadge">0</span>
+      <button class="lib-v6-add-btn" id="addGoalBtn">+ Add goal</button>
     </div>
-    <p id="goalsSummary" class="goals-summary"></p>
-    <div id="goalFilters" class="goal-filter-row"></div>
-    <div id="goalsList" class="goals-grid">
-      <div class="lib-empty">Loading…</div>
+    <div class="lib-v6-summary-bar" id="goalsSummary"></div>
+    <div id="goalFilters" class="lib-v6-filter-pills"></div>
+    <div id="goalsList" class="lib-v6-goals-list">
+      <div class="lib-v6-empty">Loading…</div>
     </div>
   </div>
 
   <!-- NOTES -->
-  <div class="lib-section" id="notesSection">
-    <div class="lib-section-head">
-      <span class="lib-eyebrow">Notes</span>
-      <button class="lib-add-btn" id="addNoteBtn">+ New note</button>
+  <div class="lib-v6-section" id="notesSection">
+    <div class="lib-v6-section-head">
+      <span class="lib-v6-section-label">NOTES</span>
+      <span class="lib-v6-count-badge" id="notesCountBadge">0</span>
+      <button class="lib-v6-add-btn" id="addNoteBtn">+ New note</button>
     </div>
-    <div id="notesList" class="lib-list">
-      <div class="lib-empty">Loading…</div>
+    <div id="notesList" class="lib-v6-notes-grid">
+      <div class="lib-v6-empty">Loading…</div>
     </div>
   </div>
 
-</main>
+</div>
 
 <!-- GOAL ADD/EDIT MODAL -->
-<div class="lib-modal-bg" id="goalModalBg" role="dialog" aria-modal="true" aria-labelledby="goalModalTitle">
-  <div class="lib-modal">
-    <div class="lib-modal-title" id="goalModalTitle">Add Goal</div>
-    <div class="lib-field">
-      <label class="lib-label" for="goalTitleInput">Goal</label>
-      <input type="text" id="goalTitleInput" class="lib-input" placeholder="What do you want to achieve?" autocomplete="off">
+<div class="lib-v6-modal-bg" id="goalModalBg" role="dialog" aria-modal="true" aria-labelledby="goalModalTitle">
+  <div class="lib-v6-modal">
+    <div class="lib-v6-modal-title" id="goalModalTitle">Add Goal</div>
+    <div class="lib-v6-field">
+      <label class="lib-v6-label" for="goalTitleInput">Goal</label>
+      <input type="text" id="goalTitleInput" class="lib-v6-input" placeholder="What do you want to achieve?" autocomplete="off">
     </div>
-    <div class="lib-row-2col">
-      <div class="lib-field">
-        <label class="lib-label" for="goalCategoryInput">Category</label>
-        <select id="goalCategoryInput" class="lib-input lib-select">
-          <option value="business">💼 Business</option>
+    <div class="lib-v6-row-2col">
+      <div class="lib-v6-field">
+        <label class="lib-v6-label" for="goalCategoryInput">Category</label>
+        <select id="goalCategoryInput" class="lib-v6-input lib-v6-select">
           <option value="personal">✦ Personal</option>
+          <option value="finance">◈ Finance</option>
           <option value="fitness">⚡ Fitness</option>
-          <option value="social">◎ Social</option>
-          <option value="academic">◈ Academic</option>
+          <option value="health">♡ Health</option>
+          <option value="focus">◎ Focus</option>
         </select>
       </div>
-      <div class="lib-field">
-        <label class="lib-label" for="goalPriorityInput">Priority</label>
-        <select id="goalPriorityInput" class="lib-input lib-select">
+      <div class="lib-v6-field">
+        <label class="lib-v6-label" for="goalDeadlineInput">Target Date</label>
+        <input type="date" id="goalDeadlineInput" class="lib-v6-input">
+      </div>
+    </div>
+    <div class="lib-v6-row-2col">
+      <div class="lib-v6-field">
+        <label class="lib-v6-label" for="goalProgressInput">Progress %</label>
+        <input type="number" id="goalProgressInput" class="lib-v6-input" min="0" max="100" value="0">
+      </div>
+      <div class="lib-v6-field">
+        <label class="lib-v6-label" for="goalPriorityInput">Priority</label>
+        <select id="goalPriorityInput" class="lib-v6-input lib-v6-select">
           <option value="high">High</option>
           <option value="med" selected>Med</option>
           <option value="low">Low</option>
         </select>
       </div>
     </div>
-    <div class="lib-row-2col">
-      <div class="lib-field">
-        <label class="lib-label" for="goalDeadlineInput">Target Date</label>
-        <input type="date" id="goalDeadlineInput" class="lib-input">
-      </div>
-      <div class="lib-field">
-        <label class="lib-label" for="goalProgressInput">Starting Progress %</label>
-        <input type="number" id="goalProgressInput" class="lib-input" min="0" max="100" value="0" placeholder="0">
-      </div>
+    <div class="lib-v6-field">
+      <label class="lib-v6-label" for="goalDailyInput">Daily Action</label>
+      <textarea id="goalDailyInput" class="lib-v6-input lib-v6-textarea" placeholder="What will you do today toward this goal?" rows="2"></textarea>
     </div>
-    <div class="lib-field">
-      <label class="lib-label" for="goalDailyInput">Daily Action</label>
-      <textarea id="goalDailyInput" class="lib-input lib-textarea" placeholder="What will you do today toward this goal?" rows="2"></textarea>
-    </div>
-    <div class="lib-modal-btns">
-      <button class="lib-btn-cancel" id="goalModalCancel">Cancel</button>
-      <button class="lib-btn-save" id="goalModalSave">Save</button>
+    <div class="lib-v6-modal-btns">
+      <button class="lib-v6-btn-cancel" id="goalModalCancel">Cancel</button>
+      <button class="lib-v6-btn-save" id="goalModalSave">Save</button>
     </div>
   </div>
 </div>
@@ -9351,17 +9236,15 @@ TAB_INITS['library'] = (function() {
 
       // ── GOAL CONFIG ──────────────────────────────────────
       const GOAL_CATS = {
-        business: { label: 'Business', icon: '💼', color: 'var(--cat-business)' },
-        personal:  { label: 'Personal', icon: '✦',  color: 'var(--cat-personal)' },
-        fitness:   { label: 'Fitness',  icon: '⚡', color: 'var(--cat-fitness)'  },
-        social:    { label: 'Social',   icon: '◎',  color: 'var(--cat-social)'   },
-        academic:  { label: 'Academic', icon: '◈',  color: 'var(--cat-academic)' },
+        personal: { label: 'Personal', icon: '✦', color: '#A78BFA' },
+        finance:  { label: 'Finance',  icon: '◈', color: '#1D9E75' },
+        fitness:  { label: 'Fitness',  icon: '⚡', color: '#E85D3A' },
+        health:   { label: 'Health',   icon: '♡', color: '#F472B6' },
+        focus:    { label: 'Focus',    icon: '◎', color: '#3B82F6' },
       };
-      const PRIORITY_COLORS = {
-        high: 'var(--priority-high)',
-        med:  'var(--priority-med)',
-        low:  'var(--priority-low)',
-      };
+      const CAT_REMAP = { business: 'finance', social: 'personal', academic: 'focus' };
+      const TAG_COLORS = ['#A78BFA','#1D9E75','#E85D3A','#F472B6','#3B82F6'];
+      const CIRC = 213.63;
 
       // ── STATE ────────────────────────────────────────────
       let goals = [];
@@ -9383,7 +9266,7 @@ TAB_INITS['library'] = (function() {
         const days = Math.floor((now - d) / 86400000);
         if (days === 0) return 'today';
         if (days === 1) return 'yesterday';
-        if (days < 7) return days + 'd ago';
+        if (days < 7) return days + 'd';
         const m = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
         return m[d.getMonth()] + ' ' + d.getDate();
       }
@@ -9394,13 +9277,21 @@ TAB_INITS['library'] = (function() {
       function genId() {
         return Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
       }
+      function tagColor(name) {
+        var h = 0;
+        for (var i = 0; i < name.length; i++) h = (h * 31 + name.charCodeAt(i)) & 0xffff;
+        return TAG_COLORS[h % TAG_COLORS.length];
+      }
+      function extractTags(body) {
+        return (body || '').match(/#([a-zA-Z][a-zA-Z0-9_]+)/g) || [];
+      }
 
       // ── GOAL STORAGE ─────────────────────────────────────
       function saveGoals() {
         localStorage.setItem('apex_goals', JSON.stringify(goals));
         if (!sb) return;
         goals.forEach(function(g) {
-          var ext = JSON.stringify({ category: g.category, priority: g.priority, progress: g.progress, daily_action: g.daily_action, _ext: true });
+          var ext = JSON.stringify({ category: g.category, priority: g.priority, progress: g.progress, daily_action: g.daily_action, streak: g.streak || 0, _ext: true });
           sb.from('goals').upsert({
             id: g.id, title: g.title, description: ext,
             deadline: g.deadline || null, status: g.status, created_at: g.created_at
@@ -9413,7 +9304,10 @@ TAB_INITS['library'] = (function() {
         if (stored) {
           try {
             var parsed = JSON.parse(stored);
-            goals = parsed.filter(function(g) { return g.status === 'active'; });
+            goals = parsed.filter(function(g) { return g.status === 'active'; }).map(function(g) {
+              if (CAT_REMAP[g.category]) g.category = CAT_REMAP[g.category];
+              return g;
+            });
             return;
           } catch(e) {}
         }
@@ -9422,12 +9316,15 @@ TAB_INITS['library'] = (function() {
         goals = (r.data || []).map(function(g) {
           var ext = {};
           try { var d = JSON.parse(g.description || '{}'); if (d._ext) ext = d; } catch(e) {}
+          var cat = ext.category || 'personal';
+          if (CAT_REMAP[cat]) cat = CAT_REMAP[cat];
           return {
             id: g.id, title: g.title,
-            category: ext.category || 'personal',
+            category: cat,
             priority: ext.priority || 'med',
             progress: ext.progress != null ? ext.progress : 0,
             daily_action: ext.daily_action || '',
+            streak: ext.streak || 0,
             deadline: g.deadline || '',
             status: g.status || 'active',
             created_at: g.created_at,
@@ -9436,20 +9333,36 @@ TAB_INITS['library'] = (function() {
         if (goals.length) localStorage.setItem('apex_goals', JSON.stringify(goals));
       }
 
-      // ── RENDER GOALS ─────────────────────────────────────
+      // ── RENDER SUMMARY ───────────────────────────────────
+      function renderSummary() {
+        var el = document.getElementById('goalsSummary');
+        var badge = document.getElementById('goalsCountBadge');
+        if (badge) badge.textContent = goals.length;
+        if (!el) return;
+        if (!goals.length) { el.innerHTML = ''; return; }
+        var avg = Math.round(goals.reduce(function(s, g) { return s + (g.progress || 0); }, 0) / goals.length);
+        var items = goals.map(function(g) {
+          var cat = GOAL_CATS[g.category] || GOAL_CATS.personal;
+          return '<span class="lib-v6-sum-item"><span class="lib-v6-sum-dot" style="background:' + cat.color + '"></span>' + esc(g.title.slice(0, 16)) + '<span style="color:' + cat.color + '">' + Math.round(g.progress || 0) + '%</span></span>';
+        }).join('');
+        el.innerHTML = items + '<span class="lib-v6-sum-avg">' + avg + '% avg</span>';
+      }
+
+      // ── RENDER FILTER PILLS ──────────────────────────────
       function renderFilterPills() {
         var filtersEl = document.getElementById('goalFilters');
         if (!filtersEl) return;
         var catCounts = {};
         goals.forEach(function(g) { catCounts[g.category] = (catCounts[g.category] || 0) + 1; });
-        var html = '<button class="goal-filter-pill' + (!activeCategory ? ' active' : '') + '" data-cat="all">All ' + goals.length + '</button>';
+        var html = '<button class="lib-v6-pill' + (!activeCategory ? ' active' : '') + '" data-cat="all">All</button>';
         Object.keys(GOAL_CATS).forEach(function(cat) {
           if (!catCounts[cat]) return;
-          html += '<button class="goal-filter-pill' + (activeCategory === cat ? ' active' : '') + '" data-cat="' + cat + '">' +
-            GOAL_CATS[cat].label + ' ' + catCounts[cat] + '</button>';
+          var c = GOAL_CATS[cat];
+          html += '<button class="lib-v6-pill' + (activeCategory === cat ? ' active' : '') + '" data-cat="' + cat + '">'
+            + '<span class="lib-v6-pill-dot" style="background:' + c.color + '"></span>' + c.label + '</button>';
         });
         filtersEl.innerHTML = html;
-        filtersEl.querySelectorAll('.goal-filter-pill').forEach(function(btn) {
+        filtersEl.querySelectorAll('.lib-v6-pill').forEach(function(btn) {
           btn.addEventListener('click', function() {
             activeCategory = btn.dataset.cat === 'all' ? null : btn.dataset.cat;
             renderFilterPills();
@@ -9458,69 +9371,96 @@ TAB_INITS['library'] = (function() {
         });
       }
 
-      function renderSummary() {
-        var el = document.getElementById('goalsSummary');
-        if (!el) return;
-        if (!goals.length) { el.textContent = ''; return; }
-        var avg = Math.round(goals.reduce(function(s, g) { return s + (g.progress || 0); }, 0) / goals.length);
-        el.textContent = goals.length + ' goal' + (goals.length === 1 ? '' : 's') + ' · ' + avg + '% avg progress';
-      }
-
+      // ── RENDER GOALS ─────────────────────────────────────
       function renderGoals() {
         var list = document.getElementById('goalsList');
         var section = document.getElementById('goalsSection');
         if (!list) return;
         var filtered = goals.filter(function(g) {
-          return (!activeCategory || g.category === activeCategory) &&
-            matchesQ([g.title, g.daily_action]);
+          return (!activeCategory || g.category === activeCategory) && matchesQ([g.title, g.daily_action]);
         });
         if (searchQuery && filtered.length === 0) { section.style.display = 'none'; return; }
         section.style.display = '';
         if (filtered.length === 0) {
-          list.innerHTML = '<div class="lib-empty">No goals yet. Tap "+ Add goal" to create one.</div>';
+          list.innerHTML = '<div class="lib-v6-empty">No goals yet — tap "+ Add goal" to start.</div>';
           return;
         }
         list.innerHTML = filtered.map(function(g) {
           var cat = GOAL_CATS[g.category] || GOAL_CATS.personal;
           var prog = Math.max(0, Math.min(100, g.progress || 0));
-          var dotColor = PRIORITY_COLORS[g.priority] || PRIORITY_COLORS.med;
-          return '<div class="goal-card-v2" data-id="' + esc(g.id) + '" data-cat="' + esc(g.category) + '">' +
-            '<div class="goal-card-header">' +
-              '<span class="goal-cat-tag" style="background:' + cat.color + '22;color:' + cat.color + '">' + cat.icon + ' ' + cat.label.toUpperCase() + '</span>' +
-              '<span class="goal-priority-dot" style="background:' + dotColor + '" title="' + esc(g.priority) + ' priority"></span>' +
-              '<div class="goal-card-header-space"></div>' +
-              '<button class="goal-delete-btn" data-id="' + esc(g.id) + '" aria-label="Delete goal">&times;</button>' +
-            '</div>' +
-            '<h2 class="goal-card-title">' + esc(g.title) + '</h2>' +
-            '<div class="goal-progress-wrap">' +
-              '<div class="goal-progress-track">' +
-                '<div class="goal-progress-fill" style="width:' + prog + '%;background:' + cat.color + '"></div>' +
-                '<input type="range" class="goal-progress-range" min="0" max="100" value="' + prog + '" data-id="' + esc(g.id) + '" aria-label="Progress">' +
-              '</div>' +
-              '<span class="goal-progress-pct" style="color:' + cat.color + '">' + prog + '%</span>' +
-            '</div>' +
-            '<div class="goal-daily-section">' +
-              '<div class="goal-daily-label">Daily Action</div>' +
-              '<textarea class="goal-daily-input" data-id="' + esc(g.id) + '" placeholder="What will you do today?" rows="2">' + esc(g.daily_action || '') + '</textarea>' +
-            '</div>' +
-          '</div>';
+          var offset = (CIRC * (1 - prog / 100)).toFixed(2);
+          var daysLeft = g.deadline ? Math.max(0, Math.ceil((new Date(g.deadline) - new Date()) / 86400000)) : null;
+          var streakDays = g.streak || 0;
+          var ticks = [20, 50, 70, 100].map(function(p) {
+            return '<div class="lib-v6-goal-bar-tick" style="left:' + p + '%"></div>';
+          }).join('');
+          var tickLabels = [20, 50, 70, 100].map(function(p) {
+            return '<span class="lib-v6-goal-bar-label" style="left:' + p + '%">' + p + '%</span>';
+          }).join('');
+
+          return '<div class="lib-v6-goal-card" data-id="' + esc(g.id) + '">'
+            + '<div class="lib-v6-goal-inner">'
+            + '<div class="lib-v6-goal-left">'
+            + '<div class="lib-v6-goal-cat-row">'
+            + '<span style="font-size:13px">' + cat.icon + '</span>'
+            + '<span class="lib-v6-goal-cat-name" style="color:' + cat.color + '">' + cat.label + '</span>'
+            + '<span class="lib-v6-goal-cat-dot" style="background:' + cat.color + '"></span>'
+            + '</div>'
+            + '<h2 class="lib-v6-goal-title">' + esc(g.title) + '</h2>'
+            + '<div class="lib-v6-goal-values">'
+            + '<div><div class="lib-v6-goal-val-lbl">Current</div><div class="lib-v6-goal-val-num" style="color:' + cat.color + '">' + prog + '%</div></div>'
+            + '<div><div class="lib-v6-goal-val-lbl">Target</div><div class="lib-v6-goal-val-num" style="color:#444">100%</div></div>'
+            + '</div>'
+            + '<div class="lib-v6-goal-bar-wrap">'
+            + '<div class="lib-v6-goal-bar-track">'
+            + '<div class="lib-v6-goal-bar-fill" style="width:' + prog + '%;background:' + cat.color + '"></div>'
+            + '<div class="lib-v6-goal-bar-ticks">' + ticks + '</div>'
+            + '<input type="range" class="lib-v6-goal-bar-range" min="0" max="100" value="' + prog + '" data-id="' + esc(g.id) + '">'
+            + '</div>'
+            + '<div class="lib-v6-goal-bar-labels">' + tickLabels + '</div>'
+            + '</div>'
+            + '<div class="lib-v6-goal-streak">🔥 ' + streakDays + 'd streak'
+            + (daysLeft !== null ? ' <span class="lib-v6-goal-streak-sep">|</span> ● ' + daysLeft + 'd left' : '')
+            + (prog > 0 ? ' <span class="lib-v6-goal-streak-sep">|</span> <span style="color:' + cat.color + '">↗ ' + prog + '% done</span>' : '')
+            + '</div>'
+            + '</div>'
+            + '<div class="lib-v6-goal-right">'
+            + '<div class="lib-v6-goal-ring-wrap">'
+            + '<svg class="lib-v6-goal-ring-svg" viewBox="0 0 80 80">'
+            + '<circle cx="40" cy="40" r="34" fill="none" stroke="#1e1e1e" stroke-width="4"/>'
+            + '<circle cx="40" cy="40" r="34" fill="none" stroke="' + cat.color + '" stroke-width="4" stroke-linecap="round" stroke-dasharray="' + CIRC + '" stroke-dashoffset="' + offset + '" style="transition:stroke-dashoffset 0.5s"/>'
+            + '</svg>'
+            + '<div class="lib-v6-goal-ring-center"><div class="lib-v6-goal-ring-pct">' + prog + '%</div><div class="lib-v6-goal-ring-lbl">done</div></div>'
+            + '</div>'
+            + '<button class="lib-v6-goal-menu-btn" data-id="' + esc(g.id) + '" aria-label="Edit goal">···</button>'
+            + '</div>'
+            + '</div>'
+            + '<div class="lib-v6-goal-daily">'
+            + '<div class="lib-v6-goal-daily-lbl">Daily Action</div>'
+            + '<textarea class="lib-v6-goal-daily-input" data-id="' + esc(g.id) + '" rows="1" placeholder="What will you do today?">' + esc(g.daily_action || '') + '</textarea>'
+            + '</div>'
+            + '</div>';
         }).join('');
 
-        list.querySelectorAll('.goal-delete-btn').forEach(function(btn) {
-          btn.addEventListener('click', function(e) { e.stopPropagation(); deleteGoal(btn.dataset.id); });
-        });
-        list.querySelectorAll('.goal-progress-range').forEach(function(input) {
+        list.querySelectorAll('.lib-v6-goal-bar-range').forEach(function(input) {
           input.addEventListener('input', function() {
-            var card = input.closest('.goal-card-v2');
-            card.querySelector('.goal-progress-fill').style.width = input.value + '%';
-            card.querySelector('.goal-progress-pct').textContent = input.value + '%';
+            var card = input.closest('.lib-v6-goal-card');
+            var fill = card.querySelector('.lib-v6-goal-bar-fill');
+            var valEl = card.querySelector('.lib-v6-goal-val-num');
+            var pctEl = card.querySelector('.lib-v6-goal-ring-pct');
+            var svg2 = card.querySelector('circle:last-of-type');
+            var v = parseInt(input.value, 10);
+            if (fill) fill.style.width = v + '%';
+            if (valEl) valEl.textContent = v + '%';
+            if (pctEl) pctEl.textContent = v + '%';
+            if (svg2) svg2.setAttribute('stroke-dashoffset', (CIRC * (1 - v / 100)).toFixed(2));
           });
           input.addEventListener('change', function() {
             var idx = goals.findIndex(function(g) { return g.id === input.dataset.id; });
             if (idx !== -1) { goals[idx].progress = parseInt(input.value, 10); saveGoals(); renderSummary(); }
           });
         });
-        list.querySelectorAll('.goal-daily-input').forEach(function(ta) {
+        list.querySelectorAll('.lib-v6-goal-daily-input').forEach(function(ta) {
           ta.addEventListener('blur', function() {
             var idx = goals.findIndex(function(g) { return g.id === ta.dataset.id; });
             if (idx !== -1 && goals[idx].daily_action !== ta.value) {
@@ -9528,6 +9468,9 @@ TAB_INITS['library'] = (function() {
               saveGoals();
             }
           });
+        });
+        list.querySelectorAll('.lib-v6-goal-menu-btn').forEach(function(btn) {
+          btn.addEventListener('click', function() { openGoalModal(btn.dataset.id); });
         });
       }
 
@@ -9555,7 +9498,7 @@ TAB_INITS['library'] = (function() {
 
       // ── GOAL CRUD ────────────────────────────────────────
       function addGoal(data) {
-        var g = Object.assign({ id: genId(), status: 'active', created_at: new Date().toISOString() }, data);
+        var g = Object.assign({ id: genId(), status: 'active', streak: 0, created_at: new Date().toISOString() }, data);
         goals.unshift(g);
         saveGoals();
         renderFilterPills();
@@ -9604,30 +9547,48 @@ TAB_INITS['library'] = (function() {
         const list = document.getElementById('notesList');
         const section = document.getElementById('notesSection');
         const filtered = nativeNotes.filter(function (n) { return matchesQ([n.title, n.body]); });
+        var badge = document.getElementById('notesCountBadge');
+        if (badge) badge.textContent = filtered.length;
         if (filter && filtered.length === 0) { section.style.display = 'none'; return; }
         section.style.display = '';
-        if (filtered.length === 0) {
-          list.innerHTML = '<div class="lib-empty">No notes yet. Tap "+ New note" to create one.</div>';
-          return;
-        }
-        list.innerHTML = filtered.map(function (n) {
-          const snippet = (n.body || '').trim().slice(0, 80);
-          return '<div class="lib-row" data-id="' + esc(n.id) + '">' +
-            '<div class="lib-row-main">' +
-              '<div class="lib-row-text-col">' +
-                '<span class="lib-row-title">' + (n.title ? esc(n.title) : '<em style="color:var(--text-quaternary)">Untitled</em>') + '</span>' +
-                (snippet ? '<span class="lib-row-snippet">' + esc(snippet) + '</span>' : '') +
-              '</div>' +
-              '<span class="lib-row-meta">' + relDate(n.updated_at) + '</span>' +
-            '</div>' +
-          '</div>';
+        var pinnedIds = JSON.parse(localStorage.getItem('pinned_notes_v1') || '[]');
+        var sorted = filtered.slice().sort(function(a, b) {
+          var aPin = pinnedIds.indexOf(a.id) !== -1;
+          var bPin = pinnedIds.indexOf(b.id) !== -1;
+          return (bPin ? 1 : 0) - (aPin ? 1 : 0);
+        });
+        var notesHtml = sorted.map(function (n) {
+          var isPinned = pinnedIds.indexOf(n.id) !== -1;
+          var snippet = (n.body || '').replace(/#\S+/g, '').trim().slice(0, 80);
+          var tags = extractTags(n.body);
+          var tagsHtml = tags.slice(0, 3).map(function(t) {
+            var c = tagColor(t);
+            return '<span class="lib-v6-note-tag" style="color:' + c + ';background:' + c + '26">' + esc(t) + '</span>';
+          }).join('');
+          return '<div class="lib-v6-note-card" data-id="' + esc(n.id) + '">'
+            + '<div class="lib-v6-note-top">'
+            + '<svg class="lib-v6-note-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>'
+            + '<span class="lib-v6-note-title">' + (n.title ? esc(n.title) : '<span style="color:#333">Untitled</span>') + '</span>'
+            + (isPinned ? '<span class="lib-v6-note-pin">★</span>' : '')
+            + '<span class="lib-v6-note-time">' + relDate(n.updated_at) + '</span>'
+            + '</div>'
+            + (snippet ? '<div class="lib-v6-note-preview">' + esc(snippet) + '</div>' : '')
+            + (tagsHtml ? '<div class="lib-v6-note-tags">' + tagsHtml + '</div>' : '')
+            + '</div>';
         }).join('');
-        list.querySelectorAll('.lib-row[data-id]').forEach(function (row) {
-          row.addEventListener('click', function () {
-            const note = nativeNotes.find(function (n) { return n.id === row.dataset.id; });
+        if (filtered.length === 0) {
+          list.innerHTML = '<div class="lib-v6-note-ghost" id="libNoteGhost"><div class="lib-v6-note-ghost-icon">+</div><div class="lib-v6-note-ghost-label">New note</div></div>';
+        } else {
+          list.innerHTML = notesHtml + '<div class="lib-v6-note-ghost" id="libNoteGhost"><div class="lib-v6-note-ghost-icon">+</div><div class="lib-v6-note-ghost-label">New note</div></div>';
+        }
+        list.querySelectorAll('.lib-v6-note-card[data-id]').forEach(function (card) {
+          card.addEventListener('click', function () {
+            const note = nativeNotes.find(function (n) { return n.id === card.dataset.id; });
             if (note) openNoteEdit(note);
           });
         });
+        var ghost = document.getElementById('libNoteGhost');
+        if (ghost) ghost.addEventListener('click', createNote);
       }
 
       function renderAll() {
@@ -9694,7 +9655,7 @@ TAB_INITS['library'] = (function() {
       }
       function closeModal(id) {
         document.getElementById(id).classList.remove('show');
-        if (!document.querySelector('.lib-modal-bg.show, .lib-fullview-bg.show')) {
+        if (!document.querySelector('.lib-v6-modal-bg.show, .lib-fullview-bg.show')) {
           document.body.classList.remove('topbar-modal-open');
         }
       }
@@ -9729,6 +9690,10 @@ TAB_INITS['library'] = (function() {
 
       // ── INIT ─────────────────────────────────────────────
       async function init() {
+        // Date label
+        var dl = document.getElementById('libDateLabel');
+        if (dl) { var now = new Date(); dl.textContent = now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }); }
+
         document.getElementById('addGoalBtn').addEventListener('click', function () { openGoalModal(null); });
         document.getElementById('goalModalCancel').addEventListener('click', function () { closeModal('goalModalBg'); });
         document.getElementById('goalModalSave').addEventListener('click', function () {
