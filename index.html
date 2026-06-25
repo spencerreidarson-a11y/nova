@@ -2849,66 +2849,23 @@ main {
 .lib-v6-add-btn { margin-left: auto; font-family: var(--lib-sans); font-size: 12px; color: #e8e8e8; background: none; border: 1px solid #333; border-radius: 8px; padding: 6px 14px; cursor: pointer; transition: background 0.15s, border-color 0.15s; white-space: nowrap; }
 .lib-v6-add-btn:hover { background: #1a1a1a; border-color: #444; }
 
-/* Summary bar */
-.lib-v6-summary-bar { background: #111; border: 1px solid #1a1a1a; border-radius: 8px; padding: 8px 14px; margin-bottom: 12px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; min-height: 36px; font-family: var(--lib-mono); font-size: 11px; }
-.lib-v6-sum-item { display: flex; align-items: center; gap: 5px; color: #888; }
-.lib-v6-sum-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
-.lib-v6-sum-avg { margin-left: auto; color: #555; font-size: 11px; }
-
 /* Filter pills */
 .lib-v6-filter-pills { display: flex; gap: 6px; flex-wrap: nowrap; overflow-x: auto; margin-bottom: 16px; padding-bottom: 2px; scrollbar-width: none; }
 .lib-v6-filter-pills::-webkit-scrollbar { display: none; }
-.lib-v6-pill { display: flex; align-items: center; gap: 5px; padding: 6px 14px; border-radius: 20px; font-family: var(--lib-sans); font-size: 12px; border: 1px solid #1a1a1a; background: transparent; color: #555; cursor: pointer; white-space: nowrap; transition: all 0.15s; -webkit-tap-highlight-color: transparent; }
+.lib-v6-pill { display: flex; align-items: center; gap: 5px; padding: 6px 14px; border-radius: 20px; font-family: var(--lib-sans); font-size: 12px; border: 1px solid #1a1a1a; background: transparent; color: #555; cursor: pointer; white-space: nowrap; transition: border-color 0.15s, color 0.15s, background 0.15s; -webkit-tap-highlight-color: transparent; }
 .lib-v6-pill.active { background: #1a1a1a; border-color: #333; color: #fff; }
 .lib-v6-pill-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
 
-/* Goal cards */
-.lib-v6-goals-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 8px; }
-.lib-v6-goal-card { background: #111; border: 1px solid #1a1a1a; border-radius: 12px; padding: 20px 20px 16px; }
-.lib-v6-goal-inner { display: flex; gap: 16px; align-items: flex-start; }
-.lib-v6-goal-left { flex: 1; min-width: 0; }
-.lib-v6-goal-right { display: flex; flex-direction: column; align-items: center; gap: 8px; flex-shrink: 0; }
-
-/* Goal left content */
-.lib-v6-goal-cat-row { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
-.lib-v6-goal-cat-name { font-family: var(--lib-mono); font-size: 10px; letter-spacing: 1.8px; font-weight: 600; text-transform: uppercase; }
-.lib-v6-goal-cat-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
-.lib-v6-goal-title { font-family: var(--lib-sans); font-size: 20px; font-weight: 600; color: #fff; margin: 0 0 14px; line-height: 1.2; word-break: break-word; }
-
-/* Current / Target values */
-.lib-v6-goal-values { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
-.lib-v6-goal-val-lbl { font-family: var(--lib-mono); font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: #555; margin-bottom: 3px; }
-.lib-v6-goal-val-num { font-family: var(--lib-sans); font-size: 22px; font-weight: 600; line-height: 1; }
-
-/* Progress bar */
-.lib-v6-goal-bar-wrap { margin-bottom: 12px; }
-.lib-v6-goal-bar-track { position: relative; height: 4px; background: #1a1a1a; border-radius: 2px; margin-bottom: 4px; overflow: visible; }
-.lib-v6-goal-bar-fill { height: 100%; border-radius: 2px; transition: width 0.3s; }
-.lib-v6-goal-bar-ticks { position: absolute; inset: 0; pointer-events: none; }
-.lib-v6-goal-bar-tick { position: absolute; width: 1px; height: 10px; background: #333; top: -3px; }
-.lib-v6-goal-bar-labels { position: relative; height: 14px; }
-.lib-v6-goal-bar-label { position: absolute; transform: translateX(-50%); font-family: var(--lib-mono); font-size: 9px; color: #444; line-height: 1; }
-.lib-v6-goal-bar-range { position: absolute; inset: -8px 0; opacity: 0; cursor: pointer; width: 100%; height: calc(100% + 16px); margin: 0; }
-
-/* Streak */
-.lib-v6-goal-streak { font-family: var(--lib-mono); font-size: 11px; color: #555; display: flex; align-items: center; gap: 5px; flex-wrap: wrap; line-height: 1.4; }
-.lib-v6-goal-streak-sep { color: #2a2a2a; }
-
-/* Ring */
-.lib-v6-goal-ring-wrap { position: relative; width: 72px; height: 72px; }
-.lib-v6-goal-ring-svg { width: 100%; height: 100%; transform: rotate(-90deg); overflow: visible; }
-.lib-v6-goal-ring-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-.lib-v6-goal-ring-pct { font-family: var(--lib-sans); font-size: 15px; font-weight: 600; color: #fff; line-height: 1; }
-.lib-v6-goal-ring-lbl { font-family: var(--lib-mono); font-size: 6px; letter-spacing: 1.2px; color: #666; text-transform: uppercase; margin-top: 3px; }
-.lib-v6-goal-menu-btn { background: none; border: none; color: #333; font-size: 16px; cursor: pointer; padding: 2px; line-height: 1; letter-spacing: 2px; transition: color 0.15s; }
-.lib-v6-goal-menu-btn:hover { color: #888; }
-
-/* Daily action */
-.lib-v6-goal-daily { background: #0d0d0d; border: 1px solid #1a1a1a; border-radius: 8px; padding: 12px 14px; margin-top: 14px; }
-.lib-v6-goal-daily-lbl { font-family: var(--lib-mono); font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: #555; margin-bottom: 6px; }
-.lib-v6-goal-daily-input { width: 100%; background: none; border: none; outline: none; font-family: var(--lib-sans); font-size: 13px; color: #666; resize: none; color-scheme: dark; padding: 0; line-height: 1.5; }
-.lib-v6-goal-daily-input::placeholder { color: #333; }
-.lib-v6-goal-daily-input:focus { color: #888; }
+/* Vision board goal grid */
+.lib-vb-goals-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 32px; }
+@media (max-width: 340px) { .lib-vb-goals-grid { grid-template-columns: 1fr; } }
+.lib-vb-goal-card { position: relative; border-radius: 16px; padding: 16px 14px 14px; border: 1px solid rgba(255,255,255,0.07); display: flex; flex-direction: column; gap: 10px; min-height: 110px; transition: transform 0.15s ease; -webkit-tap-highlight-color: transparent; }
+.lib-vb-goal-card:hover { transform: translateY(-2px); }
+.lib-vb-cat-chip { display: inline-flex; align-items: center; gap: 5px; padding: 3px 9px; border-radius: 20px; font-family: var(--lib-mono); font-size: 9px; font-weight: 700; letter-spacing: 1.8px; text-transform: uppercase; width: fit-content; }
+.lib-vb-goal-name { font-family: var(--lib-sans); font-size: 16px; font-weight: 600; color: #f0f0f0; line-height: 1.25; word-break: break-word; flex: 1; }
+.lib-vb-deadline { font-family: var(--lib-mono); font-size: 10px; font-weight: 600; letter-spacing: 0.5px; margin-top: auto; }
+.lib-vb-delete-btn { position: absolute; top: 9px; right: 9px; width: 20px; height: 20px; border-radius: 50%; border: none; background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.35); font-size: 14px; line-height: 1; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.12s, color 0.12s; -webkit-tap-highlight-color: transparent; }
+.lib-vb-delete-btn:hover { background: rgba(248,113,113,0.2); color: #f87171; }
 
 /* Notes grid */
 .lib-v6-notes-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 8px; }
@@ -4483,9 +4440,8 @@ html[data-active-tab="main"] .gm-card:hover { background: rgba(255,255,255,0.055
       <span class="lib-v6-count-badge" id="goalsCountBadge">0</span>
       <button class="lib-v6-add-btn" id="addGoalBtn">+ Add goal</button>
     </div>
-    <div class="lib-v6-summary-bar" id="goalsSummary"></div>
     <div id="goalFilters" class="lib-v6-filter-pills"></div>
-    <div id="goalsList" class="lib-v6-goals-list">
+    <div id="goalsList" class="lib-vb-goals-grid">
       <div class="lib-v6-empty">Loading…</div>
     </div>
   </div>
@@ -4504,7 +4460,7 @@ html[data-active-tab="main"] .gm-card:hover { background: rgba(255,255,255,0.055
 
 </div>
 
-<!-- GOAL ADD/EDIT MODAL -->
+<!-- GOAL ADD MODAL -->
 <div class="lib-v6-modal-bg" id="goalModalBg" role="dialog" aria-modal="true" aria-labelledby="goalModalTitle">
   <div class="lib-v6-modal">
     <div class="lib-v6-modal-title" id="goalModalTitle">Add Goal</div>
@@ -4516,35 +4472,16 @@ html[data-active-tab="main"] .gm-card:hover { background: rgba(255,255,255,0.055
       <div class="lib-v6-field">
         <label class="lib-v6-label" for="goalCategoryInput">Category</label>
         <select id="goalCategoryInput" class="lib-v6-input lib-v6-select">
-          <option value="personal">✦ Personal</option>
-          <option value="finance">◈ Finance</option>
+          <option value="money">💰 Money</option>
+          <option value="learning">📚 Learning</option>
+          <option value="social">✦ Social</option>
           <option value="fitness">⚡ Fitness</option>
-          <option value="health">♡ Health</option>
-          <option value="focus">◎ Focus</option>
         </select>
       </div>
       <div class="lib-v6-field">
-        <label class="lib-v6-label" for="goalDeadlineInput">Target Date</label>
+        <label class="lib-v6-label" for="goalDeadlineInput">Deadline</label>
         <input type="date" id="goalDeadlineInput" class="lib-v6-input">
       </div>
-    </div>
-    <div class="lib-v6-row-2col">
-      <div class="lib-v6-field">
-        <label class="lib-v6-label" for="goalProgressInput">Progress %</label>
-        <input type="number" id="goalProgressInput" class="lib-v6-input" min="0" max="100" value="0">
-      </div>
-      <div class="lib-v6-field">
-        <label class="lib-v6-label" for="goalPriorityInput">Priority</label>
-        <select id="goalPriorityInput" class="lib-v6-input lib-v6-select">
-          <option value="high">High</option>
-          <option value="med" selected>Med</option>
-          <option value="low">Low</option>
-        </select>
-      </div>
-    </div>
-    <div class="lib-v6-field">
-      <label class="lib-v6-label" for="goalDailyInput">Daily Action</label>
-      <textarea id="goalDailyInput" class="lib-v6-input lib-v6-textarea" placeholder="What will you do today toward this goal?" rows="2"></textarea>
     </div>
     <div class="lib-v6-modal-btns">
       <button class="lib-v6-btn-cancel" id="goalModalCancel">Cancel</button>
@@ -9236,20 +9173,20 @@ TAB_INITS['library'] = (function() {
 
       // ── GOAL CONFIG ──────────────────────────────────────
       const GOAL_CATS = {
-        personal: { label: 'Personal', icon: '✦', color: '#A78BFA' },
-        finance:  { label: 'Finance',  icon: '◈', color: '#1D9E75' },
-        fitness:  { label: 'Fitness',  icon: '⚡', color: '#E85D3A' },
-        health:   { label: 'Health',   icon: '♡', color: '#F472B6' },
-        focus:    { label: 'Focus',    icon: '◎', color: '#3B82F6' },
+        money:    { label: 'Money',    icon: '💰', color: '#FBBF24' },
+        learning: { label: 'Learning', icon: '📚', color: '#818CF8' },
+        social:   { label: 'Social',   icon: '✦',  color: '#F472B6' },
+        fitness:  { label: 'Fitness',  icon: '⚡', color: '#34D399' },
       };
-      const CAT_REMAP = { business: 'finance', social: 'personal', academic: 'focus' };
-      const TAG_COLORS = ['#A78BFA','#1D9E75','#E85D3A','#F472B6','#3B82F6'];
-      const CIRC = 213.63;
+      const CAT_REMAP = {
+        personal: 'social', finance: 'money', health: 'fitness', focus: 'learning',
+        business: 'money', social: 'social', academic: 'learning',
+      };
+      const TAG_COLORS = ['#FBBF24','#818CF8','#F472B6','#34D399'];
 
       // ── STATE ────────────────────────────────────────────
       let goals = [];
       let nativeNotes = [];
-      let editingGoalId = null;
       let activeCategory = null;
       let currentNote = null;
       let saveTimer = null;
@@ -9291,9 +9228,9 @@ TAB_INITS['library'] = (function() {
         localStorage.setItem('apex_goals', JSON.stringify(goals));
         if (!sb) return;
         goals.forEach(function(g) {
-          var ext = JSON.stringify({ category: g.category, priority: g.priority, progress: g.progress, daily_action: g.daily_action, streak: g.streak || 0, _ext: true });
           sb.from('goals').upsert({
-            id: g.id, title: g.title, description: ext,
+            id: g.id, title: g.title,
+            description: JSON.stringify({ category: g.category, _ext: true }),
             deadline: g.deadline || null, status: g.status, created_at: g.created_at
           }, { onConflict: 'id' });
         });
@@ -9305,8 +9242,9 @@ TAB_INITS['library'] = (function() {
           try {
             var parsed = JSON.parse(stored);
             goals = parsed.filter(function(g) { return g.status === 'active'; }).map(function(g) {
-              if (CAT_REMAP[g.category]) g.category = CAT_REMAP[g.category];
-              return g;
+              var cat = CAT_REMAP[g.category] || g.category;
+              if (!GOAL_CATS[cat]) cat = 'money';
+              return { id: g.id, title: g.title, category: cat, deadline: g.deadline || '', status: 'active', created_at: g.created_at };
             });
             return;
           } catch(e) {}
@@ -9316,36 +9254,11 @@ TAB_INITS['library'] = (function() {
         goals = (r.data || []).map(function(g) {
           var ext = {};
           try { var d = JSON.parse(g.description || '{}'); if (d._ext) ext = d; } catch(e) {}
-          var cat = ext.category || 'personal';
-          if (CAT_REMAP[cat]) cat = CAT_REMAP[cat];
-          return {
-            id: g.id, title: g.title,
-            category: cat,
-            priority: ext.priority || 'med',
-            progress: ext.progress != null ? ext.progress : 0,
-            daily_action: ext.daily_action || '',
-            streak: ext.streak || 0,
-            deadline: g.deadline || '',
-            status: g.status || 'active',
-            created_at: g.created_at,
-          };
+          var cat = CAT_REMAP[ext.category || ''] || ext.category || 'money';
+          if (!GOAL_CATS[cat]) cat = 'money';
+          return { id: g.id, title: g.title, category: cat, deadline: g.deadline || '', status: 'active', created_at: g.created_at };
         });
         if (goals.length) localStorage.setItem('apex_goals', JSON.stringify(goals));
-      }
-
-      // ── RENDER SUMMARY ───────────────────────────────────
-      function renderSummary() {
-        var el = document.getElementById('goalsSummary');
-        var badge = document.getElementById('goalsCountBadge');
-        if (badge) badge.textContent = goals.length;
-        if (!el) return;
-        if (!goals.length) { el.innerHTML = ''; return; }
-        var avg = Math.round(goals.reduce(function(s, g) { return s + (g.progress || 0); }, 0) / goals.length);
-        var items = goals.map(function(g) {
-          var cat = GOAL_CATS[g.category] || GOAL_CATS.personal;
-          return '<span class="lib-v6-sum-item"><span class="lib-v6-sum-dot" style="background:' + cat.color + '"></span>' + esc(g.title.slice(0, 16)) + '<span style="color:' + cat.color + '">' + Math.round(g.progress || 0) + '%</span></span>';
-        }).join('');
-        el.innerHTML = items + '<span class="lib-v6-sum-avg">' + avg + '% avg</span>';
       }
 
       // ── RENDER FILTER PILLS ──────────────────────────────
@@ -9358,7 +9271,9 @@ TAB_INITS['library'] = (function() {
         Object.keys(GOAL_CATS).forEach(function(cat) {
           if (!catCounts[cat]) return;
           var c = GOAL_CATS[cat];
-          html += '<button class="lib-v6-pill' + (activeCategory === cat ? ' active' : '') + '" data-cat="' + cat + '">'
+          var isActive = activeCategory === cat;
+          var activeStyle = isActive ? ' style="border-color:' + c.color + ';color:' + c.color + ';background:' + c.color + '1a"' : '';
+          html += '<button class="lib-v6-pill' + (isActive ? ' active' : '') + '" data-cat="' + cat + '"' + activeStyle + '>'
             + '<span class="lib-v6-pill-dot" style="background:' + c.color + '"></span>' + c.label + '</button>';
         });
         filtersEl.innerHTML = html;
@@ -9375,102 +9290,38 @@ TAB_INITS['library'] = (function() {
       function renderGoals() {
         var list = document.getElementById('goalsList');
         var section = document.getElementById('goalsSection');
+        var badge = document.getElementById('goalsCountBadge');
         if (!list) return;
         var filtered = goals.filter(function(g) {
-          return (!activeCategory || g.category === activeCategory) && matchesQ([g.title, g.daily_action]);
+          return (!activeCategory || g.category === activeCategory) && matchesQ([g.title]);
         });
+        if (badge) badge.textContent = goals.length;
         if (searchQuery && filtered.length === 0) { section.style.display = 'none'; return; }
         section.style.display = '';
         if (filtered.length === 0) {
-          list.innerHTML = '<div class="lib-v6-empty">No goals yet — tap "+ Add goal" to start.</div>';
+          list.innerHTML = '<div class="lib-v6-empty" style="grid-column:1/-1">No goals yet — tap "+ Add goal" to start.</div>';
           return;
         }
         list.innerHTML = filtered.map(function(g) {
-          var cat = GOAL_CATS[g.category] || GOAL_CATS.personal;
-          var prog = Math.max(0, Math.min(100, g.progress || 0));
-          var offset = (CIRC * (1 - prog / 100)).toFixed(2);
-          var daysLeft = g.deadline ? Math.max(0, Math.ceil((new Date(g.deadline) - new Date()) / 86400000)) : null;
-          var streakDays = g.streak || 0;
-          var ticks = [20, 50, 70, 100].map(function(p) {
-            return '<div class="lib-v6-goal-bar-tick" style="left:' + p + '%"></div>';
-          }).join('');
-          var tickLabels = [20, 50, 70, 100].map(function(p) {
-            return '<span class="lib-v6-goal-bar-label" style="left:' + p + '%">' + p + '%</span>';
-          }).join('');
-
-          return '<div class="lib-v6-goal-card" data-id="' + esc(g.id) + '">'
-            + '<div class="lib-v6-goal-inner">'
-            + '<div class="lib-v6-goal-left">'
-            + '<div class="lib-v6-goal-cat-row">'
-            + '<span style="font-size:13px">' + cat.icon + '</span>'
-            + '<span class="lib-v6-goal-cat-name" style="color:' + cat.color + '">' + cat.label + '</span>'
-            + '<span class="lib-v6-goal-cat-dot" style="background:' + cat.color + '"></span>'
-            + '</div>'
-            + '<h2 class="lib-v6-goal-title">' + esc(g.title) + '</h2>'
-            + '<div class="lib-v6-goal-values">'
-            + '<div><div class="lib-v6-goal-val-lbl">Current</div><div class="lib-v6-goal-val-num" style="color:' + cat.color + '">' + prog + '%</div></div>'
-            + '<div><div class="lib-v6-goal-val-lbl">Target</div><div class="lib-v6-goal-val-num" style="color:#444">100%</div></div>'
-            + '</div>'
-            + '<div class="lib-v6-goal-bar-wrap">'
-            + '<div class="lib-v6-goal-bar-track">'
-            + '<div class="lib-v6-goal-bar-fill" style="width:' + prog + '%;background:' + cat.color + '"></div>'
-            + '<div class="lib-v6-goal-bar-ticks">' + ticks + '</div>'
-            + '<input type="range" class="lib-v6-goal-bar-range" min="0" max="100" value="' + prog + '" data-id="' + esc(g.id) + '">'
-            + '</div>'
-            + '<div class="lib-v6-goal-bar-labels">' + tickLabels + '</div>'
-            + '</div>'
-            + '<div class="lib-v6-goal-streak">🔥 ' + streakDays + 'd streak'
-            + (daysLeft !== null ? ' <span class="lib-v6-goal-streak-sep">|</span> ● ' + daysLeft + 'd left' : '')
-            + (prog > 0 ? ' <span class="lib-v6-goal-streak-sep">|</span> <span style="color:' + cat.color + '">↗ ' + prog + '% done</span>' : '')
-            + '</div>'
-            + '</div>'
-            + '<div class="lib-v6-goal-right">'
-            + '<div class="lib-v6-goal-ring-wrap">'
-            + '<svg class="lib-v6-goal-ring-svg" viewBox="0 0 80 80">'
-            + '<circle cx="40" cy="40" r="34" fill="none" stroke="#1e1e1e" stroke-width="4"/>'
-            + '<circle cx="40" cy="40" r="34" fill="none" stroke="' + cat.color + '" stroke-width="4" stroke-linecap="round" stroke-dasharray="' + CIRC + '" stroke-dashoffset="' + offset + '" style="transition:stroke-dashoffset 0.5s"/>'
-            + '</svg>'
-            + '<div class="lib-v6-goal-ring-center"><div class="lib-v6-goal-ring-pct">' + prog + '%</div><div class="lib-v6-goal-ring-lbl">done</div></div>'
-            + '</div>'
-            + '<button class="lib-v6-goal-menu-btn" data-id="' + esc(g.id) + '" aria-label="Edit goal">···</button>'
-            + '</div>'
-            + '</div>'
-            + '<div class="lib-v6-goal-daily">'
-            + '<div class="lib-v6-goal-daily-lbl">Daily Action</div>'
-            + '<textarea class="lib-v6-goal-daily-input" data-id="' + esc(g.id) + '" rows="1" placeholder="What will you do today?">' + esc(g.daily_action || '') + '</textarea>'
-            + '</div>'
+          var cat = GOAL_CATS[g.category] || GOAL_CATS.money;
+          var c = cat.color;
+          var daysLeft = g.deadline ? Math.ceil((new Date(g.deadline) - new Date()) / 86400000) : null;
+          var deadlineHtml = '';
+          if (daysLeft !== null) {
+            var dl = Math.max(0, daysLeft);
+            var dlLabel = dl === 0 ? 'Today!' : dl + (dl === 1 ? ' day left' : ' days left');
+            deadlineHtml = '<div class="lib-vb-deadline" style="color:' + c + '">' + dlLabel + '</div>';
+          }
+          return '<div class="lib-vb-goal-card" data-id="' + esc(g.id) + '" style="background:linear-gradient(140deg,' + c + '1f 0%,' + c + '08 100%);box-shadow:0 0 0 1px ' + c + '28,0 4px 20px ' + c + '0f">'
+            + '<button class="lib-vb-delete-btn" data-id="' + esc(g.id) + '" aria-label="Delete goal">×</button>'
+            + '<div class="lib-vb-cat-chip" style="background:' + c + '22;color:' + c + '">' + cat.icon + ' ' + cat.label + '</div>'
+            + '<div class="lib-vb-goal-name">' + esc(g.title) + '</div>'
+            + deadlineHtml
             + '</div>';
         }).join('');
 
-        list.querySelectorAll('.lib-v6-goal-bar-range').forEach(function(input) {
-          input.addEventListener('input', function() {
-            var card = input.closest('.lib-v6-goal-card');
-            var fill = card.querySelector('.lib-v6-goal-bar-fill');
-            var valEl = card.querySelector('.lib-v6-goal-val-num');
-            var pctEl = card.querySelector('.lib-v6-goal-ring-pct');
-            var svg2 = card.querySelector('circle:last-of-type');
-            var v = parseInt(input.value, 10);
-            if (fill) fill.style.width = v + '%';
-            if (valEl) valEl.textContent = v + '%';
-            if (pctEl) pctEl.textContent = v + '%';
-            if (svg2) svg2.setAttribute('stroke-dashoffset', (CIRC * (1 - v / 100)).toFixed(2));
-          });
-          input.addEventListener('change', function() {
-            var idx = goals.findIndex(function(g) { return g.id === input.dataset.id; });
-            if (idx !== -1) { goals[idx].progress = parseInt(input.value, 10); saveGoals(); renderSummary(); }
-          });
-        });
-        list.querySelectorAll('.lib-v6-goal-daily-input').forEach(function(ta) {
-          ta.addEventListener('blur', function() {
-            var idx = goals.findIndex(function(g) { return g.id === ta.dataset.id; });
-            if (idx !== -1 && goals[idx].daily_action !== ta.value) {
-              goals[idx].daily_action = ta.value;
-              saveGoals();
-            }
-          });
-        });
-        list.querySelectorAll('.lib-v6-goal-menu-btn').forEach(function(btn) {
-          btn.addEventListener('click', function() { openGoalModal(btn.dataset.id); });
+        list.querySelectorAll('.lib-vb-delete-btn').forEach(function(btn) {
+          btn.addEventListener('click', function(e) { e.stopPropagation(); deleteGoal(btn.dataset.id); });
         });
       }
 
@@ -9498,23 +9349,11 @@ TAB_INITS['library'] = (function() {
 
       // ── GOAL CRUD ────────────────────────────────────────
       function addGoal(data) {
-        var g = Object.assign({ id: genId(), status: 'active', streak: 0, created_at: new Date().toISOString() }, data);
+        var g = Object.assign({ id: genId(), status: 'active', created_at: new Date().toISOString() }, data);
         goals.unshift(g);
         saveGoals();
         renderFilterPills();
         renderGoals();
-        renderSummary();
-      }
-
-      function updateGoal(id, patch) {
-        var idx = goals.findIndex(function(g) { return g.id === id; });
-        if (idx !== -1) {
-          goals[idx] = Object.assign({}, goals[idx], patch);
-          saveGoals();
-          renderFilterPills();
-          renderGoals();
-          renderSummary();
-        }
       }
 
       function deleteGoal(id) {
@@ -9526,13 +9365,11 @@ TAB_INITS['library'] = (function() {
         localStorage.setItem('apex_goals', JSON.stringify(goals));
         renderFilterPills();
         renderGoals();
-        renderSummary();
         showToast('Goal deleted', function() {
           goals.splice(idx, 0, deleted);
           saveGoals();
           renderFilterPills();
           renderGoals();
-          renderSummary();
         });
       }
 
@@ -9660,32 +9497,13 @@ TAB_INITS['library'] = (function() {
         }
       }
 
-      function openGoalModal(id) {
-        editingGoalId = id || null;
-        const titleEl  = document.getElementById('goalModalTitle');
-        const tIn      = document.getElementById('goalTitleInput');
-        const catIn    = document.getElementById('goalCategoryInput');
-        const priIn    = document.getElementById('goalPriorityInput');
-        const dlIn     = document.getElementById('goalDeadlineInput');
-        const progIn   = document.getElementById('goalProgressInput');
-        const dailyIn  = document.getElementById('goalDailyInput');
-        if (id) {
-          const g = goals.find(function (x) { return x.id === id; });
-          if (!g) return;
-          titleEl.textContent = 'Edit Goal';
-          tIn.value = g.title || '';
-          catIn.value = g.category || 'personal';
-          priIn.value = g.priority || 'med';
-          dlIn.value = g.deadline || '';
-          progIn.value = g.progress != null ? g.progress : 0;
-          dailyIn.value = g.daily_action || '';
-        } else {
-          titleEl.textContent = 'Add Goal';
-          tIn.value = ''; catIn.value = 'personal'; priIn.value = 'med';
-          dlIn.value = ''; progIn.value = 0; dailyIn.value = '';
-        }
+      function openGoalModal() {
+        document.getElementById('goalModalTitle').textContent = 'Add Goal';
+        document.getElementById('goalTitleInput').value = '';
+        document.getElementById('goalCategoryInput').value = 'money';
+        document.getElementById('goalDeadlineInput').value = '';
         openModal('goalModalBg');
-        setTimeout(function () { tIn.focus(); }, 60);
+        setTimeout(function() { document.getElementById('goalTitleInput').focus(); }, 60);
       }
 
       // ── INIT ─────────────────────────────────────────────
@@ -9694,24 +9512,24 @@ TAB_INITS['library'] = (function() {
         var dl = document.getElementById('libDateLabel');
         if (dl) { var now = new Date(); dl.textContent = now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }); }
 
-        document.getElementById('addGoalBtn').addEventListener('click', function () { openGoalModal(null); });
-        document.getElementById('goalModalCancel').addEventListener('click', function () { closeModal('goalModalBg'); });
-        document.getElementById('goalModalSave').addEventListener('click', function () {
-          const title = document.getElementById('goalTitleInput').value.trim();
+        document.getElementById('addGoalBtn').addEventListener('click', openGoalModal);
+        document.getElementById('goalModalCancel').addEventListener('click', function() { closeModal('goalModalBg'); });
+        document.getElementById('goalModalSave').addEventListener('click', function() {
+          var title = document.getElementById('goalTitleInput').value.trim();
           if (!title) { document.getElementById('goalTitleInput').focus(); return; }
-          const cat      = document.getElementById('goalCategoryInput').value;
-          const pri      = document.getElementById('goalPriorityInput').value;
-          const deadline = document.getElementById('goalDeadlineInput').value;
-          const progress = Math.max(0, Math.min(100, parseInt(document.getElementById('goalProgressInput').value, 10) || 0));
-          const daily    = document.getElementById('goalDailyInput').value.trim();
+          var cat = document.getElementById('goalCategoryInput').value;
+          var deadline = document.getElementById('goalDeadlineInput').value;
           closeModal('goalModalBg');
-          const data = { title: title, category: cat, priority: pri, deadline: deadline || '', progress: progress, daily_action: daily };
-          if (editingGoalId) updateGoal(editingGoalId, data);
-          else addGoal(data);
+          addGoal({ title: title, category: cat, deadline: deadline || '' });
         });
-        document.getElementById('goalModalBg').addEventListener('click', function (e) {
+        document.getElementById('goalModalBg').addEventListener('click', function(e) {
           if (e.target.id === 'goalModalBg') closeModal('goalModalBg');
         });
+
+        if (sb) {
+          sb.from('goal_milestones').delete().neq('id', '00000000-0000-0000-0000-000000000000').then(function(){}).catch(function(){});
+          sb.from('goal_progress_log').delete().neq('id', '00000000-0000-0000-0000-000000000000').then(function(){}).catch(function(){});
+        }
 
         document.getElementById('addNoteBtn').addEventListener('click', createNote);
         document.getElementById('noteEditTitle').addEventListener('input', function (e) {
@@ -9739,7 +9557,6 @@ TAB_INITS['library'] = (function() {
         await Promise.all([loadGoals(), loadNotes()]);
         renderFilterPills();
         renderGoals();
-        renderSummary();
         renderNotes(false);
       }
 
